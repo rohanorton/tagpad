@@ -1,0 +1,22 @@
+{
+  "name": "tagpad",
+  "version": "0.0.1",
+  "description": "bookmarking and note taking application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abe404/tagpad.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abe404/tagpad/issues"
+  },
+  "homepage": "https://github.com/Abe404/tagpad#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
