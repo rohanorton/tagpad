@@ -26,118 +26,99 @@
     { id: 4, type: 'location', 'title': "Enid's",
         'description': 'At night a bar, during the day a delicious brunch spot.', tags: ['Fun'] }
   ];
+  var currentPage = "browse";
 
-  var ItemTags = React.createClass({
-    render: function () {
-      var tagsJSX = [];
-      if (!this.props.tags.length) {
-        return null;
-      }
-      this.props.tags.forEach(function (tagName, index) {
-        tagsJSX.push(<a key={index} className="ui label">{tagName}</a>);
-      });
+  function Tag(props) {
+    return <a className="ui label">{props.name}</a>
+  }
 
-     return (
+  function ItemTags(props) {
+    return (
       <div className="right ui labels">
-      {tagsJSX}
+        {props.tags.map(function (tagName, index) {
+          return <Tag key={index} name={tagName} />;
+        })}
       </div>
     );
-
+  }
+ 
+  function getIconClass(itemType) {
+    var classNameValue= "";
+    if (itemType === 'note') {
+      classNameValue = "file text outline icon";
+    } else if (itemType === 'bookmark') {
+      classNameValue = "bookmark outline icon";
+    } else if (itemType === 'location') {
+      classNameValue = "map marker icon";
+    } else {
+      throw new Error("unhandled itemype: " + itemType);
     }
-  });
+    return classNameValue;
+  }
 
-  var Item = React.createClass({
-    render: function () {
-      var item = this.props.item;
-      var classNameValue= "";
-      if (item.type === 'note') {
-        classNameValue = "file text outline icon";
-      } else if (item.type === 'bookmark') {
-        classNameValue = "bookmark outline icon";
-      } else if (item.type === 'location') {
-        classNameValue = "map marker icon";
-      } else {
-        throw new Error("unhandled item.type: " + item.type);
-      }
-      return (
-        <div className="item">
-          <i className={classNameValue}></i>
-          <div className="content">
-            <a className="header">{item.title}</a>
-            <div className="description">{item.description}</div>
-            <ItemTags tags={item.tags} />
-          </div>
+  function Item(props) {
+    return (
+      <div className="item">
+        <i className={getIconClass(props.item.type)}></i>
+        <div className="content">
+          <a className="header">{props.item.title}</a>
+          <div className="description">{props.item.description}</div>
+          <ItemTags tags={props.item.tags} />
         </div>
-      );
-    }
-  });
+      </div>
+    );
+  }
 
-  var ItemList = React.createClass({
-    render: function () {
-      var itemList = [];
-      this.props.items.forEach(function (item) {
-        itemList.push(<Item item={item} key={item.id} />);
-      });
-      return (
-        <div className="ui list">
-          {itemList}
-        </div>
-      );
-    }
-  });
+  function ItemList(props) {
+    return (
+      <div className="ui list">
+        {props.items.map(function (item) {
+          return <Item item={item} key={item.id} />; 
+        })}
+      </div>
+    );
+  }
 
-  var SearchBar = React.createClass({
-    render: function () {
-      return (
-        <div className="ui fluid input">
+  function SearchBar(props) {
+    return (
+      <div className="ui fluid input">
         <input placeholder="Search.." type="text"></input>
-        </div>
-      );
-    }
-  });
+      </div>
+    );
+  }
   
-  var SearchableBrowseList = React.createClass({
-    render: function () {
-      return (
-        <div className="ui main text container">
-          <SearchBar />           
-          <ItemList items={this.props.items} />           
-        </div>
-      );
-    }
-  });
+  function SearchableBrowseList(props) {
+    return (
+      <div className="ui main text container">
+        <SearchBar />           
+        <ItemList items={props.items} />           
+      </div>
+    );
+  }
   
-  var MenuBar = React.createClass({
-    render: function () {
-      
-      return (
+  function MenuBar(props) {
+    return (
       <div className="ui fixed inverted menu">
         <div className="ui container">
           <a href="#" className="header item">
             <img className="logo" src="img/logo.png"></img>
             tagpad
           </a>
-          <a href="#" className={"item " + (this.props.page === 'browse' ? 'active' : '')}>browse</a>
-          <a href="#" className={"item " + (this.props.page === 'add' ? 'active' : '')}>add</a>
+          <a href="#" className={"item " + (props.page === 'browse' ? 'active' : '')}>browse</a>
+          <a href="#" className={"item " + (props.page === 'add' ? 'active' : '')}>add</a>
         </div>
       </div>
-      );
-    }
-  });
+    );
+  }
 
-  var currentPage = "browse";
-
-  var BrowsePage = React.createClass({
-    render: function () {
-      return (
-        <div>
-          <MenuBar page={currentPage}/>
-          <SearchableBrowseList items={items} />
-        </div>
-      );
-    }
-  });
-
+  function BrowsePage(props) {
+    return (
+      <div>
+        <MenuBar page={currentPage}/>
+        <SearchableBrowseList items={items} />
+      </div>
+    );
+  }
 
   ReactDOM.render(
     <BrowsePage />,
