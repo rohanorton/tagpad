@@ -41,25 +41,16 @@
       </div>
     );
   }
- 
-  function getIconClass(itemType) {
-    var classNameValue= "";
-    if (itemType === 'note') {
-      classNameValue = "file text outline icon";
-    } else if (itemType === 'bookmark') {
-      classNameValue = "bookmark outline icon";
-    } else if (itemType === 'location') {
-      classNameValue = "map marker icon";
-    } else {
-      throw new Error("unhandled itemType: " + itemType);
-    }
-    return classNameValue;
-  }
 
   function Item(props) {
+    var typeToClass = {
+      'note' : "file text outline icon",
+      'bookmark': "bookmark outline icon",
+      'location': "map marker icon"
+    };
     return (
       <div className="item">
-        <i className={getIconClass(props.item.type)}></i>
+        <i className={typeToClass[props.item.type]}></i>
         <div className="content">
           <a className="header">{props.item.title}</a>
           <div className="description">{props.item.description}</div>
