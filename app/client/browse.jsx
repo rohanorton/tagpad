@@ -93,7 +93,9 @@ function BrowsePage(props) {
   );
 }
 
+
 ReactDOM.render(
   <BrowsePage />,
   document.getElementById('react-container')
 );
+
