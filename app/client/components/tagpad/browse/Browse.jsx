@@ -8,7 +8,6 @@ var items = [
   { id: 4, type: 'location', 'title': "Enid's",
       'description': 'At night a bar, during the day a delicious brunch spot.', tags: ['Fun'] }
 ];
-var currentPage = "browse";
 
 function Tag(props) {
   return <a className="ui label">{props.name}</a>
@@ -60,7 +59,7 @@ function SearchBar(props) {
   );
 }
 
-function SearchableBrowseList(props) {
+function Browse(props) {
   return (
     <div className="ui main text container">
       <SearchBar />           
@@ -68,34 +67,3 @@ function SearchableBrowseList(props) {
     </div>
   );
 }
-
-function MenuBar(props) {
-  return (
-    <div className="ui fixed inverted menu">
-      <div className="ui container">
-        <a href="#" className="header item">
-          <img className="logo" src="img/logo.png"></img>
-          tagpad
-        </a>
-        <a href="#" className={"item " + (props.page === 'browse' ? 'active' : '')}>browse</a>
-        <a href="#" className={"item " + (props.page === 'add' ? 'active' : '')}>add</a>
-      </div>
-    </div>
-  );
-}
-
-function BrowsePage(props) {
-  return (
-    <div>
-      <MenuBar page={currentPage}/>
-      <SearchableBrowseList items={items} />
-    </div>
-  );
-}
-
-
-ReactDOM.render(
-  <BrowsePage />,
-  document.getElementById('react-container')
-);
-

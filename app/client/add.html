@@ -11,12 +11,27 @@
   <link rel=stylesheet type="text/css" href="semantic-dist/semantic.min.css">
   <script src="react_build/react.js"></script>
   <script src="react_build/react-dom.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+
   <!-- using babel to compile JSX in the browser -->
-  <script type="text/babel" src="add.jsx"></script>
-  <link rel=stylesheet type="text/css" href="add.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+
+  <script type="text/babel" src="components/tagpad/menu/Menu.jsx"></script>
+  <script type="text/babel" src="components/tagpad/add/Add.jsx"></script>
+  <script type="text/babel" src="components/tagpad/Tagpad.jsx"></script>
+
+  <link rel=stylesheet type="text/css" href="components/tagpad/menu/menu.css">
+  <link rel=stylesheet type="text/css" href="components/tagpad/add/add.css">
+  <link rel=stylesheet type="text/css" href="components/tagpad/tagpad.css">
+
 </head>
 <body>
   <div id="react-container">Loading react...</div>
+  <script type="text/babel">
+
+    ReactDOM.render(
+      <Tagpad page="add" />,
+      document.getElementById('react-container')
+    );
+  </script>
 </body>
 </html>
