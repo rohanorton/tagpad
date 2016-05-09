@@ -12,7 +12,7 @@ module.exports = function (props) {
   };
   return (
     <div>
-      <Menu page="{props.page}"/>
+      <Menu page={props.page}/>
       {views[props.page]}
     </div>
   );
