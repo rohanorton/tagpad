@@ -6,14 +6,18 @@ var Browse = require('./browse/Browse.jsx');
 require('./tagpad.css');
 
 module.exports = function (props) {
+  var page = props.location.pathname.replace("/", "");
+  if (!page.length) {
+    page = 'browse'; // default page at /
+  }
   var views = {
     'add': <Add />,
     'browse': <Browse />
   };
   return (
     <div>
-      <Menu page={props.page}/>
-      {views[props.page]}
+      <Menu page={page}/>
+      {views[page]}
     </div>
   );
 };

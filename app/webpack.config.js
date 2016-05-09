@@ -1,5 +1,5 @@
 module.exports = {
-  entry: "./client/browse.jsx",
+  entry: "./client/index.jsx",
   output: {
     path: __dirname + "/client/build",
     publicPath: 'build/',
