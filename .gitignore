@@ -34,3 +34,7 @@ node_modules
 
 
 .DS_Store
+
+
+# don't need to commit the built stuff to git yet
+app/client/build

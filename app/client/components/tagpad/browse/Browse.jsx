@@ -1,3 +1,5 @@
+var React = require('react');
+require('./browse.css');
 var items = [
   { id: 1, type: 'note', 'title': 'thoughts on life', 
     'description': 'What is the meaning of it all?', tags: [] },
@@ -59,11 +61,11 @@ function SearchBar(props) {
   );
 }
 
-function Browse(props) {
+module.exports = function Browse(props) {
   return (
     <div className="ui main text container">
       <SearchBar />           
       <ItemList items={props.items} />           
     </div>
   );
-}
+};

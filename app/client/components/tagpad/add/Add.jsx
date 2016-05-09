@@ -1,4 +1,6 @@
-function Add(props) {
+var React = require('react');
+require('./add.css');
+module.exports = function Add(props) {
   return (
     <div className="ui main text container">
       <div className="ui form">
@@ -23,4 +25,4 @@ function Add(props) {
       </div>
     </div>
   );
-}
+};
