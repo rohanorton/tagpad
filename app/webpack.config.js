@@ -1,5 +1,5 @@
 module.exports = {
-  entry: "./client/index.jsx",
+  entry: "./client/tagpad.jsx",
   output: {
     path: __dirname + "/client/build",
     publicPath: 'build/',

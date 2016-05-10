@@ -5,8 +5,6 @@ module.exports = function (props) {
   return (
     <div className="ui fixed inverted menu">
       <div className="ui container">
-
-
         <Link to="/browse" className="header item">
           <img className="logo" src={require("./img/logo.png")} ></img>
           tagpad
