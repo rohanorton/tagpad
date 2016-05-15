@@ -6,6 +6,14 @@ module.exports = {
     filename: "bundle.js"
   },
   module: {
+    preLoaders: [
+      {
+        test: /\.js?$/,
+        loaders: ['eslint'],
+        // define an include so we check jsut the files we need
+        include: './client'
+      }
+    ],
     loaders: [
       { test: /\.css$/, loader: "style!css" },
       {
