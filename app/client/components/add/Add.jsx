@@ -1,5 +1,4 @@
 var React = require('react');
-var actions = require("../../store/actions.js");
 require('./add.css');
 
 module.exports = function Add(props) {
@@ -10,15 +9,15 @@ module.exports = function Add(props) {
       e.preventDefault();
       changes[fieldName] = e.target.value;
       var updated = Object.assign({}, props.state.newItem, changes);
-      actions.updateNewItem(updated);
+      props.updateNewItem(updated);
     };
   }
 
   return (
     <div className="ui main text container">
-      <form className="ui form" onSubmit={actions.submitNewItem} >
+      <form className="ui form" onSubmit={props.submitNewItem} >
         <div className="field">
-          <label>title</label>
+          <labeltitle</label>
           <input 
             placeholder="title" 
             value={props.state.newItem.title}

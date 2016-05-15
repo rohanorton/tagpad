@@ -24,10 +24,8 @@ exports.submitNewItem = function () {
     item.errors.description = ["Please enter your new item's description"];
   }
   
-
   // if the new item has 0 errors then clear the fields.
   if (Object.keys(item.errors).length === 0) {
-  console.log('submit new ietm')
     // convert tags to array.
     if (!item.tags) {
       item.tags = [];
