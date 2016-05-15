@@ -56,7 +56,7 @@ module.exports = function Browse(props) {
   return (
     <div className="ui main text container">
       <SearchBar />           
-      <ItemList items={props.state.items} />           
+      <ItemList items={props.items} />           
     </div>
   );
 };

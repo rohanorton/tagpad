@@ -1,4 +1,5 @@
-exports.state = {
+module.exports = {
+  location: require("./actions/navigation.js").getLocation(),
   "items": [
     { "id": 1, "type": "note", "title": "thoughts on life", "description": "What is the meaning of it all?", "tags": [] },
     { "id": 2, "type": "bookmark", "title": "google", "description": "this is a link to the popular search engine", "tags": [] },

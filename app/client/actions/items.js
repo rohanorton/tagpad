@@ -1,12 +1,14 @@
 var model = require('./model.js');
 var helpers = require('./helpers.js');
+var navigation = require('./navigation.js');
 
 exports.updateNewItem = function (item) {
   model.setState({ newItem: item });
 };
-exports.submitNewItem = function () {
+
+exports.submitNewItem = function (e) {
   var state = model.getState();
-  console.log('submit new item function');
+  e.preventDefault();
   var item = Object.assign(
     {}, 
     state.newItem, 
@@ -39,10 +41,11 @@ exports.submitNewItem = function () {
       // without modifying the existing state.items array.
       items: state.items.slice(0).concat(item)
     });
+    navigation.startNavigating('browse');
   } else {
-    alert(JSON.stringify(item.errors));
     model.setState({
       newItem: item
     });
   }
+
 };

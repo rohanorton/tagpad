@@ -1,4 +1,3 @@
-
 // The apps complete current state
 var state = {};
 var onStateChangeCallback;
@@ -12,7 +11,7 @@ exports.setState = function (changes) {
 };
 
 exports.getState = function () {
-  return Object.assign({}, state)
+  return Object.assign({}, state);
 };
 
 exports.onStateChange = function (callback) {

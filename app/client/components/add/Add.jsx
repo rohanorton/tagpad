@@ -8,19 +8,18 @@ module.exports = function Add(props) {
       var changes = {};
       e.preventDefault();
       changes[fieldName] = e.target.value;
-      var updated = Object.assign({}, props.state.newItem, changes);
+      var updated = Object.assign({}, props.newItem, changes);
       props.updateNewItem(updated);
     };
   }
-
   return (
     <div className="ui main text container">
       <form className="ui form" onSubmit={props.submitNewItem} >
         <div className="field">
-          <labeltitle</label>
+          <label>title</label>
           <input 
             placeholder="title" 
-            value={props.state.newItem.title}
+            value={props.newItem.title}
             onChange={createUpdateField('title')}
             type="text">
           </input>
@@ -28,7 +27,7 @@ module.exports = function Add(props) {
         <div className="field">
           <label>content</label>
           <textarea 
-            value={props.state.newItem.description} 
+            value={props.newItem.description} 
             onChange={createUpdateField('description')}
             placeholder="content">
           </textarea>
@@ -37,7 +36,7 @@ module.exports = function Add(props) {
           <label>tags</label>
           <input 
             placeholder="tags"
-            value={props.state.newItem.tags}
+            value={props.newItem.tags}
             onChange={createUpdateField('tags')}
             type="text">
           </input>
