@@ -44,7 +44,10 @@ module.exports = function Add(props) {
         <button type="submit" className="savebutton ui right floated primary button">
           save
         </button>
-        <button className="ui right floated button">
+        <button 
+          className="ui right floated button"
+          onClick={props.cancel}
+          >
           cancel
         </button>
       </form>

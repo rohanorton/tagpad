@@ -14,6 +14,7 @@ module.exports = function Application (props) {
       {...props} 
       submitNewItem={itemActions.submitNewItem} 
       updateNewItem={itemActions.updateNewItem} 
+      cancel={itemActions.cancel}
     />;
   } else {
     component = (

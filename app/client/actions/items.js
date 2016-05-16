@@ -6,6 +6,14 @@ exports.updateNewItem = function (item) {
   model.setState({ newItem: item });
 };
 
+// when add or edit item is canceled 
+exports.cancel = function () {
+  // delete the edits.
+  model.setState({ newItem: helpers.getNewItem()}); 
+  // go back to the browse page.
+  navigation.startNavigating('browse');
+};
+
 exports.submitNewItem = function (e) {
   var state = model.getState();
   e.preventDefault();
