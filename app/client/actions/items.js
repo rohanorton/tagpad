@@ -7,7 +7,9 @@ exports.updateNewItem = function (item) {
 };
 
 // when add or edit item is canceled 
-exports.cancel = function () {
+exports.cancel = function (e) {
+  //console.log('cancel clicked');
+  e.preventDefault();
   // delete the edits.
   model.setState({ newItem: helpers.getNewItem()}); 
   // go back to the browse page.
@@ -17,6 +19,7 @@ exports.cancel = function () {
 exports.submitNewItem = function (e) {
   var state = model.getState();
   e.preventDefault();
+  console.log('SUBMIT NEW ITEM');
   var item = Object.assign(
     {}, 
     state.newItem, 

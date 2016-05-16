@@ -12,30 +12,36 @@ module.exports = function Add(props) {
       props.updateNewItem(updated);
     };
   }
+
+  function getFieldClass(fieldName) {
+    var areErrors = props.newItem.errors && props.newItem.errors[fieldName];
+    return 'field ' + (areErrors ? 'error': '');
+  }
+
   return (
     <div className="ui main text container">
       <form className="ui form" onSubmit={props.submitNewItem} >
-        <div className="field">
+        <div 
+          className={getFieldClass('title')}
+          >
           <label>title</label>
           <input 
-            placeholder="title" 
             value={props.newItem.title}
             onChange={createUpdateField('title')}
             type="text">
           </input>
         </div>
-        <div className="field">
+        <div className={getFieldClass('description')}>
           <label>content</label>
           <textarea 
             value={props.newItem.description} 
             onChange={createUpdateField('description')}
-            placeholder="content">
+            >
           </textarea>
         </div>
-        <div className="field">
+        <div className={getFieldClass('tags')}>
           <label>tags</label>
           <input 
-            placeholder="tags"
             value={props.newItem.tags}
             onChange={createUpdateField('tags')}
             type="text">
