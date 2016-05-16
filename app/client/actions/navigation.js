@@ -16,11 +16,13 @@ exports.startNavigating = function (newHash) {
 };
 
 exports.navigated = function () {
+  console.log('navigated');
   // Removes the `#`, and any leading/final `/` characters
   var normalizedHash = window.location.hash.replace(/^#\/?|\/$/g, '');
+  console.log('norm has = ', normalizedHash);
   if (normalizedHash === '') {
     // redirect for default route
-    exports.startNavigating('contacts'); 
+    exports.startNavigating('browse'); 
   } else {
     model.setState({
       location : exports.getLocation(),

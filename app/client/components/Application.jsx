@@ -18,6 +18,8 @@ module.exports = function Application (props) {
   } else {
     component = (
       <div>
+        <br />
+        <br />
         <h1> Not Found </h1>
         <a href="#/browse">Browse page</a>
       </div>

@@ -22,3 +22,5 @@ model.setState(require('./initialState.js'));
 
 // Handle browser navigation events
 window.addEventListener('hashchange', navigation.navigated, false);
+
+navigation.navigated(); // set the page based on the start route.
