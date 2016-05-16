@@ -19,7 +19,6 @@ exports.cancel = function (e) {
 exports.submitNewItem = function (e) {
   var state = model.getState();
   e.preventDefault();
-  console.log('SUBMIT NEW ITEM');
   var item = Object.assign(
     {}, 
     state.newItem, 

@@ -15,7 +15,7 @@ module.exports = function Add(props) {
 
   function getFieldClass(fieldName) {
     var areErrors = props.newItem.errors && props.newItem.errors[fieldName];
-    return 'field ';// + (areErrors ? 'error': '');
+    return 'field ' + (areErrors ? 'error': '');
   }
 
   function getErrorLabel(fieldName){
@@ -30,7 +30,6 @@ module.exports = function Add(props) {
       return null;
     }
   }
-
 
   return (
     <div className="ui main text container">
