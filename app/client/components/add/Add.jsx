@@ -40,6 +40,7 @@ module.exports = function Add(props) {
           <input 
             value={props.newItem.title}
             onChange={createUpdateField('title')}
+            autoFocus="true"
             type="text">
           </input>
           {getErrorLabel('title')}
