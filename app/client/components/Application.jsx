@@ -1,7 +1,7 @@
 var React = require('react');
-var Menu = require('./menu/Menu.jsx');
+var Menu = require('./Menu/Menu.jsx');
 var NoteForm = require('./NoteForm/NoteForm.jsx');
-var Browse = require('./browse/Browse.jsx');
+var Browse = require('./Browse/Browse.jsx');
 var itemActions = require('./../actions/items.js');
 
 module.exports = function Application (props) {
