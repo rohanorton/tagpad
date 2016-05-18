@@ -1,9 +1,26 @@
 var React = require('react');
 require('./add.css');
 
-module.exports = function Add(props) {
-  
-  function createUpdateField(fieldName) {
+var AddForm = React.createClass({
+
+  propTypes: {
+    newItem: React.PropTypes.object.isRequired,
+    updateNewItem: React.PropTypes.func.isRequired,
+    submitNewItem: React.PropTypes.func.isRequired
+  },
+
+  componentDidUpdate: function(prevProps) {
+    var errors = this.props.newItem.errors || {};
+    var prevErrors = prevProps.newItem.errors;
+    var fieldsWithError = Object.keys(errors);
+    // only focus is the errors are different, otherwise just typing shifts focus to the error field
+    if (this.isMounted && errors && (errors !== prevErrors) && fieldsWithError.length) {
+      this.refs[fieldsWithError[0]].focus();
+    }
+  },
+
+  createUpdateField: function(fieldName) {
+    let props = this.props;
     return function (e) {
       var changes = {};
       e.preventDefault();
@@ -11,15 +28,15 @@ module.exports = function Add(props) {
       var updated = Object.assign({}, props.newItem, changes);
       props.updateNewItem(updated);
     };
-  }
+  },
 
-  function getFieldClass(fieldName) {
-    var areErrors = props.newItem.errors && props.newItem.errors[fieldName];
+  getFieldClass: function (fieldName) {
+    var areErrors = this.props.newItem.errors && this.props.newItem.errors[fieldName];
     return 'field ' + (areErrors ? 'error': '');
-  }
+  },
 
-  function getErrorLabel(fieldName){
-    var msg = props.newItem.errors && props.newItem.errors[fieldName];
+  getErrorLabel: function (fieldName){
+    var msg = this.props.newItem.errors && this.props.newItem.errors[fieldName];
     if (msg) {
       return (
         <div className="ui pointing red basic label">
@@ -29,49 +46,55 @@ module.exports = function Add(props) {
     } else {
       return null;
     }
-  }
+  },
 
-  return (
-    <div className="ui main text container">
-
-      <form className="ui form" onSubmit={props.submitNewItem} >
-        <div className={getFieldClass('title')} >
-          <label>title</label>
-          <input 
-            value={props.newItem.title}
-            onChange={createUpdateField('title')}
-            autoFocus="true"
-            type="text">
-          </input>
-          {getErrorLabel('title')}
-        </div>
-        <div className={getFieldClass('description')}>
-          <label>content</label>
-          <textarea 
-            value={props.newItem.description} 
-            onChange={createUpdateField('description')}
+  render: function () {
+    let props = this.props;
+    return (
+      <div className="ui main text container">
+        <form className="ui form" onSubmit={props.submitNewItem} >
+          <div className={this.getFieldClass('title')} >
+            <label>title</label>
+            <input
+              value={props.newItem.title}
+              onChange={this.createUpdateField('title')}
+              autoFocus="true"
+              ref="title"
+              type="text">
+            </input>
+            {this.getErrorLabel('title')}
+          </div>
+          <div className={this.getFieldClass('description')}>
+            <label>content</label>
+            <textarea
+              value={props.newItem.description}
+              ref="description"
+              onChange={this.createUpdateField('description')}
+              >
+            </textarea>
+            {this.getErrorLabel('description')}
+          </div>
+          <div className={this.getFieldClass('tags')}>
+            <label>tags</label>
+            <input
+              value={props.newItem.tags}
+              onChange={this.createUpdateField('tags')}
+              type="text">
+            </input>
+          </div>
+          <button type="submit" className="savebutton ui right floated primary button">
+            save
+          </button>
+          <button
+            className="ui right floated button"
+            onClick={props.cancel}
             >
-          </textarea>
-          {getErrorLabel('description')}
-        </div>
-        <div className={getFieldClass('tags')}>
-          <label>tags</label>
-          <input 
-            value={props.newItem.tags}
-            onChange={createUpdateField('tags')}
-            type="text">
-          </input>
-        </div>
-        <button type="submit" className="savebutton ui right floated primary button">
-          save
-        </button>
-        <button 
-          className="ui right floated button"
-          onClick={props.cancel}
-          >
-          cancel
-        </button>
-      </form>
-    </div>
-  );
-};
+            cancel
+          </button>
+        </form>
+      </div>
+    );
+  }
+});
+
+module.exports = AddForm;
