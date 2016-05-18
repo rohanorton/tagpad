@@ -1,4 +1,6 @@
 var React = require('react');
+var React = require('react');
+
 require('./menu.css');
 module.exports = function (props) {
   return (
@@ -13,4 +15,7 @@ module.exports = function (props) {
       </div>
     </div>
   );
+};
+module.exports.propTypes = {
+  page: React.PropTypes.string.isRequired
 };
