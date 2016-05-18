@@ -47,7 +47,7 @@ function ItemList(props) {
 function SearchBar(props) {
   return (
     <div className="ui fluid input">
-      <input placeholder="Search.." type="text"></input>
+      <input autoFocus="true" placeholder="Search.." type="text"></input>
     </div>
   );
 }
