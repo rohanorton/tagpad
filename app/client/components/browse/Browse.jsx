@@ -23,21 +23,28 @@ function Item(props) {
   };
   return (
     <div className="item">
-      <i className={typeToClass[props.item.type]}></i>
+      <i className={typeToClass[props.type]}></i>
       <div className="content">
-        <a href={"#/items/" + props.item.id} className="header">{props.item.title}</a>
-        <div className="description">{props.item.description}</div>
-        <ItemTags tags={props.item.tags} />
+        <a href={"#/items/" + props.id} className="header">{props.title}</a>
+        <div className="description">{props.description}</div>
+        <ItemTags tags={props.tags} />
       </div>
     </div>
   );
 }
 
+Item.propTypes = {
+  id: React.PropTypes.number.isRequired,
+  title: React.PropTypes.string.isRequired,
+  description: React.PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired
+};
+
 function ItemList(props) {
   return (
     <div className="ui list">
       {props.items.map(function (item) {
-        return <Item item={item} key={item.id} />; 
+        return <Item {...item} key={item.id} />; 
       })}
     </div>
   );
