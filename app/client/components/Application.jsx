@@ -7,11 +7,9 @@ var itemActions = require('./../actions/items.js');
 
 function NotFound() {
   return (
-    <div>
-      <br />
-      <br />
-      <h1> Not Found </h1>
-      <a href="#/browse">Browse page</a>
+    <div className="ui main text container">
+      <h1 className="ui header"> Not Found </h1>
+      <a href="#/browse">go back to browse page</a>
     </div>
   );
 }
@@ -21,7 +19,6 @@ function getItemForm (state, id) {
   var itemForm = state.itemForms[id];
   if (!itemForm) { 
     itemForm = state.items.filter(function(item) { return item.id === id; })[0];
-    itemActions.updateItemForm(itemForm);
   }
   return itemForm;
 }
