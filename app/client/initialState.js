@@ -6,6 +6,7 @@ module.exports = {
     { "id": 3, "type": "note", "title": "Ideas about space", "description": "How big is space really?", "tags": [] },
     { "id": 4, "type": "location", "title": "Enid's", "description": "At night a bar, during the day a delicious brunch spot.", "tags": ["Fun"] }
   ],
+  itemForms: {},
   "newItem": { 
     "id": 5, "title" : "", "description": "", "tags": ""
   }

@@ -11,7 +11,7 @@ exports.startNavigating = function (newHash) {
     model.setState({transitioning: true});
     window.location.replace(
       window.location.pathname + window.location.search + '#/' + newHash
-    );
+    )
   }
 };
 

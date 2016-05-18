@@ -1,5 +1,4 @@
 var React = require('react');
-
 require('./browse.css');
 
 function Tag(props) {
@@ -26,7 +25,7 @@ function Item(props) {
     <div className="item">
       <i className={typeToClass[props.item.type]}></i>
       <div className="content">
-        <a className="header">{props.item.title}</a>
+        <a href={"#/items/" + props.item.id} className="header">{props.item.title}</a>
         <div className="description">{props.item.description}</div>
         <ItemTags tags={props.item.tags} />
       </div>
