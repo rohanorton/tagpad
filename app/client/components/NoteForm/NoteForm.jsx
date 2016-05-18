@@ -74,7 +74,8 @@ module.exports = React.createClass({
             </textarea>
             {this.getErrorLabel('description')}
           </div>
-          <div className={this.getFieldErrorClass('tags')}>
+
+          <div className={"field" + this.getFieldErrorClass('tags')}>
             <label>tags</label>
             <input
               value={props.newItem.tags}
@@ -82,7 +83,10 @@ module.exports = React.createClass({
               type="text">
             </input>
           </div>
-          <label className="required-label"><span className="asterisk">*</span> required</label>
+
+          <label className="required-label">
+          <span className="asterisk">*</span> required</label>
+        
           <button type="submit" className="savebutton ui right floated primary button">
             save
           </button>
