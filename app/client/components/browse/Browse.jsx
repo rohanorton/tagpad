@@ -51,15 +51,18 @@ function SearchBar(props) {
   );
 }
 
-module.exports = function Browse(props) {
+function Browse(props) {
   return (
     <div className="ui main text container">
       <SearchBar />           
       <ItemList items={props.items} />           
     </div>
   );
-};
+}
 
-module.exports.propTypes = {
+Browse.propTypes = {
   items: React.PropTypes.array.isRequired
 };
+
+module.exports = Browse;
+
