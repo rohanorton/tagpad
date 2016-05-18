@@ -1,7 +1,7 @@
 var React = require('react');
-require('./add.css');
+require('./style.css');
 
-var AddForm = React.createClass({
+module.exports = React.createClass({
 
   propTypes: {
     newItem: React.PropTypes.object.isRequired,
@@ -96,5 +96,3 @@ var AddForm = React.createClass({
     );
   }
 });
-
-module.exports = AddForm;

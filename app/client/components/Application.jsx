@@ -1,6 +1,6 @@
 var React = require('react');
 var Menu = require('./menu/Menu.jsx');
-var Add = require('./add/Add.jsx');
+var NoteForm = require('./NoteForm/NoteForm.jsx');
 var Browse = require('./browse/Browse.jsx');
 var itemActions = require('./../actions/items.js');
 
@@ -10,7 +10,7 @@ module.exports = function Application (props) {
   if (page === "browse") {
     component = <Browse {...props} />;
   } else if (page === "add") {
-    component = <Add 
+    component = <NoteForm 
       {...props} 
       submitNewItem={itemActions.submitNewItem} 
       updateNewItem={itemActions.updateNewItem} 
