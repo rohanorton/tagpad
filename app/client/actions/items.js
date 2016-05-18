@@ -44,6 +44,7 @@ exports.submitItemForm = function (e, itemForm) {
   // that means no edits were made so safe to just redirect away.
   if (!itemForm) {
     navigation.startNavigating('browse');
+    return;
   }
   validate(itemForm);
   if (Object.keys(itemForm.errors).length === 0) {
