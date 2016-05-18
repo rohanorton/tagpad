@@ -59,3 +59,7 @@ module.exports = function Browse(props) {
     </div>
   );
 };
+
+module.exports.propTypes = {
+  items: React.PropTypes.array.isRequired
+};
