@@ -53,7 +53,7 @@ module.exports = React.createClass({
     return (
       <div className="ui main text container">
         <form className="ui form" onSubmit={props.submitNewItem} >
-          <div className={this.getFieldClass('title')} >
+          <div className={"required " + this.getFieldClass('title')} >
             <label>title</label>
             <input
               value={props.newItem.title}
@@ -64,7 +64,7 @@ module.exports = React.createClass({
             </input>
             {this.getErrorLabel('title')}
           </div>
-          <div className={this.getFieldClass('description')}>
+          <div className={"required " + this.getFieldClass('description')}>
             <label>content</label>
             <textarea
               value={props.newItem.description}
@@ -82,6 +82,7 @@ module.exports = React.createClass({
               type="text">
             </input>
           </div>
+          <label className="required-label"><span className="asterisk">*</span> required</label>
           <button type="submit" className="savebutton ui right floated primary button">
             save
           </button>
