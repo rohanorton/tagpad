@@ -30,9 +30,9 @@ module.exports = React.createClass({
     };
   },
 
-  getFieldClass: function (fieldName) {
+  getFieldErrorClass: function (fieldName) {
     var areErrors = this.props.newItem.errors && this.props.newItem.errors[fieldName];
-    return 'field ' + (areErrors ? 'error': '');
+    return (areErrors ? 'error': '');
   },
 
   getErrorLabel: function (fieldName){
@@ -53,7 +53,7 @@ module.exports = React.createClass({
     return (
       <div className="ui main text container">
         <form className="ui form" onSubmit={props.submitNewItem} >
-          <div className={"required " + this.getFieldClass('title')} >
+          <div className={"field required " + this.getFieldErrorClass('title')} >
             <label>title</label>
             <input
               value={props.newItem.title}
@@ -64,7 +64,7 @@ module.exports = React.createClass({
             </input>
             {this.getErrorLabel('title')}
           </div>
-          <div className={"required " + this.getFieldClass('description')}>
+          <div className={"field required " + this.getFieldErrorClass('description')}>
             <label>content</label>
             <textarea
               value={props.newItem.description}
@@ -74,7 +74,7 @@ module.exports = React.createClass({
             </textarea>
             {this.getErrorLabel('description')}
           </div>
-          <div className={this.getFieldClass('tags')}>
+          <div className={this.getFieldErrorClass('tags')}>
             <label>tags</label>
             <input
               value={props.newItem.tags}
