@@ -1,0 +1,14 @@
+
+.login-form {
+  height: 100%;
+}
+.login-form .column {
+  max-width: 450px;
+}
+.signup-container {
+  margin-top:40px;
+}
+.login-form .header {
+  margin-bottom: 1.4em;
+  margin-top: 1.4em;
+}

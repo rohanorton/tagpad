@@ -1,7 +1,12 @@
+
 body {
   background-color: #FFFFFF;
   overflow:hidden;
 }
+#react-container {
+  height: 100%;
+}
+
 .main.container {
   margin-top: 7em;
 }
