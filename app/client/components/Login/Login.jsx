@@ -2,9 +2,11 @@ var React = require('react');
 
 require('./style.css')
 
-module.exports = function () {
+module.exports = function (props) {
   return (
-    <div className="login-form ui middle aligned center aligned grid">
+    <form 
+      onSubmit={props.onSubmit}
+      className="login-form ui middle aligned center aligned grid">
       <div className="column">
         <h2 className="ui header image header">
           <div className="content">
@@ -25,7 +27,11 @@ module.exports = function () {
                 <input type="password" name="password" placeholder="Password" />
               </div>
             </div>
-            <div className="ui fluid large orange submit button">Login</div>
+            <button 
+              type="submit" 
+              className="ui fluid large orange submit button">
+              Login
+            </button>
           </div>
           <div className="ui error message"></div>
         </form>
@@ -33,6 +39,6 @@ module.exports = function () {
           New to us? <a href="#">Sign Up</a>
         </div>
       </div>
-    </div>
+    </form>
   );
 };

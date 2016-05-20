@@ -35,7 +35,7 @@ function validate(item) {
   }
 }
 
-exports.submitItemForm = function (e, itemForm) {
+exports.submitItemForm = function (e) {
   var state = model.getState();
   e.preventDefault();
   var id = Number(state.location[1]);

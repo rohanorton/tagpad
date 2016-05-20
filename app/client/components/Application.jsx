@@ -28,11 +28,16 @@ function getItemForm (state, id) {
   return itemForm;
 }
 
+function loginSubmit(e) {
+  e.preventDefault();
+  alert('loginSubmit, value = ' + JSON.stringify(e.target.value));
+}
+
 module.exports = function Application (props) {
   let page = props.location[0];
 
   if (page === "login") {
-    return <Login />;
+    return <Login onSubmit={loginSubmit}/>;
   } else if (page === "browse") {
     return (
       <div>
