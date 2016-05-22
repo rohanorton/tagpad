@@ -72,4 +72,3 @@ Browse.propTypes = {
 };
 
 module.exports = Browse;
-

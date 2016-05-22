@@ -1,29 +1,36 @@
+'use strict';
+var path = require('path');
+var webpack = require('webpack');
 module.exports = {
-  entry: "./client/tagpad.jsx",
+  devtool: 'eval-source-map',
+  entry: [
+    path.join(__dirname, "./tagpad.jsx")
+  ],
   output: {
-    path: __dirname + "/client/build",
-    publicPath: 'build/',
+    path: path.join(__dirname, "/dist/"),
+    publicPath: '/dist/',
     filename: "bundle.js"
   },
-  devtool: 'source-map',
+  plugins: [
+    new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify('development')
+    })
+  ],
   module: {
     preLoaders: [
       {
         test: /\.js?$/,
         loaders: ['eslint'],
         // define an include so we check jsut the files we need
-        include: './client'
+        include: ['./components', './tagpad.jsx']
       }
     ],
     loaders: [
       { test: /\.css$/, loader: "style!css" },
       {
         test: /\.jsx?$/,
-        loader: 'babel',
-        exclude: /(node_modules|bower_components)/,
-        query: {
-           presets: ["react"]
-        }
+        loaders: ['babel'],
+        exclude: /(node_modules|bower_components)/
       },
       {
         test: /\.png$/,

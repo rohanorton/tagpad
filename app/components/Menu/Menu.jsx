@@ -1,5 +1,4 @@
 var React = require('react');
-var React = require('react');
 
 require('./menu.css');
 module.exports = function (props) {
