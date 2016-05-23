@@ -7,8 +7,8 @@ module.exports = {
     path.join(__dirname, "./tagpad.jsx")
   ],
   output: {
-    path: path.join(__dirname, "/dist/"),
-    publicPath: '/dist/',
+    path: path.join(__dirname, "/build/"),
+    publicPath: '/build',
     filename: "bundle.js"
   },
   plugins: [

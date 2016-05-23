@@ -18,8 +18,12 @@ app.use(middleware);
 
 app.use(express.static(__dirname + '/static'));
 
-app.get('/items/foo', function (req, res) {
-  res.send([1,2,3,4]);
+app.get('/items.json', function (req, res) {
+  res.sendFile(path.join(__dirname, 'items.json'));
+});
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(3000, '0.0.0.0', function () {
