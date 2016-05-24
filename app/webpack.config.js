@@ -4,10 +4,10 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'eval-source-map',
   entry: [
-    path.join(__dirname, "./tagpad.jsx")
+    path.join(__dirname, "./client/tagpad.jsx")
   ],
   output: {
-    path: path.join(__dirname, "/build/"),
+    path: path.join(__dirname, "/client/build/"),
     publicPath: '/build',
     filename: "bundle.js"
   },

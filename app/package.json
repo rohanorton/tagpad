@@ -27,7 +27,15 @@
     "react-hot-loader": "^3.0.0-beta.0"
   },
   "dependencies": {
+    "babel-preset-node5": "^11.1.0",
+    "express-graphql": "^0.5.1",
+    "faker": "^3.1.0",
+    "graphql": "^0.5.0",
+    "lodash": "^4.13.1",
+    "pg": "^4.5.5",
+    "pg-hstore": "^2.3.2",
     "react": "^15.0.2",
-    "react-dom": "^15.0.2"
+    "react-dom": "^15.0.2",
+    "sequelize": "^3.23.2"
   }
 }
