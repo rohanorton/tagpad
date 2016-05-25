@@ -28,7 +28,6 @@ db.define(config.database, function (err) {
   require('./database/addExampleData.js').run();
 
   app.use(express.static(__dirname + '/client/static'));
-  //app.use('/items', require('./controllers/items.js').getRouter());
 
   app.use('/graphql', GraphHTTP({
     schema: Schema,
