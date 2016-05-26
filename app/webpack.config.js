@@ -17,20 +17,12 @@ module.exports = {
     })
   ],
   module: {
-    preLoaders: [
-      {
-        test: /\.js?$/,
-        loaders: ['eslint'],
-        // define an include so we check jsut the files we need
-        include: ['./components', './tagpad.jsx']
-      }
-    ],
     loaders: [
       { test: /\.css$/, loader: "style!css" },
       {
         test: /\.jsx?$/,
         loaders: ['babel'],
-        exclude: /(node_modules|bower_components)/
+        exclude: /node_modules/
       },
       {
         test: /\.png$/,

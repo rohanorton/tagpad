@@ -1,0 +1,17 @@
+schema {
+  query: Query
+}
+
+type Query {
+  root: Root
+}
+
+type Root {
+  users: [User]
+}
+
+type User {
+  email: String
+  steepingTime: Int
+  id: String
+}

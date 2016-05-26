@@ -8,7 +8,7 @@ import {
 } from 'graphql';
 import Db from './db';
 
-const User = new GraphQLObjectType({
+var UserType = new GraphQLObjectType({
   name: 'User',
   description: 'This represents a User',
   fields: () => {
@@ -25,17 +25,50 @@ const User = new GraphQLObjectType({
           return user.email;
         }
       },
-      items: {
+      /*items: {
         type: new GraphQLList(Item),
         resolve(user) {
           return user.getItems();
         }
-      }
+      }*/
     }
   }
 });
 
-const Item = new GraphQLObjectType({
+var StoreType = new GraphQLObjectType({
+  name: 'Store',
+  fields: () => ({
+    users: { type: new GraphQLList(UserType)},
+  }),
+});
+
+
+let STORE = {
+  users: [
+    {email: 'foo1@bar.com', id: 0},
+    {email: 'foo2@bar.com', id: 1},
+    {email: 'foo3@bar.com', id: 2},
+    {email: 'foo4@bar.com', id: 3},
+  ],
+};
+
+
+
+export var Schema = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: 'Query', 
+    fields: () => ({
+      store: {
+        type: StoreType,
+        resolve: () => STORE,
+      }
+    })
+  })
+});
+
+
+
+/*const Item = new GraphQLObjectType({
   name: 'Item',
   description: 'This is an Item',
   fields: () => {
@@ -66,10 +99,10 @@ const Item = new GraphQLObjectType({
       }
     }
   }
-});
+});*/
 
 
-const Query = new GraphQLObjectType({
+/*const Query = new GraphQLObjectType({
   name: 'Query',
   description: 'This is a root query',
   fields: () => {
@@ -136,10 +169,8 @@ const Mutation = new GraphQLObjectType({
   }
 });
 
-
-const Schema = new GraphQLSchema({
+export var Schema = new GraphQLSchema({
   query: Query,
   mutation: Mutation
 });
-
-export default Schema;
+*/
