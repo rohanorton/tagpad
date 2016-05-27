@@ -7,11 +7,11 @@ import {
 } from 'graphql';
 import Db from './db';
 
-var UserType = new GraphQLObjectType({
-  name: 'User',
+var ItemType = new GraphQLObjectType({
+  name: 'Item',
   fields: () => ({
-    email: {type: GraphQLString},
-    steepingTime: {type: GraphQLInt},
+    title: {type: GraphQLString},
+    content: {type: GraphQLString},
     id: {type: GraphQLString},
   }),
 });
@@ -19,10 +19,10 @@ var UserType = new GraphQLObjectType({
 
 // This needs to exist due to a limitation in Relay
 //https://github.com/facebook/relay/issues/112
-var RootType = new GraphQLObjectType({
-  name: 'Root',
+var ItemsViewType = new GraphQLObjectType({
+  name: 'ItemsView',
   fields: () => ({
-    users: {type: new GraphQLList(UserType)},
+    items: {type: new GraphQLList(ItemType)},
   }),
 });
 
@@ -30,19 +30,14 @@ export var Schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: () => ({
-      root: {
-        type: RootType,
+      itemsView: {
+        type: ItemsViewType,
         resolve: function (root, args) {
-          return new Promise(
-            function(resolve, reject) {
-              console.log('query for users');
-              return Db.conn.models.user.findAll({where: args}).then(function (users) {
-                resolve({users: users});
-              });
-            }
-          );
+          return Db.conn.models.item.findAll({where: args}).then(function (items) {
+            return ({items: items});
+          });
         }
-      },
-    }),
-  }),
+      }
+    })
+  })
 });

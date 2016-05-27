@@ -2,16 +2,16 @@ schema {
   query: Query
 }
 
-type Query {
-  root: Root
-}
-
-type Root {
-  users: [User]
-}
-
-type User {
-  email: String
-  steepingTime: Int
+type Item {
+  title: String
+  content: String
   id: String
+}
+
+type ItemsView {
+  items: [Item]
+}
+
+type Query {
+  itemsView: ItemsView
 }

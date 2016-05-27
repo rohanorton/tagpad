@@ -16,6 +16,9 @@ module.exports = {
     'process.env.NODE_ENV': JSON.stringify('development')
     })
   ],
+  devServer: {
+    stats: 'errors-only',
+  }
   module: {
     loaders: [
       { test: /\.css$/, loader: "style!css" },

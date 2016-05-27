@@ -4,56 +4,59 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
 
-class User extends React.Component {
+class Item extends React.Component {
   render() {
-    var {email, id} = this.props.user;
+    var {title, id} = this.props.item;
     return (
       <li>
-        {email}
+        {title}
       </li>
     );
   }
 }
-User = Relay.createContainer(User, {
+Item = Relay.createContainer(Item, {
   fragments: {
-    user: () => Relay.QL`
-      fragment on User {
+    item: () => Relay.QL`
+      fragment on Item {
         id,
-        email
+        title
       }
     `,
   },
 });
 
-class UserList extends React.Component {
+
+
+class ItemsView extends React.Component {
   render() {
     return <ul>
-      {this.props.root.users.map(function (user) {
-        return <User key={user.id} user={user} />;
+      {this.props.itemsView.items.map(function (item) {
+        return <Item key={item.id} item={item} />;
       })}
     </ul>;
   }
 }
 
-UserList = Relay.createContainer(UserList, {
+ItemsView = Relay.createContainer(ItemsView, {
   fragments: {
-    root: () => Relay.QL`
-      fragment on Root {
-        users {
+    itemsView: () => Relay.QL`
+      fragment on ItemsView {
+        items {
           id
-          ${User.getFragment('user')} 
+          ${Item.getFragment('item')} 
         },
       }
     `,
   },
 });
 
-class UserHomeRoute extends Relay.Route {
-  static routeName = 'Home';
+
+class ItemsViewRoute extends Relay.Route {
+  static routeName = 'Browse';
   static queries = {
-    root: (Component) => Relay.QL`
-      query UserListQuery {
-        root { ${Component.getFragment('root')} },
+    itemsView: (Component) => Relay.QL`
+      query ItemsViewQuery {
+        itemsView { ${Component.getFragment('itemsView')} },
       }
     `,
   };
@@ -61,8 +64,8 @@ class UserHomeRoute extends Relay.Route {
 
 ReactDOM.render(
   <Relay.RootContainer
-    Component={UserList}
-    route={new UserHomeRoute()}
+    Component={ItemsView}
+    route={new ItemsViewRoute()}
   />,
   document.getElementById('react-container')
 );

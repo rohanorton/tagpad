@@ -9,10 +9,10 @@ var Faker = require('faker');
       return db.conn.models.user.create({
         email: Faker.internet.email()
       }).then(user => {
-        /*return user.createItem({
+        return user.createItem({
           title: `Sample title by ${user.email}`,
           description: 'This is the same note'
-        });*/
+        });
       });
     });
  }
