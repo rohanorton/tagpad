@@ -15,19 +15,7 @@ let appServer;
 
 function startAppServer(callback) {
   // Serve the Relay app
-  const compiler = webpack({
-    entry: path.resolve(__dirname, 'client', 'tagpad.jsx'),
-    module: {
-      loaders: [
-        {
-          exclude: /node_modules/,
-          loader: 'babel',
-          test: /\.jsx$/,
-        }
-      ]
-    },
-    output: {filename: 'tagpad.jsx', path: '/'}
-  });
+  const compiler = webpack(require('./webpack.config.js'));
   appServer = new WebpackDevServer(compiler, {
     contentBase: '/client/',
     proxy: {'/graphql': `http://localhost:${GRAPHQL_PORT}`},

@@ -46,8 +46,8 @@ exports.define = function (config, callback) {
       type: Sequelize.STRING,
       allowNull: false
     },
-    description: {
-      type: Sequelize.STRING
+    content: {
+      type: Sequelize.TEXT
     },
     type: {
       type: Sequelize.ENUM('note')

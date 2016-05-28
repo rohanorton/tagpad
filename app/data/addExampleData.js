@@ -5,13 +5,13 @@ var _ = require('lodash');
 var Faker = require('faker');
 
  function createFakeData() {
-    _.times(10, () => {
+    _.times(2, () => {
       return db.conn.models.user.create({
         email: Faker.internet.email()
       }).then(user => {
         return user.createItem({
-          title: `Sample title by ${user.email}`,
-          description: 'This is the same note'
+          title: Faker.lorem.words(),
+          content: Faker.lorem.paragraph()
         });
       });
     });

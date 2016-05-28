@@ -1,12 +1,14 @@
+import 'babel-polyfill';
+import Relay from 'react-relay';
 var React = require('react');
 
 // Some components
-var Menu = require('./Menu/Menu.jsx');
-var NoteForm = require('./NoteForm/NoteForm.jsx');
-var Browse = require('./Browse/Browse.jsx');
-var Login = require('./Login/Login.jsx');
+var Menu = require('./Menu/Menu.js');
+var Browse = require('./Browse/Browse.js');
 
-var itemActions = require('./../actions/items.js');
+/*var NoteForm = require('./NoteForm/NoteForm.jsx');
+var Login = require('./Login/Login.jsx');
+var itemActions = require('./../actions/items.js');*/
 
 function NotFound() {
   return (
@@ -33,7 +35,36 @@ function loginSubmit(e) {
   alert('loginSubmit, value = ' + JSON.stringify(e.target.value));
 }
 
-module.exports = function Application (props) {
+// Appplication is just browse for now.
+class ItemsView extends React.Component {
+  render() {
+    let items = this.props.itemsView.items;
+    return (
+      <div>
+        <Menu page="browse" />
+        <Browse items={items} />;
+      </div>
+    );
+  }
+}
+
+export default Relay.createContainer(ItemsView, {
+  fragments: {
+    itemsView: () => Relay.QL`
+      fragment on ItemsView {
+        items {
+          id,
+          title,
+          content,
+        },
+      }
+    `,
+  },
+});
+
+
+// Appplication is just browse for now bring this back soon.
+/*module.exports = function Application (props) {
   let page = props.location[0];
 
   if (page === "login") {
@@ -78,4 +109,4 @@ module.exports = function Application (props) {
   } 
   return <NotFound />;
 
-};
+};*/

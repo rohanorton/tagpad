@@ -3,8 +3,9 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
+import ItemsView from './components/ItemsView';
 
-class Item extends React.Component {
+/*class Item extends React.Component {
   render() {
     var {title, id} = this.props.item;
     return (
@@ -23,11 +24,10 @@ Item = Relay.createContainer(Item, {
       }
     `,
   },
-});
+});*/
 
 
-
-class ItemsView extends React.Component {
+/*class ItemsView extends React.Component {
   render() {
     return <ul>
       {this.props.itemsView.items.map(function (item) {
@@ -35,23 +35,10 @@ class ItemsView extends React.Component {
       })}
     </ul>;
   }
-}
-
-ItemsView = Relay.createContainer(ItemsView, {
-  fragments: {
-    itemsView: () => Relay.QL`
-      fragment on ItemsView {
-        items {
-          id
-          ${Item.getFragment('item')} 
-        },
-      }
-    `,
-  },
-});
+}*/
 
 
-class ItemsViewRoute extends Relay.Route {
+class BrowseRoute extends Relay.Route {
   static routeName = 'Browse';
   static queries = {
     itemsView: (Component) => Relay.QL`
@@ -65,7 +52,7 @@ class ItemsViewRoute extends Relay.Route {
 ReactDOM.render(
   <Relay.RootContainer
     Component={ItemsView}
-    route={new ItemsViewRoute()}
+    route={new BrowseRoute()}
   />,
   document.getElementById('react-container')
 );

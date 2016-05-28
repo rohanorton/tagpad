@@ -1,4 +1,5 @@
 var React = require('react');
+
 require('./browse.css');
 
 function Tag(props) {
@@ -26,17 +27,17 @@ function Item(props) {
       <i className={typeToClass[props.type]}></i>
       <div className="content">
         <a href={"#/items/" + props.id} className="header">{props.title}</a>
-        <div className="description">{props.description}</div>
-        <ItemTags tags={props.tags} />
+        <div className="description">{props.content}</div>
+        <ItemTags tags={props.tags || []} />
       </div>
     </div>
   );
 }
 
 Item.propTypes = {
-  id: React.PropTypes.number.isRequired,
+  id: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired,
-  description: React.PropTypes.string.isRequired,
+  content: React.PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired
 };
 
@@ -44,7 +45,8 @@ function ItemList(props) {
   return (
     <div className="ui list">
       {props.items.map(function (item) {
-        return <Item {...item} key={item.id} />; 
+        console.log('item = ', item);
+        return <Item {...item} type='note' key={item.id} />; 
       })}
     </div>
   );
@@ -52,7 +54,7 @@ function ItemList(props) {
 
 function SearchBar(props) {
   return (
-    <div className="ui fluid input focus">
+    <div className="ui fluid input focus search-bar">
       <input autoFocus="true" placeholder="Search.." type="text"></input>
     </div>
   );
