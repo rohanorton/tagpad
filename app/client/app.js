@@ -1,9 +1,8 @@
-
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
-import ItemsView from './components/ItemsView';
+import App from './components/App';
 
 /*class Item extends React.Component {
   render() {
@@ -51,7 +50,7 @@ class BrowseRoute extends Relay.Route {
 
 ReactDOM.render(
   <Relay.RootContainer
-    Component={ItemsView}
+    Component={App}
     route={new BrowseRoute()}
   />,
   document.getElementById('react-container')
