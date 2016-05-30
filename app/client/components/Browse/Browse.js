@@ -1,4 +1,6 @@
-var React = require('react');
+import 'babel-polyfill';
+import Relay from 'react-relay';
+import React from 'react';
 
 require('./browse.css');
 
@@ -34,6 +36,17 @@ function Item(props) {
   );
 }
 
+/*Item = Relay.createContainer(Item, {
+  fragments: {
+    item: () => Relay.QL`
+      fragment on Item {
+        title,
+        content
+      }
+    `
+  }
+});*/
+
 Item.propTypes = {
   id: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired,
@@ -41,16 +54,6 @@ Item.propTypes = {
   type: React.PropTypes.string.isRequired
 };
 
-function ItemList(props) {
-  return (
-    <div className="ui list">
-      {props.items.map(function (item) {
-        console.log('item = ', item);
-        return <Item {...item} type='note' key={item.id} />; 
-      })}
-    </div>
-  );
-}
 
 function SearchBar(props) {
   return (
@@ -60,17 +63,62 @@ function SearchBar(props) {
   );
 }
 
-function Browse(props) {
+function ItemList(props) {
+console.log('item list props = ', props);
   return (
-    <div className="ui main text container">
-      <SearchBar />           
-      <ItemList items={props.items} />           
+    <div className="ui list">
+      {props.itemsList.items.map(function (item) {
+        return <Item {...item} type='note' key={item.id} />; 
+      })}
     </div>
   );
 }
 
-Browse.propTypes = {
-  items: React.PropTypes.array.isRequired
-};
+ItemList = Relay.createContainer(ItemList, {
+  fragments: {
+    itemsList: () => Relay.QL`
+      fragment on ItemsList {
+        items {
+          id,
+          title,
+          content
+        }
+      }
+    `
+  }
+});
+
+class ItemListRouteQuery extends Relay.Route {
+  static routeName = 'ItemListRouteQuery';
+  static queries = {
+    itemsList: (Component) => Relay.QL`
+      query {
+        itemsList { ${Component.getFragment('itemsList')} },
+      }
+    `,
+  };
+}
+function Browse(props) {
+  return (
+    <div className="ui main text container">
+      <SearchBar />           
+      <Relay.RootContainer
+        Component={ItemList}
+        route={new ItemListRouteQuery()}
+        renderLoading = {function () {
+          return <div> Loading... </div>
+        }}
+        renderFailure={function(error, retry) {
+          return (
+            <div>
+              <p>{error.message}</p>
+              <p><button onClick={retry}>Retry?</button></p>
+            </div>
+          );
+        }}
+      />
+    </div>
+  );
+}
 
 module.exports = Browse;

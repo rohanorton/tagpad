@@ -36,31 +36,16 @@ function loginSubmit(e) {
 }
 
 // Appplication is just browse for now.
-class ItemsView extends React.Component {
-  render() {
-    let items = this.props.itemsView.items;
-    return (
-      <div>
-        <Menu page="browse" />
-        <Browse items={items} />;
-      </div>
-    );
-  }
+function App (props) {
+  return (
+    <div>
+      <Menu page="browse" />
+      <Browse/>;
+    </div>
+  );
 }
 
-export default Relay.createContainer(ItemsView, {
-  fragments: {
-    itemsView: () => Relay.QL`
-      fragment on ItemsView {
-        items {
-          id,
-          title,
-          content,
-        },
-      }
-    `,
-  },
-});
+module.exports = App;
 
 
 // Appplication is just browse for now bring this back soon.
