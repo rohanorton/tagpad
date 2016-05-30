@@ -16,11 +16,10 @@ var ItemType = new GraphQLObjectType({
   }),
 });
 
-
 // This needs to exist due to a limitation in Relay
 //https://github.com/facebook/relay/issues/112
-var ItemsViewType = new GraphQLObjectType({
-  name: 'ItemsView',
+var ItemsListType = new GraphQLObjectType({
+  name: 'ItemsList',
   fields: () => ({
     items: {type: new GraphQLList(ItemType)},
   }),
@@ -30,8 +29,8 @@ export var Schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: () => ({
-      itemsView: {
-        type: ItemsViewType,
+      itemsList: {
+        type: ItemsListType,
         resolve: function (root, args) {
           return Db.conn.models.item.findAll({where: args}).then(function (items) {
             return ({items: items});

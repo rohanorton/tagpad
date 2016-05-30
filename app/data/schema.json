@@ -13,12 +13,12 @@
           "description": null,
           "fields": [
             {
-              "name": "itemsView",
+              "name": "itemsList",
               "description": null,
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "ItemsView",
+                "name": "ItemsList",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -32,7 +32,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "ItemsView",
+          "name": "ItemsList",
           "description": null,
           "fields": [
             {

@@ -8,10 +8,10 @@ type Item {
   id: String
 }
 
-type ItemsView {
+type ItemsList {
   items: [Item]
 }
 
 type Query {
-  itemsView: ItemsView
+  itemsList: ItemsList
 }
