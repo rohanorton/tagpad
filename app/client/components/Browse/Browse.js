@@ -24,36 +24,31 @@ function Item(props) {
     'bookmark': "bookmark outline icon",
     'location': "map marker icon"
   };
+  var item = props.item;
+  console.log('item = ', item);
   return (
     <div className="item">
-      <i className={typeToClass[props.type]}></i>
+      <i className={typeToClass[item.type]}></i>
       <div className="content">
-        <a href={"#/items/" + props.id} className="header">{props.title}</a>
-        <div className="description">{props.content}</div>
-        <ItemTags tags={props.tags || []} />
+        <a href={"#/items/" + item.id} className="header">{item.title}</a>
+        <div className="description">{item.content}</div>
+        <ItemTags tags={item.tags || []} />
       </div>
     </div>
   );
 }
 
-/*Item = Relay.createContainer(Item, {
+Item = Relay.createContainer(Item, {
   fragments: {
     item: () => Relay.QL`
       fragment on Item {
+        id,
         title,
         content
       }
     `
   }
-});*/
-
-Item.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired
-};
-
+});
 
 function SearchBar(props) {
   return (
@@ -68,7 +63,7 @@ console.log('item list props = ', props);
   return (
     <div className="ui list">
       {props.itemsList.items.map(function (item) {
-        return <Item {...item} type='note' key={item.id} />; 
+        return <Item item={item} type='note' key={item.id} />; 
       })}
     </div>
   );
@@ -80,8 +75,7 @@ ItemList = Relay.createContainer(ItemList, {
       fragment on ItemsList {
         items {
           id,
-          title,
-          content
+          ${Item.getFragment('item')},
         }
       }
     `
