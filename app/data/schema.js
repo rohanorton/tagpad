@@ -30,9 +30,20 @@ export var Schema = new GraphQLSchema({
     name: 'Query',
     fields: () => ({
       itemsList: {
+        args: {
+          id: { type: GraphQLString },
+          title: { type: GraphQLString }
+        },
         type: ItemsListType,
         resolve: function (root, args) {
-          return Db.conn.models.item.findAll({where: args}).then(function (items) {
+          var query = {
+            where: {
+              title: {
+                $like: '%' + args.title + '%'
+              }
+            }
+          };
+          return Db.conn.models.item.findAll(query).then(function (items) {
             return {items: items};
           });
         }

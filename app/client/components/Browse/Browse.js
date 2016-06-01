@@ -84,10 +84,13 @@ ItemList = Relay.createContainer(ItemList, {
 
 class ItemListRouteQuery extends Relay.Route {
   static routeName = 'ItemListRouteQuery';
+  static paramDefinitions = {
+    title: {required: true},
+  };
   static queries = {
     itemsList: (Component) => Relay.QL`
       query {
-        itemsList { ${Component.getFragment('itemsList')} },
+        itemsList(title: $title) { ${Component.getFragment('itemsList')} },
       }
     `,
   };
@@ -99,7 +102,7 @@ function Browse(props) {
       <SearchBar />           
       <Relay.RootContainer
         Component={ItemList}
-        route={new ItemListRouteQuery()}
+        route={new ItemListRouteQuery({title: 'sint'})}
         renderLoading = {function () {
           return (
             <div className="ui active loader text">loading items</div>
