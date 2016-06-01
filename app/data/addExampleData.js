@@ -5,7 +5,7 @@ var _ = require('lodash');
 var Faker = require('faker');
 
  function createFakeData() {
-    _.times(2, () => {
+    _.times(20, () => {
       return db.conn.models.user.create({
         email: Faker.internet.email()
       }).then(user => {
@@ -19,13 +19,3 @@ var Faker = require('faker');
 exports.run = function () {
   createFakeData(); 
 };
-
-
-/*db.define(config, function (err) {
-  console.log('models = ', db.conn.models);
-  if (err) {
-    throw err;
-  } else {
-    createFakeData();  
-  }
-});*/
