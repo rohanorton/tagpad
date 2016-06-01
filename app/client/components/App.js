@@ -40,7 +40,7 @@ function App (props) {
   return (
     <div>
       <Menu page="browse" />
-      <Browse/>;
+      <Browse search={props.search} searchChange={props.searchChange}/>;
     </div>
   );
 }

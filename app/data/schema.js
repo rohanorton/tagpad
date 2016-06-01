@@ -36,13 +36,12 @@ export var Schema = new GraphQLSchema({
         },
         type: ItemsListType,
         resolve: function (root, args) {
-          var query = {
-            where: {
-              title: {
-                $like: '%' + args.title + '%'
-              }
-            }
-          };
+          var query = {where: {}};
+
+          if (args.title) {
+            query.where.title = {$like: '%' + args.title + '%'};
+          }
+          
           return Db.conn.models.item.findAll(query).then(function (items) {
             return {items: items};
           });

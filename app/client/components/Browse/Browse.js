@@ -25,7 +25,6 @@ function Item(props) {
     'location': "map marker icon"
   };
   var item = props.item;
-  console.log('item = ', item);
   return (
     <div className="item">
       <i className={typeToClass[item.type]}></i>
@@ -53,15 +52,22 @@ Item = Relay.createContainer(Item, {
 function SearchBar(props) {
   return (
     <div className="ui fluid input focus search-bar">
-      <input autoFocus="true" placeholder="search.." type="text"></input>
+      <input 
+        autoFocus="true" 
+        placeholder="search.." 
+        onChange={props.onChange}
+        type="text">
+    </input>
     </div>
   );
 }
 
 function ItemList(props) {
-console.log('item list props = ', props);
   return (
     <div className="ui list">
+      
+      {props.itemsList.items.length === 0 && <h4 className="ui center aligned header"> sorry, no matching items found. </h4>}
+
       {props.itemsList.items.map(function (item) {
         return <Item item={item} type='note' key={item.id} />; 
       })}
@@ -97,12 +103,15 @@ class ItemListRouteQuery extends Relay.Route {
 }
 
 function Browse(props) {
+  function searchChange(e) {
+    props.searchChange(e.target.value);
+  }
   return (
     <div className="ui main text container">
-      <SearchBar />           
+      <SearchBar onChange={searchChange}/>           
       <Relay.RootContainer
         Component={ItemList}
-        route={new ItemListRouteQuery({title: 'sint'})}
+        route={new ItemListRouteQuery({title: props.search})}
         renderLoading = {function () {
           return (
             <div className="ui active loader text">loading items</div>
