@@ -53,7 +53,7 @@ Item = Relay.createContainer(Item, {
 function SearchBar(props) {
   return (
     <div className="ui fluid input focus search-bar">
-      <input autoFocus="true" placeholder="Search.." type="text"></input>
+      <input autoFocus="true" placeholder="search.." type="text"></input>
     </div>
   );
 }
@@ -92,6 +92,7 @@ class ItemListRouteQuery extends Relay.Route {
     `,
   };
 }
+
 function Browse(props) {
   return (
     <div className="ui main text container">
@@ -100,7 +101,9 @@ function Browse(props) {
         Component={ItemList}
         route={new ItemListRouteQuery()}
         renderLoading = {function () {
-          return <div> Loading... </div>
+          return (
+            <div className="ui active loader text">loading items</div>
+          );
         }}
         renderFailure={function(error, retry) {
           return (
