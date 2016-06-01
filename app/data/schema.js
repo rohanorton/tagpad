@@ -33,7 +33,7 @@ export var Schema = new GraphQLSchema({
         type: ItemsListType,
         resolve: function (root, args) {
           return Db.conn.models.item.findAll({where: args}).then(function (items) {
-            return ({items: items});
+            return {items: items};
           });
         }
       }
