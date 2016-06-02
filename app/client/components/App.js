@@ -37,10 +37,11 @@ function loginSubmit(e) {
 
 // Appplication is just browse for now.
 function App (props) {
+  // props {hash, query}
   return (
     <div>
       <Menu page="browse" />
-      <Browse search={props.search} searchChange={props.searchChange}/>;
+      <Browse search={props.query.search || ''}/>;
     </div>
   );
 }

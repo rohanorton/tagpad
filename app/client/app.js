@@ -3,17 +3,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
 import App from './components/App';
+import navigation from './helpers/navigation'
 
 require('./tagpad.css');
 
-// TODO handle routing
-
-function searchChange (newSearchValue) {
+function render() {
   ReactDOM.render(
-    <App searchChange={searchChange} search={newSearchValue} />,
+    React.createElement(App, {
+      location: navigation.getLocation(),
+      query: navigation.getQuery()
+    }),
     document.getElementById('react-container')
   );
 }
 
-searchChange('');
+// Handle browser navigation events
+window.addEventListener('hashchange', render, false);
 
+render();

@@ -1,6 +1,7 @@
 import 'babel-polyfill';
 import Relay from 'react-relay';
 import React from 'react';
+import queryString from 'query-string';
 
 require('./browse.css');
 
@@ -50,12 +51,26 @@ Item = Relay.createContainer(Item, {
 });
 
 function SearchBar(props) {
+
+  function setSearch(e) {
+    var oldHash = window.location.hash;
+    let newHash;
+    if (oldHash.indexOf('?')) {
+      newHash = oldHash.split('?')[0];
+    } else {
+      newHash = oldHash;
+    }
+    newHash += '?search=' + e.target.value;
+    window.location.hash = newHash;
+  }
+
   return (
     <div className="ui fluid input focus search-bar">
       <input 
         autoFocus="true" 
         placeholder="search.." 
-        onChange={props.onChange}
+        onChange={setSearch}
+        value={props.search}
         type="text">
     </input>
     </div>
@@ -103,12 +118,9 @@ class ItemListRouteQuery extends Relay.Route {
 }
 
 function Browse(props) {
-  function searchChange(e) {
-    props.searchChange(e.target.value);
-  }
   return (
     <div className="ui main text container">
-      <SearchBar onChange={searchChange}/>           
+      <SearchBar search={props.search}/>           
       <Relay.RootContainer
         Component={ItemList}
         route={new ItemListRouteQuery({title: props.search})}

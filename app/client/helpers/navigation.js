@@ -1,8 +1,24 @@
 var model = require('./model.js');
+import queryString from 'query-string';
 
 exports.getLocation = function () {
+  let hash = window.location.hash;
+  // remove query string
+  if (hash.indexOf('?')) {
+    hash = hash.split('?')[0];
+  }
   // Removes the `#`, and any leading/final `/` characters
-  return window.location.hash.replace(/^#\/?|\/$/g, '').split('/');
+  return hash.replace(/^#\/?|\/$/g, '').split('/');
+};
+
+
+exports.getQuery = function () {
+  // Removes the `#`, and any leading/final `/` characters
+  let hash = window.location.hash;
+  if (hash.indexOf('?')) {
+    return queryString.parse(hash.split('?')[1]);
+  }
+  return {};
 };
 
 exports.startNavigating = function (newHash) {
@@ -11,7 +27,7 @@ exports.startNavigating = function (newHash) {
     model.setState({transitioning: true});
     window.location.replace(
       window.location.pathname + window.location.search + '#/' + newHash
-    )
+    );
   }
 };
 
