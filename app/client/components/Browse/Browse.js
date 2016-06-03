@@ -2,6 +2,8 @@ import 'babel-polyfill';
 import Relay from 'react-relay';
 import React from 'react';
 import queryString from 'query-string';
+import model from '../../helpers/model';
+import navigation from '../../helpers/navigation';
 
 require('./browse.css');
 
@@ -50,32 +52,27 @@ Item = Relay.createContainer(Item, {
   }
 });
 
-let SearchBar = React.createClass({
-  setSearch: function (e) {
-    var oldHash = window.location.hash;
-    let newHash;
-    if (oldHash.indexOf('?')) {
-      newHash = oldHash.split('?')[0];
-    } else {
-      newHash = oldHash;
-    }
-    newHash += '?' + queryString.stringify({search: e.target.value}); 
-    window.location.hash = newHash;
-  },
-  render: function () {
-    return (
-      <div className="ui fluid input focus search-bar">
-        <input 
-          autoFocus="true" 
-          placeholder="search.." 
-          onChange={this.setSearch}
-          value={this.props.search}
-          type="text">
+function searchChanged(e) {
+  let newQuery = { search: e.target.value };
+  // sync state update required to avoid async text update issues
+  model.setState({query: newQuery});
+  // update url to reflect change.
+  navigation.setQuery(newQuery);
+}
+
+function SearchBar(props) {
+  return (
+    <div className="ui fluid input focus search-bar">
+      <input 
+        autoFocus="true" 
+        placeholder="search.." 
+        onChange={searchChanged}
+        value={props.search}
+        type="text">
       </input>
-      </div>
-    );
-  }
-});
+    </div>
+  );
+}
 
 function ItemList(props) {
   return (
@@ -118,7 +115,7 @@ class ItemListRouteQuery extends Relay.Route {
 function Browse(props) {
   return (
     <div className="ui main text container">
-      <SearchBar search={props.search}/>           
+      <SearchBar {...props}/>           
       <Relay.RootContainer
         Component={ItemList}
         route={new ItemListRouteQuery({title: props.search})}

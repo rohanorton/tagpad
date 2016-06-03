@@ -12,6 +12,18 @@ exports.getLocation = function () {
 };
 
 
+exports.setQuery = function (newQuery) {
+  var oldHash = window.location.hash,
+    newHash;
+  if (oldHash.indexOf('?')) {
+    newHash = oldHash.split('?')[0];
+  } else {
+    newHash = oldHash;
+  }
+  newHash += '?' + queryString.stringify(newQuery); 
+  window.location.hash = newHash;
+};
+
 exports.getQuery = function () {
   // Removes the `#`, and any leading/final `/` characters
   let hash = window.location.hash;
@@ -40,6 +52,7 @@ exports.navigated = function () {
   } else {
     model.setState({
       location : exports.getLocation(),
+      query: exports.getQuery(),
       transitioning: false
     });
   }
