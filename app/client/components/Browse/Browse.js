@@ -50,9 +50,8 @@ Item = Relay.createContainer(Item, {
   }
 });
 
-function SearchBar(props) {
-
-  function setSearch(e) {
+let SearchBar = React.createClass({
+  setSearch: function (e) {
     var oldHash = window.location.hash;
     let newHash;
     if (oldHash.indexOf('?')) {
@@ -60,29 +59,28 @@ function SearchBar(props) {
     } else {
       newHash = oldHash;
     }
-    newHash += '?search=' + e.target.value;
+    newHash += '?' + queryString.stringify({search: e.target.value}); 
     window.location.hash = newHash;
+  },
+  render: function () {
+    return (
+      <div className="ui fluid input focus search-bar">
+        <input 
+          autoFocus="true" 
+          placeholder="search.." 
+          onChange={this.setSearch}
+          value={this.props.search}
+          type="text">
+      </input>
+      </div>
+    );
   }
-
-  return (
-    <div className="ui fluid input focus search-bar">
-      <input 
-        autoFocus="true" 
-        placeholder="search.." 
-        onChange={setSearch}
-        value={props.search}
-        type="text">
-    </input>
-    </div>
-  );
-}
+});
 
 function ItemList(props) {
   return (
     <div className="ui list">
-      
       {props.itemsList.items.length === 0 && <h4 className="ui center aligned header"> sorry, no matching items found. </h4>}
-
       {props.itemsList.items.map(function (item) {
         return <Item item={item} type='note' key={item.id} />; 
       })}
