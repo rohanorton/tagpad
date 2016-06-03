@@ -5,14 +5,17 @@ var _ = require('lodash');
 var Faker = require('faker');
 
  function createFakeData() {
-    _.times(20, () => {
+    _.times(2, () => {
       return db.conn.models.user.create({
         email: Faker.internet.email()
       }).then(user => {
-        return user.createItem({
-          title: Faker.lorem.words(),
-          content: Faker.lorem.paragraph()
-        });
+        _.times(200, (i) => {
+          return user.createItem({
+            title: Faker.lorem.words() + ' ' + String(i),
+            content: Faker.lorem.paragraph()
+          });
+        })
+
       });
     });
  }
