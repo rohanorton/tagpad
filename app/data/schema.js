@@ -41,6 +41,7 @@ export var Schema = new GraphQLSchema({
           if (args.title) {
             query.where.title = {$like: '%' + args.title + '%'};
           }
+          query.limit = 20;
           
           return Db.conn.models.item.findAll(query).then(function (items) {
             return {items: items};
