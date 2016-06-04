@@ -1,13 +1,11 @@
 import 'babel-polyfill';
 import Relay from 'react-relay';
-var React = require('react');
+import React from 'react';
+import Menu from './Menu/Menu';
+import Browse from './Browse/Browse.js';
+import NoteForm = './NoteForm/NoteForm';
 
-// Some components
-var Menu = require('./Menu/Menu.js');
-var Browse = require('./Browse/Browse.js');
-
-/*var NoteForm = require('./NoteForm/NoteForm.jsx');
-var Login = require('./Login/Login.jsx');
+/*var Login = require('./Login/Login.jsx');
 var itemActions = require('./../actions/items.js');*/
 
 function NotFound() {
