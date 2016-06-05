@@ -1,6 +1,10 @@
 var model = require('./model.js');
-var helpers = require('./helpers.js');
 var navigation = require('./navigation.js');
+var constants = require('./constants.js');
+
+exports.getNewItem = function () {
+  return Object.assign({}, constants.ITEM_TEMPLATE);
+};
 
 exports.updateNewItem = function (item) {
   model.setState({ newItem: item });
@@ -19,7 +23,7 @@ exports.updateItemForm = function (itemForm) {
 exports.cancel = function (e) {
   e.preventDefault();
   // delete the edits.
-  model.setState({ newItem: helpers.getNewItem()}); 
+  model.setState({ newItem: exports.getNewItem()}); 
   // go back to the browse page.
   navigation.startNavigating('browse');
 };
@@ -87,7 +91,7 @@ exports.submitNewItem = function (e) {
     }
     item.type = 'note';
     model.setState({
-      newItem: helpers.getNewItem(),
+      newItem: exports.getNewItem(),
       // slice is just used to get a copy of the array
       // without modifying the existing state.items array.
       items: state.items.slice(0).concat(item)

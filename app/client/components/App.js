@@ -1,12 +1,10 @@
 import 'babel-polyfill';
-import Relay from 'react-relay';
 import React from 'react';
 import Menu from './Menu/Menu';
 import Browse from './Browse/Browse.js';
 import NoteForm from './NoteForm/NoteForm.js';
-
-/*var Login = require('./Login/Login.jsx');
-var itemActions = require('./../actions/items.js');*/
+import Login from './Login/Login.js';
+import itemHelpers from './../helpers/items';
 
 function NotFound() {
   return (
@@ -17,21 +15,20 @@ function NotFound() {
   );
 }
 
-
-// object which represents item whilst being edited.
-function getItemForm (state, id) {
-  // use one we are editing already, if we aren't already editing then get the existing item.
-  var itemForm = state.itemForms[id];
-  if (!itemForm) { 
-    itemForm = state.items.filter(function(item) { return item.id === id; })[0];
-  }
-  return itemForm;
-}
-
 function loginSubmit(e) {
   e.preventDefault();
   alert('loginSubmit, value = ' + JSON.stringify(e.target.value));
 }
+
+
+// either return temp new item from local store or get new empty item
+function getNewItem(props) {
+  if (props.newItem) {
+    return props.newItem;
+  }
+  return itemHelpers.getNewItem();
+}
+
 
 function App (props) {
   // props {location:Array, query:Object}
@@ -49,8 +46,12 @@ function App (props) {
     return (
       <div>
         <Menu page={page} />
-        <h1> todo: Note add form here </h1>
-        <NoteForm />;
+        <NoteForm 
+          item={getNewItem(props)} 
+          update={itemHelpers.updateNewItem}
+          submit={function (e) { e.preventDefault(); alert('submit')}}
+          cancel={itemHelpers.cancel}
+          />;
       </div>
     );
   } else if (page === "items") {
@@ -66,7 +67,6 @@ function App (props) {
     }
   } 
   return <NotFound />;
-};
-
+}
 
 module.exports = App;
