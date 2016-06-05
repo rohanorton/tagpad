@@ -3,7 +3,7 @@ import Relay from 'react-relay';
 import React from 'react';
 import Menu from './Menu/Menu';
 import Browse from './Browse/Browse.js';
-import NoteForm = './NoteForm/NoteForm';
+import NoteForm from './NoteForm/NoteForm.js';
 
 /*var Login = require('./Login/Login.jsx');
 var itemActions = require('./../actions/items.js');*/
@@ -33,64 +33,40 @@ function loginSubmit(e) {
   alert('loginSubmit, value = ' + JSON.stringify(e.target.value));
 }
 
-// Appplication is just browse for now.
 function App (props) {
-  // props {hash, query}
-  return (
-    <div>
-      <Menu page="browse" />
-      <Browse search={props.query.search || ''}/>;
-    </div>
-  );
-}
-
-module.exports = App;
-
-
-// Appplication is just browse for now bring this back soon.
-/*module.exports = function Application (props) {
-  let page = props.location[0];
-
+  // props {location:Array, query:Object}
+  const page = props.location[0];
   if (page === "login") {
     return <Login onSubmit={loginSubmit}/>;
   } else if (page === "browse") {
     return (
       <div>
         <Menu page={page} />
-        <Browse {...props} />;
+        <Browse search={props.query.search || ''}/>;
       </div>
     );
   } else if (page === "add") {
     return (
       <div>
         <Menu page={page} />
-        <NoteForm 
-          item={props.newItem}
-          submit={itemActions.submitNewItem} 
-          update={itemActions.updateNewItem} 
-          cancel={itemActions.cancel}
-        />;
+        <h1> todo: Note add form here </h1>
+        <NoteForm />;
       </div>
     );
   } else if (page === "items") {
     if (props.location.length === 2) {
       let id = Number(props.location[1]);
-      let item = getItemForm(props, id);
-      if (item) {
-        return (
-          <div>
-            <Menu page={page} />
-            <NoteForm
-              item={item}
-              submit={itemActions.submitItemForm}
-              update={itemActions.updateItemForm}
-              cancel={itemActions.cancel}
-            />;
-          </div>
-        );
-      }
+      return (
+        <div>
+          <Menu page={page} />
+          <h1> todo: Note edit form for item with id: {id} here </h1>
+          <NoteForm itemId={id} />
+        </div>
+      );
     }
   } 
   return <NotFound />;
+};
 
-};*/
+
+module.exports = App;

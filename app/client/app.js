@@ -9,10 +9,13 @@ import model from './helpers/model'
 require('./tagpad.css');
 
 function render() {
-  ReactDOM.render(
-    React.createElement(App, model.getState()),
-    document.getElementById('react-container')
-  );
+  let state = model.getState();
+  if (!state.transitioning) {
+    ReactDOM.render(
+      React.createElement(App, state),
+      document.getElementById('react-container')
+    );
+  }
 }
 
 model.onStateChange(render);
