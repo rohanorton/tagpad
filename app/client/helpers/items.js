@@ -28,7 +28,7 @@ exports.cancel = function (e) {
   navigation.startNavigating('browse');
 };
   
-function validate(item) {  
+exports.validate = function (item) {  
   item.errors = item.errors || {};
   if (!item.title) {
     item.errors.title = ["Please enter your new item's title"];
@@ -83,6 +83,8 @@ exports.submitNewItem = function (e) {
   
   // if the new item has 0 errors then clear the fields.
   if (Object.keys(item.errors).length === 0) {
+    console.log('need to submit new item here');
+    return;
     // convert tags to array.
     if (!item.tags) {
       item.tags = [];

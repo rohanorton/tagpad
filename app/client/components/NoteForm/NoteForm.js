@@ -1,4 +1,5 @@
 var React = require('react');
+var itemHelpers = require('./../../helpers/items.js');
 require('./style.css');
 
 module.exports = React.createClass({
@@ -49,11 +50,18 @@ module.exports = React.createClass({
     }
   },
 
+  onSubmit: function (e) {
+    e.preventDefault();
+    let item = this.props.item;
+    itemHelpers.validate(item);
+    this.props.update(item);
+  },
+
   render: function () {
     let props = this.props;
     return (
       <div className="ui main text container">
-        <form className="ui form" onSubmit={props.submit} >
+        <form className="ui form" onSubmit={this.onSubmit} >
           <div className={"field required " + this.getFieldErrorClass('title')} >
             <label>title</label>
             <input

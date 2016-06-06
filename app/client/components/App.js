@@ -49,7 +49,7 @@ function App (props) {
         <NoteForm 
           item={getNewItem(props)} 
           update={itemHelpers.updateNewItem}
-          submit={function (e) { e.preventDefault(); alert('submit')}}
+          submit={itemHelpers.submitNewItem}
           cancel={itemHelpers.cancel}
           />;
       </div>
