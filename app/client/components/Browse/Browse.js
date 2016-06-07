@@ -7,6 +7,8 @@ import navigation from '../../helpers/navigation';
 
 require('./browse.css');
 
+
+
 function Tag(props) {
   return <a className="ui label">{props.name}</a>
 }

@@ -1,13 +1,49 @@
-var React = require('react');
+import React from 'react';
+import Relay from 'react-relay';
+
 var itemHelpers = require('./../../helpers/items.js');
+var store = require('./../../helpers/model.js');
 require('./style.css');
+
+
+/*class AddItemMutation extends Relay.Mutation {
+  getVariables() {
+    // server can decide how to handle this.
+    return {
+      foo: 'bar'
+    }
+  }
+  // this stuff that might change.
+  getFatQuery() {
+    return Relay.QL`
+      fragment on ItemsList {
+        items 
+      }
+    `
+  }
+   // These configurations advise Relay on how to handle the Payload
+  // returned by the server. Here, we tell Relay to use the payload to
+  // change the fields of a record it already has in the store. The
+  // key-value pairs of ‘fieldIDs’ associate field names in the payload
+  // with the ID of the record that we want updated.
+  getConfigs() {
+    return [{
+      type: 'FIELDS_CHANGE',
+      fieldIDs: {
+        itemList: {id: '1'}
+      },
+    }];
+  }
+  getMutation() {
+    return Relay.QL`mutation { AddItemMutation }`;
+  }
+}*/
+
 
 module.exports = React.createClass({
 
   propTypes: {
     item: React.PropTypes.object.isRequired,
-    update: React.PropTypes.func.isRequired,
-    submit: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired
   },
 
@@ -28,7 +64,7 @@ module.exports = React.createClass({
       e.preventDefault();
       changes[fieldName] = e.target.value;
       var updated = Object.assign({}, props.item, changes);
-      props.update(updated);
+      store.setState({ newItem: item });
     };
   },
 
@@ -54,7 +90,14 @@ module.exports = React.createClass({
     e.preventDefault();
     let item = this.props.item;
     itemHelpers.validate(item);
-    this.props.update(item);
+    store.setState({ newItem: item });
+    if (!item.errors) {
+      Relay.Store.commitUpdate(
+        new AddItemMutation({someData: 'blah'})
+      )
+    } else {
+      alert('cant submit item, there was errors: ' + JSON.stringify(errors));
+    }
   },
 
   render: function () {

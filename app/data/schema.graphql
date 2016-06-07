@@ -9,6 +9,7 @@ type Item {
 }
 
 type ItemsList {
+  id: String
   items: [Item]
 }
 

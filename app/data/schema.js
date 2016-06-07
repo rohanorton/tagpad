@@ -7,6 +7,7 @@ import {
 } from 'graphql';
 import Db from './db';
 
+
 var ItemType = new GraphQLObjectType({
   name: 'Item',
   fields: () => ({
@@ -21,6 +22,7 @@ var ItemType = new GraphQLObjectType({
 var ItemsListType = new GraphQLObjectType({
   name: 'ItemsList',
   fields: () => ({
+    id: {type: GraphQLString},
     items: {type: new GraphQLList(ItemType)},
   }),
 });
@@ -44,7 +46,7 @@ export var Schema = new GraphQLSchema({
           query.limit = 20;
           
           return Db.conn.models.item.findAll(query).then(function (items) {
-            return {items: items};
+            return {id: '1', items: items};
           });
         }
       }
