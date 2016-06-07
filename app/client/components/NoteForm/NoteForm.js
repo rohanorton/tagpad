@@ -6,7 +6,7 @@ var store = require('./../../helpers/model.js');
 require('./style.css');
 
 
-/*class AddItemMutation extends Relay.Mutation {
+class AddItemMutation extends Relay.Mutation {
   getVariables() {
     // server can decide how to handle this.
     return {
@@ -16,8 +16,8 @@ require('./style.css');
   // this stuff that might change.
   getFatQuery() {
     return Relay.QL`
-      fragment on ItemsList {
-        items 
+      fragment on AddItemPayload {
+        itemList
       }
     `
   }
@@ -31,13 +31,13 @@ require('./style.css');
       type: 'FIELDS_CHANGE',
       fieldIDs: {
         itemList: {id: '1'}
-      },
+      }
     }];
   }
   getMutation() {
-    return Relay.QL`mutation { AddItemMutation }`;
+    return Relay.QL`mutation { addItem }`;
   }
-}*/
+}
 
 
 module.exports = React.createClass({
@@ -64,7 +64,7 @@ module.exports = React.createClass({
       e.preventDefault();
       changes[fieldName] = e.target.value;
       var updated = Object.assign({}, props.item, changes);
-      store.setState({ newItem: item });
+      store.setState({ newItem: updated });
     };
   },
 
@@ -90,13 +90,14 @@ module.exports = React.createClass({
     e.preventDefault();
     let item = this.props.item;
     itemHelpers.validate(item);
+    
     store.setState({ newItem: item });
-    if (!item.errors) {
+    if (Object.keys(item.errors).length === 0) {
       Relay.Store.commitUpdate(
         new AddItemMutation({someData: 'blah'})
       )
     } else {
-      alert('cant submit item, there was errors: ' + JSON.stringify(errors));
+      alert('cant submit item, there was errors: ' + JSON.stringify(item.errors));
     }
   },
 

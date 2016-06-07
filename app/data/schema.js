@@ -3,9 +3,14 @@ import {
   GraphQLList,
   GraphQLObjectType,
   GraphQLSchema,
+  GraphQLNonNull,
   GraphQLString,
 } from 'graphql';
 import Db from './db';
+
+import {
+  mutationWithClientMutationId,
+} from 'graphql-relay';
 
 
 var ItemType = new GraphQLObjectType({
@@ -27,7 +32,47 @@ var ItemsListType = new GraphQLObjectType({
   }),
 });
 
+
+const GraphQLAddItemMutation = mutationWithClientMutationId({
+  name: 'AddItem',
+  inputFields: {
+    foo: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    itemList: {
+      type: ItemsListType,
+      resolve: function () {
+        return getItemList({title:'f'});
+      }
+    },
+  },
+  mutateAndGetPayload: ({foo}) => {
+    console.log('add item here');
+    return {itemListId: '1'};
+  },
+});
+
+
+function getItemList(args) {
+  var query = {where: {}};
+
+  if (args.title) {
+    query.where.title = {$like: '%' + args.title + '%'};
+  }
+  query.limit = 20;
+  
+  return Db.conn.models.item.findAll(query).then(function (items) {
+    return {id: '1', items: items};
+  });
+}
+
 export var Schema = new GraphQLSchema({
+  mutation : new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+      addItem: GraphQLAddItemMutation,
+    },
+  }),
   query: new GraphQLObjectType({
     name: 'Query',
     fields: () => ({
@@ -38,16 +83,7 @@ export var Schema = new GraphQLSchema({
         },
         type: ItemsListType,
         resolve: function (root, args) {
-          var query = {where: {}};
-
-          if (args.title) {
-            query.where.title = {$like: '%' + args.title + '%'};
-          }
-          query.limit = 20;
-          
-          return Db.conn.models.item.findAll(query).then(function (items) {
-            return {id: '1', items: items};
-          });
+          return getItemList(args);
         }
       }
     })

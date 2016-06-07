@@ -1,5 +1,16 @@
 schema {
   query: Query
+  mutation: Mutation
+}
+
+input AddItemInput {
+  foo: String!
+  clientMutationId: String!
+}
+
+type AddItemPayload {
+  itemList: ItemsList
+  clientMutationId: String!
 }
 
 type Item {
@@ -11,6 +22,10 @@ type Item {
 type ItemsList {
   id: String
   items: [Item]
+}
+
+type Mutation {
+  addItem(input: AddItemInput!): AddItemPayload
 }
 
 type Query {
