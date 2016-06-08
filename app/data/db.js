@@ -1,4 +1,4 @@
-var Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
 
 function getConnection (config) {
   return new Sequelize(config.name, config.user, config.password, {
@@ -25,7 +25,7 @@ function sync (conn, callback) {
 exports.define = function (config, callback) {
   const conn = getConnection(config);
 
-  var User = conn.define('user', {
+  const User = conn.define('user', {
     email: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -41,7 +41,7 @@ exports.define = function (config, callback) {
   }, {
     freezeTableName: true // Model tableName will be the same as the model name
   });
-  var Item = conn.define('item', {
+  const Item = conn.define('item', {
     title: {
       type: Sequelize.STRING,
       allowNull: false
@@ -68,7 +68,7 @@ exports.define = function (config, callback) {
 };
 
 exports.getItemList = function (args) {
-  var query = {where: {}};
+  let query = {where: {}};
   if (args.title) {
     query.where.title = {$like: '%' + args.title + '%'};
   }
