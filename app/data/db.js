@@ -1,7 +1,5 @@
 import Sequelize from 'sequelize';
 
-const conn = getConnection(config);
-
 function getConnection (config) {
   return new Sequelize(config.name, config.user, config.password, {
     host: config.host,
@@ -14,10 +12,9 @@ function getConnection (config) {
   });
 };
 
-function sync (conn, callback) {
-  conn.sync({force: true}).then(function() {
-    module.exports.conn = conn;
-    console.log('callback called, conn.models = ', module.exports.conn.models);
+function sync (callback) {
+  exports.conn.sync({force: true}).then(function() {
+    console.log('callback called, exports.conn.models = ', exports.conn.models);
     callback();
   }).catch(function(error) {
     callback(error);
@@ -25,9 +22,8 @@ function sync (conn, callback) {
 };
 
 exports.define = function (config, callback) {
-  conn = getConnection(config);
-
-  const User = conn.define('user', {
+  exports.conn = getConnection(config);
+  let User = exports.conn.define('user', {
     email: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -43,7 +39,7 @@ exports.define = function (config, callback) {
   }, {
     freezeTableName: true // Model tableName will be the same as the model name
   });
-  const Item = conn.define('item', {
+  let Item = exports.conn.define('item', {
     title: {
       type: Sequelize.STRING,
       allowNull: false
@@ -66,7 +62,7 @@ exports.define = function (config, callback) {
   User.hasMany(Item);
   Item.belongsTo(User);
   
-  sync(conn, callback);
+  sync(callback);
 };
 
 exports.getItemList = function (args) {
@@ -75,14 +71,12 @@ exports.getItemList = function (args) {
     query.where.title = {$like: '%' + args.title + '%'};
   }
   query.limit = 20;
-  return conn.models.item.findAll(query).then(function (items) {
-    return {id: '1', items: items};
+  return exports.conn.models.item.findAll(query).then(function (items) {
+    return {items: items};
   });
 };
 
-/*exports.addItem = function (item) {
-  return Db.
-
-};*/
-
+exports.addItem = function (item) {
+  return exports.conn.models.item.create(item);
+};
 

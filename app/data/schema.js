@@ -6,7 +6,7 @@ import {
   GraphQLNonNull,
   GraphQLString,
 } from 'graphql';
-import Db from './db';
+import db from './db';
 
 import {
   mutationWithClientMutationId,
@@ -48,8 +48,9 @@ const GraphQLAddItemMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: ({title, content}) => {
-    console.log('add item here, title = ', title, ', content = ', content);
-    return {itemListId: '1'};
+    return db.addItem({title, content}).then(function () {
+      return db.getItemList({title: ''});
+    });
   },
 });
 
@@ -67,12 +68,11 @@ export var Schema = new GraphQLSchema({
     fields: () => ({
       itemsList: {
         args: {
-          id: { type: GraphQLString },
           title: { type: GraphQLString }
         },
         type: ItemsListType,
         resolve: function (root, args) {
-          return db.getItemList(args);
+          return db.getItemList({title: args.title}); 
         }
       }
     })

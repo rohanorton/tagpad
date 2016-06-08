@@ -18,7 +18,9 @@ class AddItemMutation extends Relay.Mutation {
   getFatQuery() {
     return Relay.QL`
       fragment on AddItemPayload {
-        itemList
+        itemList {
+          items
+        }
       }
     `
   }

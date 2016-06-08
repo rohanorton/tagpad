@@ -30,5 +30,5 @@ type Mutation {
 }
 
 type Query {
-  itemsList(id: String, title: String): ItemsList
+  itemsList(title: String): ItemsList
 }
