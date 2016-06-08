@@ -36,7 +36,8 @@ var ItemsListType = new GraphQLObjectType({
 const GraphQLAddItemMutation = mutationWithClientMutationId({
   name: 'AddItem',
   inputFields: {
-    foo: { type: new GraphQLNonNull(GraphQLString) },
+    title: { type: new GraphQLNonNull(GraphQLString) },
+    content: { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
     itemList: {
@@ -46,8 +47,8 @@ const GraphQLAddItemMutation = mutationWithClientMutationId({
       }
     },
   },
-  mutateAndGetPayload: ({foo}) => {
-    console.log('add item here');
+  mutateAndGetPayload: ({title, content}) => {
+    console.log('add item here, title = ', title, ', content = ', content);
     return {itemListId: '1'};
   },
 });

@@ -4,7 +4,8 @@ schema {
 }
 
 input AddItemInput {
-  foo: String!
+  title: String!
+  content: String!
   clientMutationId: String!
 }
 
