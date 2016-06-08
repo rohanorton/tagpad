@@ -1,5 +1,7 @@
 import Sequelize from 'sequelize';
 
+const conn = getConnection(config);
+
 function getConnection (config) {
   return new Sequelize(config.name, config.user, config.password, {
     host: config.host,
@@ -23,7 +25,7 @@ function sync (conn, callback) {
 };
 
 exports.define = function (config, callback) {
-  const conn = getConnection(config);
+  conn = getConnection(config);
 
   const User = conn.define('user', {
     email: {
@@ -73,8 +75,14 @@ exports.getItemList = function (args) {
     query.where.title = {$like: '%' + args.title + '%'};
   }
   query.limit = 20;
-  return Db.conn.models.item.findAll(query).then(function (items) {
+  return conn.models.item.findAll(query).then(function (items) {
     return {id: '1', items: items};
   });
-}
+};
+
+/*exports.addItem = function (item) {
+  return Db.
+
+};*/
+
 
