@@ -72,7 +72,7 @@ exports.getItemList = function (args) {
   }
   query.limit = 20;
   return exports.conn.models.item.findAll(query).then(function (items) {
-    return {items: items};
+    return {id: '1', items: items};
   });
 };
 

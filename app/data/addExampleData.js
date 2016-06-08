@@ -9,7 +9,7 @@ var Faker = require('faker');
       return db.conn.models.user.create({
         email: Faker.internet.email()
       }).then(user => {
-        _.times(1, (i) => {
+        _.times(6, (i) => {
           return user.createItem({
             title: Faker.lorem.words() + ' ' + String(i),
             content: Faker.lorem.paragraph()
