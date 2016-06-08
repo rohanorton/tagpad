@@ -10,7 +10,8 @@ class AddItemMutation extends Relay.Mutation {
   getVariables() {
     // server can decide how to handle this.
     return {
-      foo: 'bar'
+      title: this.props.title,
+      content: this.props.content
     }
   }
   // this stuff that might change.
@@ -90,14 +91,15 @@ module.exports = React.createClass({
     e.preventDefault();
     let item = this.props.item;
     itemHelpers.validate(item);
-    
-    store.setState({ newItem: item });
     if (Object.keys(item.errors).length === 0) {
+      console.log('submitting mutation');
       Relay.Store.commitUpdate(
-        new AddItemMutation({someData: 'blah'})
+        new AddItemMutation(item)
       )
     } else {
-      alert('cant submit item, there was errors: ' + JSON.stringify(item.errors));
+      //alert('cant submit item, there was errors: ' + JSON.stringify(item.errors));
+      // render the errors
+      store.setState({ newItem: item });
     }
   },
 
@@ -117,15 +119,15 @@ module.exports = React.createClass({
             </input>
             {this.getErrorLabel('title')}
           </div>
-          <div className={"field required " + this.getFieldErrorClass('description')}>
+          <div className={"field required " + this.getFieldErrorClass('content')}>
             <label>content</label>
             <textarea
-              value={props.item.description}
-              ref="description"
-              onChange={this.createUpdateField('description')}
+              value={props.item.content}
+              ref="content"
+              onChange={this.createUpdateField('content')}
               >
             </textarea>
-            {this.getErrorLabel('description')}
+            {this.getErrorLabel('content')}
           </div>
 
           <div className={"field" + this.getFieldErrorClass('tags')}>
