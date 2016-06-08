@@ -29,7 +29,7 @@ exports.cancel = function (e) {
 };
   
 exports.validate = function (item) {  
-  item.errors = item.errors || {};
+  item.errors = {};
   if (!item.title) {
     item.errors.title = ["Please enter your new item's title"];
   }
