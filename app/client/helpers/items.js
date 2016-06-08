@@ -34,8 +34,8 @@ exports.validate = function (item) {
     item.errors.title = ["Please enter your new item's title"];
   }
   // Test that 'item.email' looks like a real email address using a RegExp
-  if (!item.description) {
-    item.errors.description = ["Please enter your new item's description"];
+  if (!item.content) {
+    item.errors.content = ["Please enter your new item's description"];
   }
 }
 
