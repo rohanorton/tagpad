@@ -1,10 +1,9 @@
 import React from 'react';
 import Relay from 'react-relay';
-
 var itemHelpers = require('./../../helpers/items.js');
+var navigation = require('./../../helpers/navigation.js');
 var store = require('./../../helpers/model.js');
 require('./style.css');
-
 
 class AddItemMutation extends Relay.Mutation {
   getVariables() {
@@ -14,7 +13,6 @@ class AddItemMutation extends Relay.Mutation {
       content: this.props.content
     }
   }
-  // this stuff that might change.
   getFatQuery() {
     return Relay.QL`
       fragment on AddItemPayload {
@@ -24,18 +22,15 @@ class AddItemMutation extends Relay.Mutation {
       }
     `
   }
-   // These configurations advise Relay on how to handle the Payload
-  // returned by the server. Here, we tell Relay to use the payload to
-  // change the fields of a record it already has in the store. The
-  // key-value pairs of ‘fieldIDs’ associate field names in the payload
-  // with the ID of the record that we want updated.
   getConfigs() {
-    return [{
-      type: 'FIELDS_CHANGE',
-      fieldIDs: {
-        itemList: {id: '1'}
-      }
-    }];
+    return [
+      {
+        type: 'FIELDS_CHANGE',
+        fieldIDs: {
+          itemList: {id: '1'}
+        }
+      },
+    ];
   }
   getMutation() {
     return Relay.QL`mutation { addItem }`;
@@ -94,13 +89,12 @@ module.exports = React.createClass({
     let item = this.props.item;
     itemHelpers.validate(item);
     if (Object.keys(item.errors).length === 0) {
-      console.log('submitting mutation');
       Relay.Store.commitUpdate(
         new AddItemMutation(item)
       )
+      navigation.startNavigating('browse'); 
     } else {
-      //alert('cant submit item, there was errors: ' + JSON.stringify(item.errors));
-      // render the errors
+      // render the errors.
       store.setState({ newItem: item });
     }
   },
