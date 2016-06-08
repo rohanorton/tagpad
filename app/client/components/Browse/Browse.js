@@ -120,6 +120,7 @@ function Browse(props) {
       <SearchBar {...props}/>           
       <Relay.RootContainer
         Component={ItemList}
+        forceFetch={true}
         route={new ItemListRouteQuery({title: props.search})}
         renderLoading = {function () {
           return (
