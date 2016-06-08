@@ -67,3 +67,14 @@ exports.define = function (config, callback) {
   sync(conn, callback);
 };
 
+exports.getItemList = function (args) {
+  var query = {where: {}};
+  if (args.title) {
+    query.where.title = {$like: '%' + args.title + '%'};
+  }
+  query.limit = 20;
+  return Db.conn.models.item.findAll(query).then(function (items) {
+    return {id: '1', items: items};
+  });
+}
+

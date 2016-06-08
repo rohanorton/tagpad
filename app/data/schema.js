@@ -43,7 +43,7 @@ const GraphQLAddItemMutation = mutationWithClientMutationId({
     itemList: {
       type: ItemsListType,
       resolve: function () {
-        return getItemList({title:'f'});
+        return db.getItemList({title:''});
       }
     },
   },
@@ -54,18 +54,6 @@ const GraphQLAddItemMutation = mutationWithClientMutationId({
 });
 
 
-function getItemList(args) {
-  var query = {where: {}};
-
-  if (args.title) {
-    query.where.title = {$like: '%' + args.title + '%'};
-  }
-  query.limit = 20;
-  
-  return Db.conn.models.item.findAll(query).then(function (items) {
-    return {id: '1', items: items};
-  });
-}
 
 export var Schema = new GraphQLSchema({
   mutation : new GraphQLObjectType({
@@ -84,7 +72,7 @@ export var Schema = new GraphQLSchema({
         },
         type: ItemsListType,
         resolve: function (root, args) {
-          return getItemList(args);
+          return db.getItemList(args);
         }
       }
     })
