@@ -77,6 +77,15 @@ exports.getItemList = function (args) {
 };
 
 exports.addItem = function (item) {
-  return exports.conn.models.item.create(item);
+  var promise = new Promise(
+    function(resolve, reject) {
+      setTimeout(function() {
+        exports.conn.models.item.create(item).then(function (result) {
+          resolve(result);
+        });
+      }, 3000);
+    }
+  );
+  return promise;
 };
 

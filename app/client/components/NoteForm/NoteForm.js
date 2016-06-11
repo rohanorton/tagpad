@@ -3,6 +3,7 @@ import Relay from 'react-relay';
 var itemHelpers = require('./../../helpers/items.js');
 var navigation = require('./../../helpers/navigation.js');
 var AddItemMutation = require('./../../mutations/AddItemMutation.js');
+var notification = require('./../../helpers/notification.js');
 var store = require('./../../helpers/model.js');
 
 require('./style.css');
@@ -12,6 +13,30 @@ module.exports = React.createClass({
   propTypes: {
     item: React.PropTypes.object.isRequired,
     cancel: React.PropTypes.func.isRequired
+  },
+
+  onSubmit: function (e) {
+    e.preventDefault();
+    let item = this.props.item;
+    itemHelpers.validate(item);
+    if (Object.keys(item.errors).length === 0) {
+      notification.info("Adding...");
+      Relay.Store.commitUpdate(
+        new AddItemMutation(item),
+        { 
+          onSuccess: function (reponse) {
+            notification.info("Item has been added. View item");
+          },
+          onFailure: function (transaction) {
+            notification.info("Error adding item, retry?");
+          }
+        }
+      );
+      navigation.startNavigating('browse'); 
+    } else {
+      // render the errors.
+      store.setState({ newItem: item });
+    }
   },
 
   componentDidUpdate: function(prevProps) {
@@ -50,21 +75,6 @@ module.exports = React.createClass({
       );
     } else {
       return null;
-    }
-  },
-
-  onSubmit: function (e) {
-    e.preventDefault();
-    let item = this.props.item;
-    itemHelpers.validate(item);
-    if (Object.keys(item.errors).length === 0) {
-      Relay.Store.commitUpdate(
-        new AddItemMutation(item)
-      )
-      navigation.startNavigating('browse'); 
-    } else {
-      // render the errors.
-      store.setState({ newItem: item });
     }
   },
 
