@@ -85,13 +85,15 @@ watcher.on('change', path => {
   );
 });
 
-const db = require('./data/db.js');
 const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
+const db = require('./data/' + config.database + '.js');
 
-db.define(config.database, function (err) {
+db.define(config[config.database], function (err) {
   if (err) {
     throw err;
   }
-  require('./data/addExampleData.js').run();
+  if (config.database === 'postgres') {
+    require('./data/addExampleData.js').run();
+  }
   startServers();
 });

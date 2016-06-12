@@ -6,7 +6,10 @@ import {
   GraphQLNonNull,
   GraphQLString,
 } from 'graphql';
-import db from './db';
+import path from 'path';
+
+const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
+const db = require('./' + config.database + '.js');
 
 import {
   mutationWithClientMutationId,
@@ -48,9 +51,7 @@ const GraphQLAddItemMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: ({title, content}) => {
-    return db.addItem({title, content}).then(function () {
-      return db.getItemList({title: ''});
-    });
+    return db.addItem({title, content});
   },
 });
 
