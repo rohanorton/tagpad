@@ -39,7 +39,7 @@ function App (props) {
     return (
       <div>
         <Menu page={page} />
-        <Browse search={props.query.search || ''}/>;
+        <Browse search={props.query.search || ''}/>
       </div>
     );
   } else if (page === "add") {
