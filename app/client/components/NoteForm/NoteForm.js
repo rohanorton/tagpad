@@ -2,7 +2,7 @@ import React from 'react';
 import Relay from 'react-relay';
 var itemHelpers = require('./../../helpers/items.js');
 var navigation = require('./../../helpers/navigation.js');
-//var AddItemMutation = require('./../../mutations/AddItemMutation.js');
+import AddItemMutation from './../../mutations/AddItemMutation.js';
 var notification = require('./../../helpers/notification.js');
 var store = require('./../../helpers/model.js');
 
@@ -21,8 +21,8 @@ module.exports = React.createClass({
     itemHelpers.validate(item);
     if (Object.keys(item.errors).length === 0) {
       notification.info("Adding...");
-      /*Relay.Store.commitUpdate(
-        new AddItemMutation(item),
+      Relay.Store.commitUpdate(
+        new AddItemMutation({item, itemListId: '1'}),
         { 
           onSuccess: function (reponse) {
             notification.info("Item has been added. View item");
@@ -31,7 +31,7 @@ module.exports = React.createClass({
             notification.info("Error adding item, retry?");
           }
         }
-      );*/
+      );
       navigation.startNavigating('browse'); 
     } else {
       // render the errors.

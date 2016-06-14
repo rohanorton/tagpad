@@ -1,5 +1,18 @@
 schema {
   query: Query
+  mutation: Mutation
+}
+
+input AddItemInput {
+  title: String!
+  content: String!
+  clientMutationId: String!
+}
+
+type AddItemPayload {
+  itemEdge: ItemEdge
+  itemsList: ItemsList
+  clientMutationId: String!
 }
 
 type Item {
@@ -21,6 +34,10 @@ type ItemEdge {
 type ItemsList {
   id: String
   items(title: String = "", after: String, first: Int, before: String, last: Int): ItemConnection
+}
+
+type Mutation {
+  addItem(input: AddItemInput!): AddItemPayload
 }
 
 type PageInfo {

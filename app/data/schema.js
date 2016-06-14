@@ -64,34 +64,44 @@ var ItemsListType = new GraphQLObjectType({
 });
 
 
-/*const GraphQLAddItemMutation = mutationWithClientMutationId({
+const AddItemMutation = mutationWithClientMutationId({
   name: 'AddItem',
   inputFields: {
     title: { type: new GraphQLNonNull(GraphQLString) },
     content: { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
-    item: {
-      type: ItemType,
-      resolve: function (item) {
-        return item;
+    itemEdge: {
+      type: GraphQLItemEdge,
+      resolve: ({localItemId}) => {
+        const item = db.getItem(localItemId);
+        return {
+          cursor: cursorForObjectInConnection(db.getItems(), item), 
+          node: item
+        };
+      }
+    },
+    itemsList: {
+      type: ItemsListType,
+      resolve: function () {
+        return { id: '1' };
       }
     },
   },
   mutateAndGetPayload: ({title, content}) => {
-    return db.addItem({title, content});
+    const localItemId = db.addItem({title, content}).id
+    return {localItemId};
   },
-});*/
-
+});
 
 
 export var Schema = new GraphQLSchema({
-  /*mutation : new GraphQLObjectType({
+  mutation : new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-      addItem: GraphQLAddItemMutation,
+      addItem: AddItemMutation,
     },
-  }),*/
+  }),
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
@@ -101,7 +111,6 @@ export var Schema = new GraphQLSchema({
         },
         type: ItemsListType,
         resolve: function (root, args) {
-          //return db.getItemList({title: args.title}); 
           return { id: '1' }
         }
       }
