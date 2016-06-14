@@ -11,7 +11,6 @@ export default class AddItemMutation extends Relay.Mutation {
   getFatQuery() {
     return Relay.QL`
       fragment on AddItemPayload {
-        itemEdge,
         itemsList {
           items
         }
@@ -21,31 +20,11 @@ export default class AddItemMutation extends Relay.Mutation {
   getConfigs() {
     return [
       {
-        type: 'RANGE_ADD',
-        //type: 'FIELDS_CHANGE',
-        parentName: 'itemsList',
-        parentID: this.props.itemsListId,
-        connectionName: 'items',
-        edgeName: 'itemEdge',
-        rangeBehaviors: () => {
-          return 'append'
-        }
+        type: 'FIELDS_CHANGE',
+        fieldIDs: {
+          itemsList: this.props.itemsListId
+        },
       },
-      //{
-        // field in the fat query would normally be ignored.
-        // `REQUIRED_CHILDREN` forces it to be retrieved anyway.
-        /*type: 'REQUIRED_CHILDREN',
-        children: [
-          Relay.QL`
-            fragment on AddItemPayload {
-              itemEdge,
-              itemsList {
-                items
-              }
-            }
-          `,
-        ]*/
-      //}
     ];
   }
   getMutation() {
