@@ -85,11 +85,15 @@ function ItemList(props) {
   );
 }
 
+
 ItemList = Relay.createContainer(ItemList, {
+  initialVariables: {
+    title: null
+  },
   fragments: {
     itemsList: () => Relay.QL`
       fragment on ItemsList {
-        items (first: 2999) {
+        items (first: 20, title: $title) {
           edges {
             node {
               id,
@@ -108,11 +112,13 @@ class ItemListRouteQuery extends Relay.Route {
     title: {required: true},
   };
   static queries = {
-    itemsList: (Component) => Relay.QL`
-      query {
-        itemsList { ${Component.getFragment('itemsList')} },
-      }
-    `,
+    itemsList: function (Component, {title}) {
+      return Relay.QL`
+        query {
+          itemsList { ${Component.getFragment('itemsList', {title}) } }
+        }
+      `;
+    }
   };
 }
 
