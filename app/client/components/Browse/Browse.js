@@ -7,9 +7,7 @@ import navigation from '../../helpers/navigation';
 
 require('./browse.css');
 
-
-
-function Tag(props) {
+function Tag (props) {
   return <a className="ui label">{props.name}</a>
 }
 
@@ -80,8 +78,8 @@ function ItemList(props) {
   return (
     <div className="ui list">
       {props.itemsList.items.length === 0 && <h4 className="ui center aligned header"> sorry, no matching items found. </h4>}
-      {props.itemsList.items.map(function (item) {
-        return <Item item={item} type='note' key={item.id} />; 
+      {props.itemsList.items.edges.map(function (edge) {
+        return <Item item={edge.node} type='note' key={edge.node.id} />; 
       })}
     </div>
   );
@@ -91,9 +89,13 @@ ItemList = Relay.createContainer(ItemList, {
   fragments: {
     itemsList: () => Relay.QL`
       fragment on ItemsList {
-        items {
-          id,
-          ${Item.getFragment('item')},
+        items (first: 2999) {
+          edges {
+            node {
+              id,
+              ${Item.getFragment('item')},
+            }
+          }
         }
       }
     `
@@ -108,7 +110,7 @@ class ItemListRouteQuery extends Relay.Route {
   static queries = {
     itemsList: (Component) => Relay.QL`
       query {
-        itemsList(title: $title) { ${Component.getFragment('itemsList')} },
+        itemsList { ${Component.getFragment('itemsList')} },
       }
     `,
   };
@@ -120,7 +122,7 @@ function Browse(props) {
       <SearchBar {...props}/>           
       <Relay.RootContainer
         Component={ItemList}
-        forceFetch={true}
+        //forceFetch={true}
         route={new ItemListRouteQuery({title: props.search})}
         renderLoading = {function () {
           return (

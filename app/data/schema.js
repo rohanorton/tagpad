@@ -6,14 +6,22 @@ import {
   GraphQLNonNull,
   GraphQLString,
 } from 'graphql';
+
+import {
+  connectionArgs,
+  connectionDefinitions,
+  connectionFromArray,
+  cursorForObjectInConnection,
+  globalIdField,
+  mutationWithClientMutationId,
+} from 'graphql-relay';
+
+
+
 import path from 'path';
 
 const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
 const db = require('./' + config.database + '.js');
-
-import {
-  mutationWithClientMutationId,
-} from 'graphql-relay';
 
 
 var ItemType = new GraphQLObjectType({
@@ -25,57 +33,78 @@ var ItemType = new GraphQLObjectType({
   }),
 });
 
+
+const {
+  connectionType: ItemsConnection,
+  edgeType: GraphQLItemEdge,
+} = connectionDefinitions({
+  name: 'Item',
+  nodeType: ItemType,
+});
+
 // This needs to exist due to a limitation in Relay
 //https://github.com/facebook/relay/issues/112
 var ItemsListType = new GraphQLObjectType({
   name: 'ItemsList',
-  fields: () => ({
+  fields: {
     id: {type: GraphQLString},
-    items: {type: new GraphQLList(ItemType)},
-  }),
+    items: {
+      type: ItemsConnection,
+      args: {
+        title: {
+          type: GraphQLString,
+          defaultValue: '',
+        },
+       ...connectionArgs, 
+      },
+      resolve: (obj, {title, ...args}) =>
+        connectionFromArray(db.getItems({title}), args),
+    },
+  },
 });
 
 
-const GraphQLAddItemMutation = mutationWithClientMutationId({
+/*const GraphQLAddItemMutation = mutationWithClientMutationId({
   name: 'AddItem',
   inputFields: {
     title: { type: new GraphQLNonNull(GraphQLString) },
     content: { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
-    itemList: {
-      type: ItemsListType,
-      resolve: function () {
-        return db.getItemList({title:''});
+    item: {
+      type: ItemType,
+      resolve: function (item) {
+        return item;
       }
     },
   },
   mutateAndGetPayload: ({title, content}) => {
     return db.addItem({title, content});
   },
-});
+});*/
 
 
 
 export var Schema = new GraphQLSchema({
-  mutation : new GraphQLObjectType({
+  /*mutation : new GraphQLObjectType({
     name: 'Mutation',
     fields: {
       addItem: GraphQLAddItemMutation,
     },
-  }),
+  }),*/
   query: new GraphQLObjectType({
     name: 'Query',
-    fields: () => ({
+    fields: {
       itemsList: {
         args: {
           title: { type: GraphQLString }
         },
         type: ItemsListType,
         resolve: function (root, args) {
-          return db.getItemList({title: args.title}); 
+          //return db.getItemList({title: args.title}); 
+          return { id: '1' }
         }
       }
-    })
+    }
   })
 });

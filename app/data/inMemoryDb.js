@@ -19,14 +19,26 @@ exports.define = function (config, callback) {
   callback();
 };
 
+
+exports.getItems = function (args) {
+  if (args.title && args.title.length) {
+    let filtered = _.filter(items, function (item) {
+      return (item.title.indexOf(args.title) !== -1);  
+    });
+    return filtered;
+  } else {
+    return items;
+  }
+};
+
 exports.getItemList = function (args) {
   if (args.title && args.title.length) {
     let filtered = _.filter(items, function (item) {
       return (item.title.indexOf(args.title) !== -1);  
     });
-    return { id: '1', items: filtered }
+    return { items: filtered }
   } else {
-    return { id: '1', items: items }
+    return { items: items }
   }
 };
 

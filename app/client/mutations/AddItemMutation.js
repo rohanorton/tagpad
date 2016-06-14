@@ -11,9 +11,7 @@ class AddItemMutation extends Relay.Mutation {
   getFatQuery() {
     return Relay.QL`
       fragment on AddItemPayload {
-        itemList {
-          items
-        }
+        item
       }
     `
   }
@@ -22,7 +20,7 @@ class AddItemMutation extends Relay.Mutation {
       {
         type: 'FIELDS_CHANGE',
         fieldIDs: {
-          itemList: {id: '1'}
+          item: {id: this.props.id}
         }
       },
     ];
