@@ -37,8 +37,15 @@ function App (props) {
     return <Login onSubmit={loginSubmit}/>;
   } else if (page === "browse") {
     return (
-      <div>
+      <div className="ui center aligned">
         <Menu page={page} />
+        
+        <div id="notification-container" className="ui center aligned container">
+          <div className="ui compact message">
+            <p>Notifications here!</p>
+          </div>
+        </div>
+
         <Browse search={props.query.search || ''}/>
       </div>
     );

@@ -8,7 +8,7 @@ body {
 }
 
 .main.container {
-  margin-top: 7em;
+  margin-top: 1.1em;
 }
 .wireframe {
   margin-top: 2em;
@@ -16,4 +16,8 @@ body {
 .ui.footer.segment {
   margin: 5em 0em 0em;
   padding: 5em 0em;
+}
+
+#notification-container {
+  padding-top: 5em;
 }
