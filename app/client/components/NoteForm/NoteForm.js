@@ -20,15 +20,20 @@ module.exports = React.createClass({
     let item = this.props.item;
     itemHelpers.validate(item);
     if (Object.keys(item.errors).length === 0) {
-      notification.info("Adding...");
+      notification.loading("Adding...");
       Relay.Store.commitUpdate(
         new AddItemMutation({item, itemListId: '1'}),
         { 
           onSuccess: function (reponse) {
-            notification.info("Item added");
+            notification.success("Item added");
           },
           onFailure: function (transaction) {
-            notification.error("Error adding item");
+            let error = transaction.getError();
+            let message = 'Add item failed';
+            if (error) {
+              message = error.source.errors[0].message;
+            }
+            notification.error("Error adding item", message);
           }
         }
       );
