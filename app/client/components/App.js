@@ -39,7 +39,7 @@ function App (props) {
     return (
       <div className="ui center aligned">
         <Menu page={page} />
-        <Notification message={props.notification} />
+        <Notification {...props.notification} />
         <Browse search={props.query.search || ''}/>
       </div>
     );
