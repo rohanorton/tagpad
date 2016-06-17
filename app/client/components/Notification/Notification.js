@@ -1,15 +1,46 @@
 import React from 'react';
 
+let Notifications = {
+  loading: function (props) {
+    return (
+      <div className="ui compact yellow message">
+        <p>{props.message}</p>
+      </div>
+    );
+  },
+  success: function (props) {
+    return (
+      <div className="ui compact green message">
+        <p>{props.message}</p>
+      </div>
+    );
+  },
+  error: function (props) {
+    return (
+      <div className="ui compact negative message">
+        <i className="close icon" onClick={props.close}></i>
+        <div className="header">
+          {props.header}
+        </div>
+        <p>
+          {props.message}
+        </p>
+      </div>
+    );
+  }
+};
+
 export default function (props) {
-  let style = {height: '8em'};
-  if (!props.message) {
+  let style = {height: '6em'};
+  if (!props.type) {
     style.visibility = 'hidden';
+  }
+  if (props.type === 'error') {
+    style.height = '9.5em';
   }
   return (
     <div style={style} id="notification-container" className="ui center aligned container">
-      <div className="ui compact message">
-        <p>{props.message}</p>
-      </div>
+      {props.type && Notifications[props.type](props)}
     </div>
   );
 }
