@@ -1,10 +1,10 @@
 import React from 'react';
 import Relay from 'react-relay';
 import AddItemMutation from './../../mutations/AddItemMutation.js';
+import notification from require('./../../helpers/notification.js');
 let itemHelpers = require('./../../helpers/items.js');
 let navigation = require('./../../helpers/navigation.js');
 let store = require('./../../helpers/model.js');
-let notification = require('./../../actions/notification.js');
 
 require('./style.css');
 
