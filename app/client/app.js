@@ -24,3 +24,5 @@ model.onStateChange(render);
 window.addEventListener('hashchange', navigation.navigated, false);
 
 navigation.navigated();
+
+model.setState({notification: 'foo bar baz!'});

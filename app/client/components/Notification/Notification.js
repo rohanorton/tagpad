@@ -1,11 +1,12 @@
 import React from 'react';
 
 export default function (props) {
+  let style = {};
   if (!props.message) {
-    return null;
+    style = { visibility: 'hidden' };
   }
   return (
-    <div id="notification-container" className="ui center aligned container">
+    <div style={style} id="notification-container" className="ui center aligned container">
       <div className="ui compact message">
         <p>{props.message}</p>
       </div>
