@@ -4,14 +4,11 @@ let items = [];
 
 function createFakeData() {
   for (let i = 2; i <= 5; i += 1) {
-    
-    console.log('add item with id: ' + i);
     items.push({
       id: String(i),
       title: Faker.lorem.words() + ' ' + String(i),
       content: Faker.lorem.paragraph()
     });
-
   }
 }
 exports.define = function (config, callback) {
