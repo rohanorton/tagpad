@@ -1,6 +1,16 @@
 .savebutton {
   margin-left:0.8em !important;
 }
+.savebutton:focus {
+  color: green;
+  background-color:green;
+}
+
+button:focus {
+  text-decoration: underline !important;
+}
+
+
 .required-label .asterisk {
   color: #db2828;
 }
