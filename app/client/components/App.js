@@ -2,6 +2,7 @@ import 'babel-polyfill';
 import React from 'react';
 import Menu from './Menu/Menu';
 import Browse from './Browse/Browse.js';
+import Notification from './Notification/Notification.js';
 import NoteForm from './NoteForm/NoteForm.js';
 import Login from './Login/Login.js';
 import itemHelpers from './../helpers/items';
@@ -29,7 +30,6 @@ function getNewItem(props) {
   return itemHelpers.getNewItem();
 }
 
-
 function App (props) {
   // props {location:Array, query:Object}
   const page = props.location[0];
@@ -39,13 +39,7 @@ function App (props) {
     return (
       <div className="ui center aligned">
         <Menu page={page} />
-        
-        <div id="notification-container" className="ui center aligned container">
-          <div className="ui compact message">
-            <p>Notifications here!</p>
-          </div>
-        </div>
-
+        <Notification message="This is the notification message" />
         <Browse search={props.query.search || ''}/>
       </div>
     );
