@@ -1,9 +1,9 @@
 import React from 'react';
 
 export default function (props) {
-  let style = {};
+  let style = {height: '8em'};
   if (!props.message) {
-    style = { visibility: 'hidden' };
+    style.visibility = 'hidden';
   }
   return (
     <div style={style} id="notification-container" className="ui center aligned container">
