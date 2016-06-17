@@ -2,5 +2,9 @@
   margin-left:0.8em !important;
 }
 .required-label .asterisk {
-  color: #db2828
+  color: #db2828;
+}
+
+.ui.form {
+  padding-top: 5em;
 }
