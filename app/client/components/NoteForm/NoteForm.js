@@ -1,10 +1,10 @@
 import React from 'react';
 import Relay from 'react-relay';
-var itemHelpers = require('./../../helpers/items.js');
-var navigation = require('./../../helpers/navigation.js');
 import AddItemMutation from './../../mutations/AddItemMutation.js';
-var notification = require('./../../helpers/notification.js');
-var store = require('./../../helpers/model.js');
+let itemHelpers = require('./../../helpers/items.js');
+let navigation = require('./../../helpers/navigation.js');
+let store = require('./../../helpers/model.js');
+let notification = require('./../../actions/notification.js');
 
 require('./style.css');
 
@@ -25,10 +25,10 @@ module.exports = React.createClass({
         new AddItemMutation({item, itemListId: '1'}),
         { 
           onSuccess: function (reponse) {
-            notification.info("Item has been added. View item");
+            notification.info("Item added");
           },
           onFailure: function (transaction) {
-            notification.info("Error adding item, retry?");
+            notification.error("Error adding item");
           }
         }
       );
