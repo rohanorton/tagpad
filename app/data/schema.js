@@ -16,15 +16,12 @@ import {
   mutationWithClientMutationId,
 } from 'graphql-relay';
 
-
-
 import path from 'path';
 
 const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
 const db = require('./' + config.database + '.js');
 
-
-var ItemType = new GraphQLObjectType({
+const ItemType = new GraphQLObjectType({
   name: 'Item',
   fields: () => ({
     title: {type: GraphQLString},
@@ -44,7 +41,7 @@ const {
 
 // This needs to exist due to a limitation in Relay
 //https://github.com/facebook/relay/issues/112
-var ItemsListType = new GraphQLObjectType({
+const ItemsListType = new GraphQLObjectType({
   name: 'ItemsList',
   fields: {
     id: {type: GraphQLString},
@@ -62,7 +59,6 @@ var ItemsListType = new GraphQLObjectType({
     },
   },
 });
-
 
 const AddItemMutation = mutationWithClientMutationId({
   name: 'AddItem',
@@ -95,7 +91,7 @@ const AddItemMutation = mutationWithClientMutationId({
 });
 
 
-export var Schema = new GraphQLSchema({
+export const Schema = new GraphQLSchema({
   mutation : new GraphQLObjectType({
     name: 'Mutation',
     fields: {
