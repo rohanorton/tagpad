@@ -31,7 +31,10 @@ module.exports = React.createClass({
             let error = transaction.getError();
             let message = 'Add item failed';
             if (error) {
-              message = error.source.errors[0].message;
+              message = _.get(error, 'source.errors[0].message');
+              if (!message) {
+                message = error.statusText; 
+              }
             }
             notification.error("Error adding item", message);
           }
