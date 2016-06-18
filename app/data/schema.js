@@ -69,8 +69,7 @@ const AddItemMutation = mutationWithClientMutationId({
   outputFields: {
     itemEdge: {
       type: GraphQLItemEdge,
-      resolve: ({localItemId}) => {
-        const item = db.getItem(localItemId);
+      resolve: (item) => {
         return {
           cursor: cursorForObjectInConnection(db.getItems(), item), 
           node: item
@@ -85,8 +84,7 @@ const AddItemMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: ({title, content}) => {
-    const localItemId = db.addItem({title, content}).id
-    return {localItemId};
+    return db.addItem({title, content});
   },
 });
 
