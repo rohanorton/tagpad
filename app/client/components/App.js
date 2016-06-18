@@ -52,7 +52,7 @@ function App (props) {
           update={itemHelpers.updateNewItem}
           submit={itemHelpers.submitNewItem}
           cancel={itemHelpers.cancel}
-          />;
+          />
       </div>
     );
   } else if (page === "items") {
