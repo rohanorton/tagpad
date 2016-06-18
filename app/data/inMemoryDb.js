@@ -17,7 +17,7 @@ exports.define = function (config, callback) {
 };
 
 
-exports.getItems = function (args) {
+function getItemsSync(args) {
   if (args.title && args.title.length) {
     let filtered = _.filter(items, function (item) {
       return (item.title.indexOf(args.title) !== -1);  
@@ -26,17 +26,15 @@ exports.getItems = function (args) {
   } else {
     return items;
   }
-};
+}
 
-exports.getItemList = function (args) {
-  if (args.title && args.title.length) {
-    let filtered = _.filter(items, function (item) {
-      return (item.title.indexOf(args.title) !== -1);  
-    });
-    return { items: filtered }
-  } else {
-    return { items: items }
-  }
+// must use promise here to stay compatible with postgres version
+exports.getItems = function (args) {
+  return (new Promise(
+    function(resolve, reject) {
+      resolve(getItemsSync(args));
+    }
+  ));
 };
 
 exports.addItem = function (item) {

@@ -54,8 +54,11 @@ const ItemsListType = new GraphQLObjectType({
         },
        ...connectionArgs, 
       },
-      resolve: (obj, {title, ...args}) =>
-        connectionFromArray(db.getItems({title}), args),
+      resolve: function (obj, {title, ...args}) {
+        return db.getItems({title}).then(function (items) {
+          return connectionFromArray(items, args);
+        });
+      }
     },
   },
 });
