@@ -1,4 +1,6 @@
 import Sequelize from 'sequelize';
+import Faker from 'faker';
+import _ from 'lodash';
 
 function getConnection (config) {
   return new Sequelize(config.name, config.user, config.password, {
@@ -10,7 +12,7 @@ function getConnection (config) {
       idle: 10000
     }
   });
-};
+}
 
 function sync (callback) {
   exports.conn.sync({force: true}).then(function() {
@@ -19,7 +21,23 @@ function sync (callback) {
   }).catch(function(error) {
     callback(error);
   });
-};
+}
+
+function createFakeData() {
+  _.times(1, () => {
+    return exports.conn.models.user.create({
+      email: Faker.internet.email()
+    }).then(user => {
+      _.times(6, (i) => {
+        return user.createItem({
+          title: Faker.lorem.words() + ' ' + String(i),
+          content: Faker.lorem.paragraph()
+        });
+      });
+    });
+  });
+}
+
 
 exports.define = function (config, callback) {
   exports.conn = getConnection(config);
@@ -62,7 +80,13 @@ exports.define = function (config, callback) {
   User.hasMany(Item);
   Item.belongsTo(User);
   
-  sync(callback);
+  sync(function (err) {
+    if (err) {
+      return callback(err);
+    }
+    createFakeData();
+    callback();
+  });
 };
 
 exports.getItems = function (args) {
@@ -75,15 +99,6 @@ exports.getItems = function (args) {
 };
 
 exports.addItem = function (item) {
-  var promise = new Promise(
-    function(resolve, reject) {
-      setTimeout(function() {
-        exports.conn.models.item.create(item).then(function (result) {
-          resolve(result);
-        });
-      }, 3000);
-    }
-  );
-  return promise;
+  return exports.conn.models.item.create(item);
 };
 
