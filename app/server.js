@@ -92,8 +92,5 @@ db.define(config[config.database], function (err) {
   if (err) {
     throw err;
   }
-  if (config.database === 'postgres') {
-    require('./data/addExampleData.js').run();
-  }
   startServers();
 });
