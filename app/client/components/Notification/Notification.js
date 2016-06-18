@@ -1,5 +1,7 @@
 import React from 'react';
 
+require('./notification.css');
+
 let Notifications = {
   loading: function (props) {
     return (
@@ -31,12 +33,12 @@ let Notifications = {
 };
 
 export default function (props) {
-  let style = {height: '6em'};
+  let style = {height: '7.5em'};
   if (!props.type) {
     style.visibility = 'hidden';
   }
   if (props.type === 'error') {
-    style.height = '9.5em';
+    style.height = '8.94em';
   }
   return (
     <div style={style} id="notification-container" className="ui center aligned container">
