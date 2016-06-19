@@ -74,7 +74,7 @@ function SearchBar(props) {
   );
 }
 
-function ItemList(props) {
+function ItemsList(props) {
   return (
     <div className="ui list">
       {props.itemsList.items.length === 0 && <h4 className="ui center aligned header"> sorry, no matching items found. </h4>}
@@ -86,7 +86,7 @@ function ItemList(props) {
 }
 
 
-ItemList = Relay.createContainer(ItemList, {
+ItemsList = Relay.createContainer(ItemsList, {
   initialVariables: {
     title: null
   },
@@ -106,8 +106,8 @@ ItemList = Relay.createContainer(ItemList, {
   }
 });
 
-class ItemListRouteQuery extends Relay.Route {
-  static routeName = 'ItemListRouteQuery';
+class ItemsListRouteQuery extends Relay.Route {
+  static routeName = 'ItemsListRouteQuery';
   static paramDefinitions = {
     title: {required: true},
   };
@@ -127,9 +127,8 @@ function Browse(props) {
     <div className="ui main text container">
       <SearchBar {...props}/>           
       <Relay.RootContainer
-        Component={ItemList}
-        //forceFetch={true}
-        route={new ItemListRouteQuery({title: props.search})}
+        Component={ItemsList}
+        route={new ItemsListRouteQuery({title: props.search})}
         renderLoading = {function () {
           return (
             <div className="ui active loader text">loading items</div>

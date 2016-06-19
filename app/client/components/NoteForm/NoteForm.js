@@ -8,7 +8,7 @@ import store from './../../helpers/model.js';
 
 require('./style.css');
 
-module.exports = React.createClass({
+let Form = React.createClass({
 
   propTypes: {
     item: React.PropTypes.object.isRequired,
@@ -22,7 +22,7 @@ module.exports = React.createClass({
     if (Object.keys(item.errors).length === 0) {
       notification.loading("Adding...");
       Relay.Store.commitUpdate(
-        new AddItemMutation({item, itemListId: '1'}),
+        new AddItemMutation({item, itemsListId: this.props.itemsList.id}),
         { 
           onSuccess: function (reponse) {
             notification.success("Item added");
@@ -89,7 +89,6 @@ module.exports = React.createClass({
   render: function () {
     let props = this.props;
     return (
-      <div className="ui main text container">
         <form className="ui form" onSubmit={this.onSubmit} >
           <div className={"field required " + this.getFieldErrorClass('title')} >
             <label>title</label>
@@ -135,7 +134,61 @@ module.exports = React.createClass({
             cancel
           </button>
         </form>
-      </div>
     );
   }
 });
+
+
+Form = Relay.createContainer(Form, {
+  fragments: {
+    itemsList: () => Relay.QL`
+      fragment on ItemsList {
+        id
+      }
+    `
+  }
+});
+
+// Return the itemsList id as we want to invalidate the items list from cache
+// on mutation success and need the id to do this.
+class NoteFormRouteQuery extends Relay.Route {
+  static routeName = 'NoteFormRouteQuery';
+  static queries = {
+    itemsList: function (Component) {
+      return Relay.QL`
+        query {
+          itemsList { ${Component.getFragment('itemsList')} }
+        }
+      `;
+    }
+  };
+}
+
+function NoteForm(props) {
+  return (
+    <div className="ui main text container">
+      <Relay.RootContainer
+        Component={Form}
+        route={new NoteFormRouteQuery()}
+        renderFetched={function (data) {
+          return <Form {...data} {...props} />
+        }}
+        renderLoading={function () {
+          return (
+            <div className="ui active loader text">loading item</div>
+          );
+        }}
+        renderFailure={function(error, retry) {
+          return (
+            <div>
+              <p>{error.message}</p>
+              <p><button onClick={retry}>Retry?</button></p>
+            </div>
+          );
+        }}
+      />
+    </div>
+  );
+}
+
+module.exports = NoteForm;

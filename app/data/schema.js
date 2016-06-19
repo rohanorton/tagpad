@@ -44,7 +44,7 @@ const {
 const ItemsListType = new GraphQLObjectType({
   name: 'ItemsList',
   fields: {
-    id: {type: GraphQLString},
+    id: globalIdField('ItemsList'),
     items: {
       type: ItemsConnection,
       args: {

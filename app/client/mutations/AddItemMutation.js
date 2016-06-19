@@ -22,7 +22,7 @@ export default class AddItemMutation extends Relay.Mutation {
       {
         type: 'FIELDS_CHANGE',
         fieldIDs: {
-          itemsList: '1'
+          itemsList: this.props.itemsListId
         },
       },
     ];

@@ -32,7 +32,7 @@ type ItemEdge {
 }
 
 type ItemsList {
-  id: String
+  id: ID!
   items(title: String = "", after: String, first: Int, before: String, last: Int): ItemConnection
 }
 

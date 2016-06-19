@@ -28,7 +28,7 @@ function createFakeData() {
     return exports.conn.models.user.create({
       email: Faker.internet.email()
     }).then(user => {
-      _.times(6, (i) => {
+      _.times(3, (i) => {
         return user.createItem({
           title: Faker.lorem.words() + ' ' + String(i),
           content: Faker.lorem.paragraph()
@@ -95,7 +95,11 @@ exports.getItems = function (args) {
     query.where.title = {$like: '%' + args.title + '%'};
   }
   query.limit = 20;
-  return exports.conn.models.item.findAll(query);
+  return exports.conn.models.item.findAll(query).then(function (items) {
+    return items.map(function ({title, content, id}) {
+      return {title, content, id: String(id)};
+    });
+  });
 };
 
 exports.addItem = function (item) {
