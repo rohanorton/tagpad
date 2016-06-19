@@ -18,7 +18,7 @@ type AddItemPayload {
 type Item {
   title: String
   content: String
-  id: String
+  id: ID!
 }
 
 type ItemConnection {
