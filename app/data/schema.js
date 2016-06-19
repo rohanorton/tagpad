@@ -17,9 +17,12 @@ import {
 } from 'graphql-relay';
 
 import path from 'path';
-
 const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
 const db = require('./' + config.database + '.js');
+
+
+// Doesn't matter what this is as there is only 1 itemsList
+const itemsListId = 'itemsList'; 
 
 const ItemType = new GraphQLObjectType({
   name: 'Item',
@@ -82,7 +85,7 @@ const AddItemMutation = mutationWithClientMutationId({
     itemsList: {
       type: ItemsListType,
       resolve: function () {
-        return { id: '1' };
+        return { id: itemsListId };
       }
     },
   },
@@ -108,7 +111,7 @@ export const Schema = new GraphQLSchema({
         },
         type: ItemsListType,
         resolve: function (root, args) {
-          return { id: '1' }
+          return { id: itemsListId }
         }
       }
     }
