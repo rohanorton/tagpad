@@ -56,11 +56,10 @@ function App (props) {
     );
   } else if (page === "items") {
     if (props.location.length === 2) {
-      let id = Number(props.location[1]);
+      let id = props.location[1];
       return (
         <div>
           <Menu page={page} />
-          <h1> todo: Note edit form for item with id: {id} here </h1>
           <NoteForm
             mode='edit'
             itemId={id} 

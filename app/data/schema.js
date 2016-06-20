@@ -13,6 +13,8 @@ import {
   connectionFromArray,
   cursorForObjectInConnection,
   globalIdField,
+  nodeDefinitions,
+  fromGlobalId,
   mutationWithClientMutationId,
 } from 'graphql-relay';
 
@@ -24,6 +26,27 @@ const db = require('./' + config.database + '.js');
 // Doesn't matter what this is as there is only 1 itemsList
 const itemsListId = 'itemsList'; 
 
+// Used to create getItemById
+var {nodeInterface, nodeField} = nodeDefinitions(
+  (globalId) => {
+    var {type, id} = fromGlobalId(globalId);
+    if (type === 'Item') {
+      return db.getItem(id);
+    } else {
+      return null;
+    }
+  },
+  (obj) => {
+    let type = 'Item';
+    if (type === 'Item') {
+      return ItemType;
+    } else {
+      return null;
+    }
+  }
+);
+
+
 const ItemType = new GraphQLObjectType({
   name: 'Item',
   fields: () => ({
@@ -31,7 +54,13 @@ const ItemType = new GraphQLObjectType({
     content: {type: GraphQLString},
     id: globalIdField('Item'),
   }),
+  interfaces: [nodeInterface]
 });
+
+
+
+
+
 
 
 const {
@@ -105,6 +134,15 @@ export const Schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
+      node: nodeField,
+      item: {
+        args: { id: { type: GraphQLString } },
+        type: ItemType,
+        resolve: function (root, args) {
+          var {type, id} = fromGlobalId(args.id);
+          return db.getItem(id);
+        }
+      },
       itemsList: {
         args: {
           title: { type: GraphQLString }

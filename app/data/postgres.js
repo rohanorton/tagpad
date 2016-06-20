@@ -102,6 +102,10 @@ exports.getItems = function (args) {
   });
 };
 
+exports.getItem = function (id) {
+  return exports.conn.models.item.findById(id);
+};
+
 exports.addItem = function (item) {
   return exports.conn.models.item.create(item);
 };

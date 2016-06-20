@@ -88,6 +88,8 @@ let Form = React.createClass({
 
   render: function () {
     let props = this.props;
+    console.log('this.props.item = ', this.props);
+    console.log('this.props.itemsList =', this.props.itemsList);
     return (
         <form className="ui form" onSubmit={this.onSubmit} >
           <div className={"field required " + this.getFieldErrorClass('title')} >
@@ -139,8 +141,25 @@ let Form = React.createClass({
 });
 
 
+/*Form = Relay.createContainer(Form, {
+  fragments: {
+    itemsList: () => Relay.QL`
+      fragment on ItemsList {
+        id
+      }
+    `
+  }
+});*/
+
 Form = Relay.createContainer(Form, {
   fragments: {
+    item: () => Relay.QL`
+      fragment on Item {
+        id
+        title
+        content
+      }
+    `,
     itemsList: () => Relay.QL`
       fragment on ItemsList {
         id
@@ -153,7 +172,17 @@ Form = Relay.createContainer(Form, {
 // on mutation success and need the id to do this.
 class NoteFormRouteQuery extends Relay.Route {
   static routeName = 'NoteFormRouteQuery';
+  static paramDefinitions = {
+    itemId: {required: true},
+  };
   static queries = {
+    item: function (Component) {
+      return Relay.QL`
+        query {
+          item(id: $itemId) { ${Component.getFragment('item')} }
+        }
+      `;
+    },
     itemsList: function (Component) {
       return Relay.QL`
         query {
@@ -169,7 +198,7 @@ function NoteForm(props) {
     <div className="ui main text container">
       <Relay.RootContainer
         Component={Form}
-        route={new NoteFormRouteQuery()}
+        route={new NoteFormRouteQuery({itemId: props.itemId})}
         renderFetched={function (data) {
           return <Form {...data} {...props} />
         }}

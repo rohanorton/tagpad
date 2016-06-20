@@ -15,7 +15,7 @@ type AddItemPayload {
   clientMutationId: String!
 }
 
-type Item {
+type Item implements Node {
   title: String
   content: String
   id: ID!
@@ -40,6 +40,10 @@ type Mutation {
   addItem(input: AddItemInput!): AddItemPayload
 }
 
+interface Node {
+  id: ID!
+}
+
 type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
@@ -48,5 +52,7 @@ type PageInfo {
 }
 
 type Query {
+  node(id: ID!): Node
+  item(id: String): Item
   itemsList(title: String): ItemsList
 }
