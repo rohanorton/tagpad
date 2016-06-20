@@ -48,9 +48,8 @@ function App (props) {
       <div>
         <Menu page={page} />
         <NoteForm 
+          mode='add'
           item={getNewItem(props)} 
-          update={itemHelpers.updateNewItem}
-          submit={itemHelpers.submitNewItem}
           cancel={itemHelpers.cancel}
           />
       </div>
@@ -62,7 +61,11 @@ function App (props) {
         <div>
           <Menu page={page} />
           <h1> todo: Note edit form for item with id: {id} here </h1>
-          <NoteForm itemId={id} />
+          <NoteForm
+            mode='edit'
+            itemId={id} 
+            cancel={itemHelpers.cancel}
+          />
         </div>
       );
     }
