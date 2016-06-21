@@ -49,7 +49,7 @@ function App (props) {
         <Menu page={page} />
         <NoteForm 
           mode='add'
-          item={getNewItem(props)} 
+          newItem={getNewItem(props)} 
           cancel={itemHelpers.cancel}
           />
       </div>
