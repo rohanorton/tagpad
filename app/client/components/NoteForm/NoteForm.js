@@ -1,6 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 import AddItemMutation from './../../mutations/AddItemMutation.js';
+import UpdateItemMutation from './../../mutations/UpdateItemMutation.js';
 import notification from './../../helpers/notification.js';
 import itemHelpers from './../../helpers/items.js';
 import navigation from './../../helpers/navigation.js';
@@ -28,31 +29,58 @@ let Form = React.createClass({
     navigation.startNavigating('browse');
   },
 
+  addItem: function (item) {
+    notification.loading("Adding...");
+    Relay.Store.commitUpdate(
+      new AddItemMutation({item, itemsListId: this.props.itemsList.id}),
+      { 
+        onSuccess: function (reponse) {
+          notification.success("Item added");
+        },
+        onFailure: function (transaction) {
+          let error = transaction.getError();
+          let message = 'Add item failed';
+          if (error) {
+            message = _.get(error, 'source.errors[0].message');
+            if (!message) {
+              message = error.statusText; 
+            }
+          }
+          notification.error("Error adding item", message);
+        }
+      }
+    );
+  },
+
+  updateItem: function (item) {
+    notification.loading("Updating...");
+    Relay.Store.commitUpdate(
+      new UpdateItemMutation({item}),
+      { 
+        onSuccess: function (reponse) {
+          notification.success("Item updated");
+        },
+        onFailure: function (transaction) {
+          let error = transaction.getError();
+          let message = 'Update item failed';
+          if (error) {
+            message = _.get(error, 'source.errors[0].message');
+            if (!message) {
+              message = error.statusText; 
+            }
+          }
+          notification.error("Error adding item", message);
+        }
+      }
+    );
+  },
+
   onSubmit: function (e) {
     e.preventDefault();
     let item = this.getItem(this.props);
     itemHelpers.validate(item);
     if (Object.keys(item.errors).length === 0) {
-      notification.loading("Adding...");
-      Relay.Store.commitUpdate(
-        new AddItemMutation({item, itemsListId: this.props.itemsList.id}),
-        { 
-          onSuccess: function (reponse) {
-            notification.success("Item added");
-          },
-          onFailure: function (transaction) {
-            let error = transaction.getError();
-            let message = 'Add item failed';
-            if (error) {
-              message = _.get(error, 'source.errors[0].message');
-              if (!message) {
-                message = error.statusText; 
-              }
-            }
-            notification.error("Error adding item", message);
-          }
-        }
-      );
+      this[this.props.mode + 'Item'](item);
       navigation.startNavigating('browse'); 
     } else {
       // render the errors.

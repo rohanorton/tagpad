@@ -46,7 +46,6 @@ var {nodeInterface, nodeField} = nodeDefinitions(
   }
 );
 
-
 const ItemType = new GraphQLObjectType({
   name: 'Item',
   fields: () => ({
@@ -57,12 +56,6 @@ const ItemType = new GraphQLObjectType({
   }),
   interfaces: [nodeInterface]
 });
-
-
-
-
-
-
 
 const {
   connectionType: ItemsConnection,
@@ -125,12 +118,38 @@ const AddItemMutation = mutationWithClientMutationId({
   },
 });
 
+const UpdateItemMutation = mutationWithClientMutationId({
+  name: 'UpdateItem',
+  inputFields: {
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    title: { type: new GraphQLNonNull(GraphQLString) },
+    content: { type: new GraphQLNonNull(GraphQLString) },
+    tags: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    item: {
+      type: ItemType,
+      resolve: function (item) {
+        return item;
+      }
+    },
+  },
+  mutateAndGetPayload: (item) => {
+    let localId = fromGlobalId(item.id).id;
+    item.id = localId;
+    return db.updateItem(item).then(function () {
+      return db.getItem(localId);
+    });
+  },
+});
+
 
 export const Schema = new GraphQLSchema({
   mutation : new GraphQLObjectType({
     name: 'Mutation',
     fields: {
       addItem: AddItemMutation,
+      updateItem: UpdateItemMutation,
     },
   }),
   query: new GraphQLObjectType({

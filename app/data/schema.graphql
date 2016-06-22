@@ -40,6 +40,7 @@ type ItemsList {
 
 type Mutation {
   addItem(input: AddItemInput!): AddItemPayload
+  updateItem(input: UpdateItemInput!): UpdateItemPayload
 }
 
 interface Node {
@@ -57,4 +58,17 @@ type Query {
   node(id: ID!): Node
   item(id: String): Item
   itemsList(title: String): ItemsList
+}
+
+input UpdateItemInput {
+  id: String!
+  title: String!
+  content: String!
+  tags: String!
+  clientMutationId: String!
+}
+
+type UpdateItemPayload {
+  item: Item
+  clientMutationId: String!
 }

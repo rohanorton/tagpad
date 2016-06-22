@@ -49,7 +49,7 @@ function App (props) {
       return (
         <div>
           <Menu page={page} />
-          <NoteForm mode='edit' itemId={id} />
+          <NoteForm mode='update' itemId={id} />
         </div>
       );
     }
