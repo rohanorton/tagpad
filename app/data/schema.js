@@ -100,7 +100,8 @@ const AddItemMutation = mutationWithClientMutationId({
   name: 'AddItem',
   inputFields: {
     title: { type: new GraphQLNonNull(GraphQLString) },
-    content: { type: new GraphQLNonNull(GraphQLString) }
+    content: { type: new GraphQLNonNull(GraphQLString) },
+    tags: { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
     itemEdge: {
@@ -119,8 +120,8 @@ const AddItemMutation = mutationWithClientMutationId({
       }
     },
   },
-  mutateAndGetPayload: ({title, content}) => {
-    return db.addItem({title, content});
+  mutateAndGetPayload: (item) => {
+    return db.addItem(item);
   },
 });
 

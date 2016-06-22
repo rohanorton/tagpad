@@ -6,6 +6,7 @@ schema {
 input AddItemInput {
   title: String!
   content: String!
+  tags: String!
   clientMutationId: String!
 }
 

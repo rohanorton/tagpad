@@ -1,12 +1,10 @@
 import Relay from 'react-relay';
+import _ from 'lodash';
 
 export default class AddItemMutation extends Relay.Mutation {
   getVariables() {
     // server can decide how to handle this.
-    return {
-      title: this.props.item.title,
-      content: this.props.item.content
-    }
+    return _.pick(this.props.item, ['title', 'content', 'tags']);
   }
   getFatQuery() {
     return Relay.QL`
