@@ -22,13 +22,6 @@ function loginSubmit(e) {
 }
 
 
-// either return temp new item from local store or get new empty item
-function getNewItem(props) {
-  if (props.newItem) {
-    return props.newItem;
-  }
-  return itemHelpers.getNewItem();
-}
 
 function App (props) {
   // props {location:Array, query:Object}
@@ -49,7 +42,6 @@ function App (props) {
         <Menu page={page} />
         <NoteForm 
           mode='add'
-          newItem={getNewItem(props)} 
           cancel={itemHelpers.cancel}
           />
       </div>

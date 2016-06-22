@@ -17,10 +17,12 @@ let Form = React.createClass({
   // props passed in so args such as prev props can be used
   getItem: function (props) {
     let item;
-    if (props.mode === 'add') {
-      item = props.newItem;
-    } else {
+    if (this.state) {
+      item = this.state;
+    } else if (props.item) {
       item = props.item;
+    } else {
+      item = itemHelpers.getNewItem();
     }
     return item;
   },
@@ -67,24 +69,27 @@ let Form = React.createClass({
       this.refs[fieldsWithError[0]].focus();
     }
   },
-
-  createUpdateField: function(fieldName) {
-    let item = this.getItem(this.props);
-    return function (e) {
-      var changes = {};
-      e.preventDefault();
-      changes[fieldName] = e.target.value;
-      var updated = Object.assign({}, item, changes);
-      store.setState({ newItem: updated });
-    };
+  updateField: function(name, value) {
+    var updated = Object.assign({}, this.getItem(this.props), {[name]:value});
+    this.setState(updated);
   },
-
+  updateTitle: function(e) {
+    e.preventDefault();
+    this.updateField('title', e.target.value);
+  },
+  updateContent: function(e) {
+    e.preventDefault();
+    this.updateField('content', e.target.value);
+  },
+  updateTags: function(e) {
+    e.preventDefault();
+    this.updateField('tags', e.target.value);
+  },
   getFieldErrorClass: function (fieldName) {
     let item = this.getItem(this.props);
     var areErrors = item.errors && item.errors[fieldName];
     return (areErrors ? 'error': '');
   },
-
   getErrorLabel: function (fieldName){
     let item = this.getItem(this.props);
     var msg = item.errors && item.errors[fieldName];
@@ -100,27 +105,27 @@ let Form = React.createClass({
   },
 
   render: function () {
-    let props = this.props;
-    let item = this.getItem(props);
+    let item = this.getItem(this.props);
+    let cancel = this.props.cancel;
     return (
         <form className="ui form" onSubmit={this.onSubmit} >
           <div className={"field required " + this.getFieldErrorClass('title')} >
             <label>title</label>
             <input
               value={item.title}
-              onChange={this.createUpdateField('title')}
+              onChange={this.updateTitle}
               autoFocus="true"
               ref="title"
-              type="text">
-            </input>
+              type="text" />
             {this.getErrorLabel('title')}
           </div>
+
           <div className={"field required " + this.getFieldErrorClass('content')}>
             <label>content</label>
             <textarea
               value={item.content}
               ref="content"
-              onChange={this.createUpdateField('content')}
+              onChange={this.updateContent}
               >
             </textarea>
             {this.getErrorLabel('content')}
@@ -130,9 +135,9 @@ let Form = React.createClass({
             <label>tags</label>
             <input
               value={item.tags}
-              onChange={this.createUpdateField('tags')}
-              type="text">
-            </input>
+              onChange={this.updateTags}
+              ref="tags"
+              type="text" />
           </div>
 
           <label className="required-label">
@@ -143,7 +148,7 @@ let Form = React.createClass({
           </button>
           <button
             className="ui right floated button"
-            onClick={props.cancel}
+            onClick={cancel}
             >
             cancel
           </button>
@@ -152,17 +157,6 @@ let Form = React.createClass({
   }
 });
 
-
-/*Form = Relay.createContainer(Form, {
-  fragments: {
-    itemsList: () => Relay.QL`
-      fragment on ItemsList {
-        id
-      }
-    `
-  }
-});*/
-
 Form = Relay.createContainer(Form, {
   fragments: {
     item: () => Relay.QL`
@@ -170,6 +164,7 @@ Form = Relay.createContainer(Form, {
         id
         title
         content
+        tags
       }
     `,
     itemsList: () => Relay.QL`
@@ -215,6 +210,7 @@ function NoteForm(props) {
           return <Form {...data} {...props} />
         }}
         renderLoading={function () {
+          console.log('render loading');
           return (
             <div className="ui active loader text">loading item</div>
           );

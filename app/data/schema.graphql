@@ -18,6 +18,7 @@ type AddItemPayload {
 type Item implements Node {
   title: String
   content: String
+  tags: String
   id: ID!
 }
 

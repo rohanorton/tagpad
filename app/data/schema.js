@@ -52,6 +52,7 @@ const ItemType = new GraphQLObjectType({
   fields: () => ({
     title: {type: GraphQLString},
     content: {type: GraphQLString},
+    tags: {type: GraphQLString},
     id: globalIdField('Item'),
   }),
   interfaces: [nodeInterface]

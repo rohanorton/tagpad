@@ -15,6 +15,7 @@ exports.updateItemForm = function (itemForm) {
   });
 };
 
+
 // when add or edit item is canceled 
 exports.cancel = function (e) {
   e.preventDefault();

@@ -31,7 +31,8 @@ function createFakeData() {
       _.times(3, (i) => {
         return user.createItem({
           title: Faker.lorem.words() + ' ' + String(i),
-          content: Faker.lorem.paragraph()
+          content: Faker.lorem.paragraph(),
+          tags: Faker.lorem.words()
         });
       });
     });
@@ -65,6 +66,9 @@ exports.define = function (config, callback) {
     content: {
       type: Sequelize.TEXT
     },
+    tags: {
+      type: Sequelize.STRING
+    },
     type: {
       type: Sequelize.ENUM('note')
     },
@@ -96,8 +100,8 @@ exports.getItems = function (args) {
   }
   query.limit = 20;
   return exports.conn.models.item.findAll(query).then(function (items) {
-    return items.map(function ({title, content, id}) {
-      return {title, content, id: String(id)};
+    return items.map(function ({title, content, id, tags}) {
+      return {title, content, id: String(id), tags: tags || ""};
     });
   });
 };
