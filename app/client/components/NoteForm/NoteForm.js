@@ -4,7 +4,6 @@ import AddItemMutation from './../../mutations/AddItemMutation.js';
 import notification from './../../helpers/notification.js';
 import itemHelpers from './../../helpers/items.js';
 import navigation from './../../helpers/navigation.js';
-import store from './../../helpers/model.js';
 
 require('./style.css');
 
@@ -55,7 +54,7 @@ let Form = React.createClass({
       navigation.startNavigating('browse'); 
     } else {
       // render the errors.
-      store.setState({ newItem: item });
+      this.setState({item});
     }
   },
 
