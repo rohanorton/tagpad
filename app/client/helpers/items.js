@@ -9,10 +9,10 @@ exports.getNewItem = function () {
 exports.validate = function (item) {  
   item.errors = {};
   if (!item.title) {
-    item.errors.title = ["Please enter your new item's title"];
+    item.errors.title = ["Please enter a title"];
   }
   // Test that 'item.email' looks like a real email address using a RegExp
   if (!item.content) {
-    item.errors.content = ["Please enter your new item's description"];
+    item.errors.content = ["Please enter a description"];
   }
 }
