@@ -9,10 +9,6 @@ require('./style.css');
 
 let Form = React.createClass({
 
-  propTypes: {
-    cancel: React.PropTypes.func.isRequired
-  },
-  
   // props passed in so args such as prev props can be used
   getItem: function (props) {
     let item;
@@ -24,6 +20,12 @@ let Form = React.createClass({
       item = itemHelpers.getNewItem();
     }
     return item;
+  },
+
+  cancel: function (e) {
+    e.preventDefault();
+    // go back to the browse page.
+    navigation.startNavigating('browse');
   },
 
   onSubmit: function (e) {
@@ -105,7 +107,6 @@ let Form = React.createClass({
 
   render: function () {
     let item = this.getItem(this.props);
-    let cancel = this.props.cancel;
     return (
         <form className="ui form" onSubmit={this.onSubmit} >
           <div className={"field required " + this.getFieldErrorClass('title')} >
@@ -147,7 +148,7 @@ let Form = React.createClass({
           </button>
           <button
             className="ui right floated button"
-            onClick={cancel}
+            onClick={this.cancel}
             >
             cancel
           </button>
@@ -209,7 +210,6 @@ function NoteForm(props) {
           return <Form {...data} {...props} />
         }}
         renderLoading={function () {
-          console.log('render loading');
           return (
             <div className="ui active loader text">loading item</div>
           );

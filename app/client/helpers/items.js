@@ -6,25 +6,6 @@ exports.getNewItem = function () {
   return Object.assign({}, constants.ITEM_TEMPLATE);
 };
 
-exports.updateItemForm = function (itemForm) {
-  // remember we just need to set the changes.
-  var itemForms = Object.assign({}, model.getState().itemForms);
-  itemForms[itemForm.id] = itemForm;
-  model.setState({
-    itemForms: itemForms
-  });
-};
-
-
-// when add or edit item is canceled 
-exports.cancel = function (e) {
-  e.preventDefault();
-  // delete the edits.
-  model.setState({ newItem: exports.getNewItem()}); 
-  // go back to the browse page.
-  navigation.startNavigating('browse');
-};
-  
 exports.validate = function (item) {  
   item.errors = {};
   if (!item.title) {

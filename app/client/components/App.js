@@ -40,10 +40,7 @@ function App (props) {
     return (
       <div>
         <Menu page={page} />
-        <NoteForm 
-          mode='add'
-          cancel={itemHelpers.cancel}
-          />
+        <NoteForm mode='add'/>
       </div>
     );
   } else if (page === "items") {
@@ -52,11 +49,7 @@ function App (props) {
       return (
         <div>
           <Menu page={page} />
-          <NoteForm
-            mode='edit'
-            itemId={id} 
-            cancel={itemHelpers.cancel}
-          />
+          <NoteForm mode='edit' itemId={id} />
         </div>
       );
     }
