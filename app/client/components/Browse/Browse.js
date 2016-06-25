@@ -77,7 +77,7 @@ function SearchBar(props) {
 function ItemsList(props) {
   return (
     <div className="ui list">
-      {props.itemsList.items.length === 0 && <h4 className="ui center aligned header"> sorry, no matching items found. </h4>}
+      {props.itemsList.items.edges.length === 0 && <h4 className="ui center aligned header"> sorry, no matching items found. </h4>}
       {props.itemsList.items.edges.map(function (edge) {
         return <Item item={edge.node} type='note' key={edge.node.id} />; 
       })}
