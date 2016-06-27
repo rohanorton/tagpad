@@ -2,7 +2,6 @@
 var path = require('path');
 var webpack = require('webpack');
 module.exports = {
-  devtool: 'eval-source-map',
   entry: path.resolve(__dirname, 'client', 'app.js'),
   output: {filename: 'app.js', path: './build/client'},
   plugins: [
