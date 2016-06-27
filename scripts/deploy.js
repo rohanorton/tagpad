@@ -19,7 +19,7 @@ let commands = [
   'sudo npm install',
   'sudo forever stopall',
   'sudo npm run build',
-  'sudo NODE_ENV=production forever start ' + remoteAppDir + '/build/server.js'
+  'cd build && sudo NODE_ENV=production forever start server.js'
 ];
 
 // need to go to proper dir first.

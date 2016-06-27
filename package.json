@@ -9,7 +9,7 @@
     "start-webpack": "webpack-dev-server",
     "start": "babel-node ./server.js",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "build": "rm -r build/static && mkdir build/static && cp -r client/static build/static &&  webpack && babel ./server.js -d build && babel ./data -d build/data"
+    "build": "rm -r build/static && cp -r client/static build/static &&  webpack && babel ./server.js -d build && babel ./data -d build/data"
   },
   "keywords": [],
   "author": "",
