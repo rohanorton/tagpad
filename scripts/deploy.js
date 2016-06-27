@@ -47,4 +47,4 @@ ssh.exec(commands[0], handlers(commands[0]))
   .exec(commands[5], handlers(commands[5]))
   .exec(commands[6], handlers(commands[6]))
   .exec(commands[7], handlers(commands[7]))
-  .exec(commands[7], handlers(commands[8])).start();
+  .exec(commands[8], handlers(commands[8])).start();
