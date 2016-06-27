@@ -13,14 +13,11 @@ const GRAPHQL_PORT = 8080;
 let graphQLServer;
 let appServer;
 
-const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
 let APP_PORT = 3000;
-
 
 if (process.env.NODE_ENV === 'production') {
   APP_PORT = 80;
 }
-
 
 // for production
 function startExpressAppServer(callback) {
@@ -46,7 +43,8 @@ function startExpressAppServer(callback) {
 // for development.
 function startWebpackAppServer(callback) {
   // Serve the Relay app
-  const compiler = webpack(require('./webpack.config.js'));
+  let webpackConfig = require('./webpack.dev.config.js');
+  const compiler = webpack(webpackConfig);
   appServer = new WebpackDevServer(compiler, {
     contentBase: '/client/',
     proxy: {'/graphql': `http://localhost:${GRAPHQL_PORT}`},
@@ -86,6 +84,8 @@ function startGraphQLServer(callback) {
 }
 
 function startServers(callback) {
+
+
   // Shut down the servers
   if (appServer) {
     appServer.listeningApp.close();
@@ -121,6 +121,7 @@ watcher.on('change', path => {
   );
 });
 
+const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
 const db = require('./data/' + config.database + '.js');
 
 db.define(config[config.database], function (err) {
