@@ -11,11 +11,11 @@ let ssh = new SSH({
 let remoteAppDir = '/home/tagpad/tagpad';
 
 let commands = [
-  'git clean -f -d',
-  'git pull origin master',
-  'npm install',
+  'sudo git clean -f -d',
+  'sudo git pull origin master',
+  'sudo npm install',
   'sudo forever stopall',
-  'npm run build',
+  'sudo npm run build',
   'sudo NODE_ENV=production forever start ' + remoteAppDir + '/build/server.js'
 ];
 
