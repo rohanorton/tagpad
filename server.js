@@ -6,14 +6,45 @@ import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import {clean} from 'require-clean';
 import {exec} from 'child_process';
+import proxy from 'express-http-proxy';
 
-const APP_PORT = 3000;
 const GRAPHQL_PORT = 8080;
 
 let graphQLServer;
 let appServer;
 
-function startAppServer(callback) {
+const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
+let APP_PORT = 3000;
+
+
+if (process.env.NODE_ENV === 'production') {
+  APP_PORT = 80;
+}
+
+
+// for production
+function startExpressAppServer(callback) {
+  let app = express();
+
+  // can serve these directly.
+  app.use('/', express.static(__dirname + '/static'));
+
+  // build the client scripts and server them from the build folder
+  app.use('/build', express.static(__dirname + '/client'));
+
+  // proxy graphql to the graphql server on the graphql port
+  app.use('/graphql', proxy(`http://localhost:${GRAPHQL_PORT}`));
+
+  app.listen(APP_PORT, () => {
+    console.log(`App is now running on http://localhost:${APP_PORT}`);
+    if (callback) {
+      callback();
+    }
+  });
+}
+
+// for development.
+function startWebpackAppServer(callback) {
   // Serve the Relay app
   const compiler = webpack(require('./webpack.config.js'));
   appServer = new WebpackDevServer(compiler, {
@@ -74,7 +105,12 @@ function startServers(callback) {
       }
     }
     startGraphQLServer(handleTaskDone);
-    startAppServer(handleTaskDone);
+
+    if (process.env.NODE_ENV === 'production') {
+      startExpressAppServer(handleTaskDone);
+    } else {
+      startWebpackAppServer(handleTaskDone);
+    }
   });
 }
 const watcher = chokidar.watch('./data/{database,schema}.js');
@@ -85,7 +121,6 @@ watcher.on('change', path => {
   );
 });
 
-const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
 const db = require('./data/' + config.database + '.js');
 
 db.define(config[config.database], function (err) {

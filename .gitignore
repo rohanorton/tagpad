@@ -38,3 +38,5 @@ node_modules
 
 # don't need to commit the built stuff to git yet
 app/client/build
+
+build
