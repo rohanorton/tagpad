@@ -13,6 +13,8 @@ let remoteAppDir = '/home/tagpad/tagpad';
 let commands = [
   'sudo git clean -f -d',
   'sudo git pull origin master',
+  'sudo rm -r build',
+  'sudo mkdir build',
   'sudo npm install',
   'sudo forever stopall',
   'sudo npm run build',
@@ -41,4 +43,6 @@ ssh.exec(commands[0], handlers(commands[0]))
   .exec(commands[2], handlers(commands[2]))
   .exec(commands[3], handlers(commands[3]))
   .exec(commands[4], handlers(commands[4]))
-  .exec(commands[5], handlers(commands[5])).start();
+  .exec(commands[5], handlers(commands[5]))
+  .exec(commands[6], handlers(commands[6]))
+  .exec(commands[7], handlers(commands[7])).start();
