@@ -15,6 +15,7 @@ let commands = [
   'sudo git pull origin master',
   'sudo rm -r build',
   'sudo mkdir build',
+  'sudo mkdir build/static',
   'sudo npm install',
   'sudo forever stopall',
   'sudo npm run build',
@@ -45,4 +46,5 @@ ssh.exec(commands[0], handlers(commands[0]))
   .exec(commands[4], handlers(commands[4]))
   .exec(commands[5], handlers(commands[5]))
   .exec(commands[6], handlers(commands[6]))
-  .exec(commands[7], handlers(commands[7])).start();
+  .exec(commands[7], handlers(commands[7]))
+  .exec(commands[7], handlers(commands[8])).start();
