@@ -27,7 +27,7 @@ function startExpressAppServer(callback) {
   app.use('/', express.static(__dirname + '/static'));
 
   // build the client scripts and server them from the build folder
-  app.use('/build', express.static(__dirname + '/client'));
+  app.use('/', express.static(__dirname + '/client'));
 
   // proxy graphql to the graphql server on the graphql port
   app.use('/graphql', proxy(`http://localhost:${GRAPHQL_PORT}`));
