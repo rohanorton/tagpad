@@ -48,7 +48,7 @@ function startWebpackAppServer(callback) {
   appServer = new WebpackDevServer(compiler, {
     contentBase: '/client/',
     proxy: {'/graphql': `http://localhost:${GRAPHQL_PORT}`},
-    publicPath: '/build/',
+    publicPath: '/',
     stats: 'errors-only'
   });
   // Serve static resources
