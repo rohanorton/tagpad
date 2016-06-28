@@ -18,7 +18,7 @@ let commands = [
   'sudo mkdir build/static',
   'sudo npm install',
   'sudo forever stopall',
-  'sudo npm run build',
+  'source scripts/build.sh',
   'cd build && sudo NODE_ENV=production forever start server.js'
 ];
 
