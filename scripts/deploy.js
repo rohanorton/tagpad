@@ -11,13 +11,10 @@ let ssh = new SSH({
 let remoteAppDir = '/home/tagpad/tagpad';
 
 let commands = [
-  'sudo git clean -f -d',
-  'sudo git pull origin master',
-  'sudo rm -r build',
-  'sudo mkdir build',
-  'sudo mkdir build/static',
-  'sudo npm install',
-  'sudo forever stopall',
+  'git clean -f -d',
+  'git pull origin master',
+  'npm install',
+  'forever stopall',
   'source scripts/build.sh',
   'cd build && sudo NODE_ENV=production forever start server.js'
 ];
@@ -44,7 +41,4 @@ ssh.exec(commands[0], handlers(commands[0]))
   .exec(commands[2], handlers(commands[2]))
   .exec(commands[3], handlers(commands[3]))
   .exec(commands[4], handlers(commands[4]))
-  .exec(commands[5], handlers(commands[5]))
-  .exec(commands[6], handlers(commands[6]))
-  .exec(commands[7], handlers(commands[7]))
-  .exec(commands[8], handlers(commands[8])).start();
+  .exec(commands[5], handlers(commands[5])).start();
