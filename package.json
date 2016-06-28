@@ -2,6 +2,7 @@
   "name": "tagpad",
   "version": "0.0.1",
   "description": "note taking and bookmarking application",
+  "private": true,
   "main": "",
   "repository": "https://github.com/Abe404/tagpad",
   "scripts": {
