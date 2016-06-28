@@ -9,7 +9,8 @@
     "start-webpack": "webpack-dev-server",
     "start": "babel-node ./server.js",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "build": "source ./scripts/build.sh"
+    "build": "source ./scripts/build.sh",
+    "deploy": "node scripts/deploy.js"
   },
   "keywords": [],
   "author": "",
