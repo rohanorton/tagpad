@@ -6,8 +6,6 @@
   "main": "",
   "repository": "https://github.com/Abe404/tagpad",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start-webpack": "webpack-dev-server",
     "start": "babel-node ./server.js",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "build": "source ./scripts/build.sh",
@@ -48,6 +46,6 @@
     "webpack-dev-server": "1.14.1"
   },
   "devDependencies": {
-    "babel-cli": "6.9.0"
+    "babel-cli": "^6.10.1"
   }
 }
