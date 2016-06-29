@@ -2,6 +2,7 @@ import React from 'react';
 import Relay from 'react-relay';
 import AddItemMutation from './../../mutations/AddItemMutation.js';
 import UpdateItemMutation from './../../mutations/UpdateItemMutation.js';
+import DeleteItemMutation from './../../mutations/DeleteItemMutation.js';
 import notification from './../../helpers/notification.js';
 import itemHelpers from './../../helpers/items.js';
 import navigation from './../../helpers/navigation.js';
@@ -21,6 +22,36 @@ let Form = React.createClass({
       item = itemHelpers.getNewItem();
     }
     return item;
+  },
+
+  delete: function (e) {
+    e.preventDefault();
+    let item = this.getItem(this.props);
+    notification.loading("Deleting...");
+    Relay.Store.commitUpdate(
+      new DeleteItemMutation({
+        itemToDeleteId: item.id, 
+        itemsListId: this.props.itemsList.id
+      }),
+      { 
+        onSuccess: function (reponse) {
+          notification.success("Item deleted");
+        },
+        onFailure: function (transaction) {
+          let error = transaction.getError();
+          let message = 'Delete item failed';
+          if (error) {
+            message = _.get(error, 'source.errors[0].message');
+            if (!message) {
+              message = error.statusText; 
+            }
+          }
+          notification.error("Error deleting item", message);
+        }
+      }
+    );
+    navigation.startNavigating('browse');
+
   },
 
   cancel: function (e) {
@@ -69,7 +100,7 @@ let Form = React.createClass({
               message = error.statusText; 
             }
           }
-          notification.error("Error adding item", message);
+          notification.error("Error updating item", message);
         }
       }
     );
@@ -168,8 +199,7 @@ let Form = React.createClass({
               type="text" />
           </div>
 
-          <label className="required-label">
-          <span className="asterisk">*</span> required</label>
+
         
           <button type="submit" className="savebutton ui right floated primary button">
             save
@@ -180,7 +210,27 @@ let Form = React.createClass({
             >
             cancel
           </button>
+
+
+        {((mode) => {
+          if (mode === 'update') {
+            return (
+              <button 
+                className="ui left floated negative button"
+                onClick={this.delete} 
+              >
+                delete 
+              </button>
+            );
+          } else {
+            return null;
+          }
+        })(this.props.mode)}
+
+          
         </form>
+
+
     );
   }
 });

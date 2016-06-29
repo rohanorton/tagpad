@@ -16,6 +16,16 @@ type AddItemPayload {
   clientMutationId: String!
 }
 
+input DeleteItemInput {
+  itemToDeleteId: String!
+  clientMutationId: String!
+}
+
+type DeleteItemPayload {
+  itemsList: ItemsList
+  clientMutationId: String!
+}
+
 type Item implements Node {
   title: String
   content: String
@@ -41,6 +51,7 @@ type ItemsList {
 type Mutation {
   addItem(input: AddItemInput!): AddItemPayload
   updateItem(input: UpdateItemInput!): UpdateItemPayload
+  deleteItem(input: DeleteItemInput!): DeleteItemPayload
 }
 
 interface Node {

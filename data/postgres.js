@@ -114,6 +114,10 @@ exports.addItem = function (item) {
   return exports.conn.models.item.create(item);
 };
 
+exports.deleteItem = function (id) {
+  return exports.conn.models.item.destroy({where: {id}});
+};
+
 exports.updateItem = function (item) {
   console.error('update item, id = ', item.id);
   return exports.conn.models.item.update(item, {where: {id: item.id}} );

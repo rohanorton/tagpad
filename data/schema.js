@@ -118,6 +118,26 @@ const AddItemMutation = mutationWithClientMutationId({
   },
 });
 
+const DeleteItemMutation = mutationWithClientMutationId({
+  name: 'DeleteItem',
+  inputFields: {
+    itemToDeleteId: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    itemsList: {
+      type: ItemsListType,
+      resolve: function () {
+        return { id: itemsListId };
+      }
+    },
+  },
+  mutateAndGetPayload: ({itemToDeleteId}) => {
+    let localId = fromGlobalId(itemToDeleteId).id;
+    db.deleteItem(localId);
+    return { id: itemsListId };
+  }
+});
+
 const UpdateItemMutation = mutationWithClientMutationId({
   name: 'UpdateItem',
   inputFields: {
@@ -143,13 +163,13 @@ const UpdateItemMutation = mutationWithClientMutationId({
   },
 });
 
-
 export const Schema = new GraphQLSchema({
   mutation : new GraphQLObjectType({
     name: 'Mutation',
     fields: {
       addItem: AddItemMutation,
       updateItem: UpdateItemMutation,
+      deleteItem: DeleteItemMutation,
     },
   }),
   query: new GraphQLObjectType({
