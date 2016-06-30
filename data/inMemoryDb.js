@@ -7,7 +7,8 @@ function createFakeData() {
     items.push({
       id: String(i),
       title: Faker.lorem.words() + ' ' + String(i),
-      content: Faker.lorem.paragraph()
+      content: Faker.lorem.paragraph(),
+      tags: Faker.lorem.words()
     });
   }
 }
@@ -36,6 +37,41 @@ exports.getItems = function (args) {
     }
   ));
 };
+
+exports.getItem = function (id) {
+  return (new Promise(
+    function(resolve, reject) {
+      resolve(_.filter(items, function (item) { return item.id === id; })[0]);
+    }
+  ));
+};
+
+exports.updateItem = function (itemToUpdate) {
+  return (new Promise(
+    function(resolve, reject) {
+      items = _.map(items, function (item) {
+        if (item.id === itemToUpdate.id) {
+          return itemToUpdate;
+        } else {
+          return item;
+        }
+      });
+      resolve(itemToUpdate);
+    }
+  ));
+};
+
+exports.deleteItem = function (id) {
+  return (new Promise(
+    function(resolve, reject) {
+      items = _.filter(items, function (item) { return item.id !== id; });
+      resolve();
+    }
+  ));
+};
+
+
+
 
 exports.addItem = function (item) {
   item.id = String(items.length + 2);
