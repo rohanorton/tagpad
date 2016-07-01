@@ -7,6 +7,7 @@ import WebpackDevServer from 'webpack-dev-server';
 import {clean} from 'require-clean';
 import {exec} from 'child_process';
 import proxy from 'express-http-proxy';
+import cookieParser from 'cookie-parser';
 
 const GRAPHQL_PORT = 8080;
 
@@ -28,6 +29,8 @@ function startExpressAppServer(callback) {
 
   // build the client scripts and server them from the build folder
   app.use('/', express.static(__dirname + '/client'));
+
+  app.use(cookieParser());
 
   // proxy graphql to the graphql server on the graphql port
   app.use('/graphql', proxy(`http://localhost:${GRAPHQL_PORT}`));
@@ -51,9 +54,37 @@ function startWebpackAppServer(callback) {
     publicPath: '/',
     stats: 'errors-only'
   });
+  appServer.use(cookieParser());
+
+  appServer.use('/login',function(req, res, next) {
+    res.cookie('login', 'true' ).send('You are now logged in');
+  });
+  appServer.use('/logout',function(req, res, next) {
+    res.cookie('login' , 'false').send('You are now logged out');
+  });
+
+  appServer.use('/getcookie', function(req, res, next) {
+    console.log(req.originalUrl); // '/admin/new'
+    console.log(req.baseUrl); // '/admin'
+    console.log(req.path); // '/new'
+    res.send(req.cookies);
+  });
+
+  appServer.use('login_page', function (req, res, next) {
+    res.send('This is a page where you can login');
+  });
+
+  appServer.use('/graphql', function (req, res, next) {
+    if (req.cookies.login !== 'true') {
+      res.redirect('/login_page');
+    } else {
+      next();
+    }
+  });
   // Serve static resources
   appServer.use('/', express.static(__dirname + '/client/static'));
   appServer.use('/', express.static(__dirname + '/client/build'));
+
 
   appServer.listen(APP_PORT, () => {
     console.log(`App is now running on http://localhost:${APP_PORT}`);
@@ -68,7 +99,7 @@ function startGraphQLServer(callback) {
   clean('./data/schema');
   const {Schema} = require('./data/schema');
   const graphQLApp = express();
-  graphQLApp.use('/', graphQLHTTP({
+  graphQLApp.use('/graphql', graphQLHTTP({
     graphiql: true,
     pretty: true,
     schema: Schema,

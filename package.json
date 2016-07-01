@@ -24,6 +24,7 @@
     "babel-relay-plugin": "0.8.1",
     "chokidar": "1.5.1",
     "classnames": "2.2.5",
+    "cookie-parser": "^1.4.3",
     "css-loader": "^0.23.1",
     "express": "4.13.4",
     "express-graphql": "0.5.1",
