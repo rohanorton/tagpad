@@ -8,6 +8,13 @@ import model from './helpers/model'
 
 require('./tagpad.css');
 
+// User same origin to send cookies through network layer
+Relay.injectNetworkLayer(
+  new Relay.DefaultNetworkLayer('/graphql', {
+    credentials: 'same-origin'
+  })
+);
+
 function render() {
   let state = model.getState();
   if (!state.transitioning) {
