@@ -33,7 +33,7 @@ function Item(props) {
       <i className={typeToClass[item.type]}></i>
       <div className="content">
         <a href={"#/items/" + item.id} className="header">{item.title}</a>
-        <div className="description">stuff2: {item.content}</div>
+        <div className="description"> {item.content}</div>
         <ItemTags tags={item.tags || []} />
       </div>
     </div>

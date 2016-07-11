@@ -1,57 +1,41 @@
 import chokidar from 'chokidar';
 import express from 'express';
 import graphQLHTTP from 'express-graphql';
-import { graphql } from 'graphql';
 import path from 'path';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import {clean} from 'require-clean';
 import {exec} from 'child_process';
 import proxy from 'express-http-proxy';
-import cookieParser from 'cookie-parser';
-import passport from 'passport';
-import bodyParser from 'body-parser';
 import session from 'express-session';
-var LocalStrategy = require('passport-local').Strategy;
+import url from 'url';
 
-const GRAPHQL_PORT = 8080;
-
-let graphQLServer;
-let appServer;
-let server;
 
 let APP_PORT = 3000;
+let WEBPACK_PORT = 8080; 
+
+let devServer;
+let appServer;
 
 if (process.env.NODE_ENV === 'production') {
-  APP_PORT = 3000;
+  APP_PORT = 80;
 }
 
 function startExpressAppServer(callback) {
-  let app = express();
-
+  var app = express()
   clean('./data/schema');
   const {Schema} = require('./data/schema');
 
-  app.use(
-    session({ 
-      secret: 'secret', 
-      cookie: {maxAge: 60000},
-      resave: true,
-      saveUninitialized: true
-    })
-  );
-   
+  app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+  }));
+
   app.post('/login', function (req, res) {
-    req.session.user = { name: 'a user'};
-    req.session.save(function(err) {
-      res.redirect('/');
-    })
+    req.session.user = {name: 'the user'};
+    res.send('Success');
   });
-
-  app.get('/login', function (req, res) {
-    res.sendfile('login.html', {root: __dirname })
-  });
-
   app.use('/graphql', graphQLHTTP(function (req, res) {
     if (!req.session.user) {
       throw new Error('Authentication Required'); 
@@ -62,20 +46,16 @@ function startExpressAppServer(callback) {
       schema: Schema
     }
   }));
+ 
+  // when in production server these, in dev they are served by webpack dev server. 
+  if (process.env.NODE_ENV === 'production') {
+    app.use('/', express.static(__dirname + '/build/static'));
+    app.use('/', express.static(__dirname + '/build/client'));
+  } else {
+    app.use('/', proxy('http://localhost:' + WEBPACK_PORT + '/'));
+  }
 
-  /*app.use('/', function (req, res, next) {
-    if (req.session.user) {
-      next();
-    } else {
-      res.redirect('/login');
-    }
-  });*/
-
-  app.use('/', express.static(__dirname + '/build/static'));
-  // build the client scripts and server them from the build folder
-  app.use('/', express.static(__dirname + '/build/client'));
-
-  server = app.listen(APP_PORT, () => {
+  appServer = app.listen(APP_PORT, () => {
     console.log(`App is now running on http://localhost:${APP_PORT}`);
     if (callback) {
       callback();
@@ -83,9 +63,34 @@ function startExpressAppServer(callback) {
   });
 }
 
+// for development.
+function startWebpackAppServer(callback) {
+  // Serve the Relay app
+  const compiler = webpack(require('./webpack.dev.config.js'));
+  devServer = new WebpackDevServer(compiler, {
+    contentBase: '/client/',
+    publicPath: '/',
+    stats: 'errors-only'
+  });
+  // Serve static resources
+  devServer.use('/', express.static(__dirname + '/client/static'));
+  devServer.use('/', express.static(__dirname + '/client/build'));
+
+  devServer.listen(WEBPACK_PORT, () => {
+    console.log(`Dev server is now running on http://localhost:${WEBPACK_PORT}`);
+    if (callback) {
+      callback();
+    }
+  });
+}
+
+
 function startServer(callback) {
-  if (server) {
-    server.close();
+  if (appServer) {
+    appServer.close();
+  }
+  if (devServer) {
+    devServer.close();
   }
   // Compile the schema
   exec('npm run update-schema', (error, stdout) => {
@@ -94,10 +99,15 @@ function startServer(callback) {
       return;
     }
     console.log(stdout);
-    startExpressAppServer(callback);
+    startExpressAppServer(function () {
+      if (process.env.NODE_ENV !== 'production') {
+        startWebpackAppServer();    
+      } else {
+        callback();
+      }
+    });
   });
 }
-
 const watcher = chokidar.watch('./data/{database,schema}.js');
 watcher.on('change', path => {
   console.log(`\`${path}\` changed. Restarting.`);

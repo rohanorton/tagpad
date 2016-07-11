@@ -6,10 +6,13 @@ module.exports = React.createClass({
   handleSubmit: function (e) {
     e.preventDefault();
     fetch('login', {
-      method: 'post',
+      method: 'POST',
+      credentials: 'same-origin',
       body: new FormData(document.getElementById('login-form'))
     }).then(function(res) {
-      alert('response = ' + JSON.stringify(res));
+      return res.json();
+    }).then(function(json) {
+      console.log(json);
     });
   },
   updatePassword: function (e) {
@@ -22,15 +25,16 @@ module.exports = React.createClass({
   },
   render: function () {
     return (
-      <form 
-        className="login-form ui middle aligned center aligned grid">
+      <div className="login-form ui middle aligned center aligned grid">
         <div className="column">
           <h2 className="ui header image header">
             <div className="content">
               Log-in to your account
             </div>
           </h2>
-          <form className="ui large form">
+          <form 
+            onSubmit={this.handleSubmit}
+            className="ui large form">
             <div className="ui">
               <div className="field">
                 <div className="ui left icon input">
@@ -56,7 +60,7 @@ module.exports = React.createClass({
             New to us? <a href="#">Sign Up</a>
           </div>
         </div>
-      </form>
+      </div>
     );   
   }
   /*wut: function () {
