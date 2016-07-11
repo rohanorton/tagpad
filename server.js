@@ -40,7 +40,7 @@ function startExpressAppServer(callback) {
       saveUninitialized: true
     })
   );
-  
+   
   app.post('/login', function (req, res) {
     req.session.user = { name: 'a user'};
     req.session.save(function(err) {
@@ -62,13 +62,15 @@ function startExpressAppServer(callback) {
       schema: Schema
     }
   }));
-  app.use('/', function (req, res, next) {
+
+  /*app.use('/', function (req, res, next) {
     if (req.session.user) {
       next();
     } else {
       res.redirect('/login');
     }
-  });
+  });*/
+
   app.use('/', express.static(__dirname + '/build/static'));
   // build the client scripts and server them from the build folder
   app.use('/', express.static(__dirname + '/build/client'));
@@ -82,11 +84,9 @@ function startExpressAppServer(callback) {
 }
 
 function startServer(callback) {
-
   if (server) {
     server.close();
   }
-
   // Compile the schema
   exec('npm run update-schema', (error, stdout) => {
     if (error) {

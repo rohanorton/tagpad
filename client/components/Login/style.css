@@ -1,6 +1,6 @@
 
 .login-form {
-  height: 100%;
+  padding-top: 8em !important;
 }
 .login-form .column {
   max-width: 450px;
