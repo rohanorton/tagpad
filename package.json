@@ -7,7 +7,6 @@
   "repository": "https://github.com/Abe404/tagpad",
   "scripts": {
     "start": "babel-node ./server.js",
-    "watch": "webpack --progress --colors --watch",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "build": "source ./scripts/build.sh",
     "deploy": "node scripts/deploy.js"
