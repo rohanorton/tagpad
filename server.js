@@ -34,6 +34,7 @@ function startExpressAppServer(callback) {
 
   app.post('/login', function (req, res) {
     req.session.user = {name: 'the user'};
+    res.cookie('tagpadlogin', 'true', { maxAge: 900000, httpOnly: false });
     res.send('Success');
   });
   app.use('/graphql', graphQLHTTP(function (req, res) {

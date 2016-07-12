@@ -10,9 +10,12 @@ module.exports = React.createClass({
       credentials: 'same-origin',
       body: new FormData(document.getElementById('login-form'))
     }).then(function(res) {
-      return res.json();
-    }).then(function(json) {
-      console.log(json);
+      return res.text();
+    }).then(function(text) {
+      console.log('Login: ' + text);
+      if (text === 'Success') {
+        window.location = '/';
+      }
     });
   },
   updatePassword: function (e) {
@@ -33,6 +36,7 @@ module.exports = React.createClass({
             </div>
           </h2>
           <form 
+            id="login-form"
             onSubmit={this.handleSubmit}
             className="ui large form">
             <div className="ui">
