@@ -43,10 +43,21 @@ exports.startNavigating = function (newHash) {
   }
 };
 
+function isLoggedIn() {
+  var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)tagpadlogin\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+  return (cookieValue === 'true');
+}
+
 exports.navigated = function () {
   // Removes the `#`, and any leading/final `/` characters
   var normalizedHash = window.location.hash.replace(/^#\/?|\/$/g, '');
-  if (normalizedHash === '') {
+  var loggedIn = isLoggedIn();
+  console.log('loggedIn = ', loggedIn);
+  if (!loggedIn && normalizedHash !== 'login') {
+    console.log('navigate to login page');
+    // redirect to login if they are not logged in and trying to access somsething which isn't the login page.
+    exports.startNavigating('login'); 
+  } else if (normalizedHash === '') {
     // redirect for default route
     exports.startNavigating('browse'); 
   } else {

@@ -1,4 +1,5 @@
-var React = require('react');
+import React from 'react';
+import navigation from '../../helpers/navigation'
 
 require('./style.css')
 
@@ -14,7 +15,7 @@ module.exports = React.createClass({
     }).then(function(text) {
       console.log('Login: ' + text);
       if (text === 'Success') {
-        window.location = '/';
+        navigation.startNavigating('browse');
       }
     });
   },
