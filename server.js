@@ -101,9 +101,11 @@ function startServer(callback) {
     console.log(stdout);
     startExpressAppServer(function () {
       if (process.env.NODE_ENV !== 'production') {
-        startWebpackAppServer();    
+        startWebpackAppServer(callback);    
       } else {
-        callback();
+        if (callback) {
+          callback();
+        }
       }
     });
   });
@@ -123,5 +125,7 @@ db.define(config[config.database], function (err) {
   if (err) {
     throw err;
   }
-  startServer();
+  startServer(function () {
+    console.log('server started');
+  });
 });
