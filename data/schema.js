@@ -19,12 +19,19 @@ import {
 } from 'graphql-relay';
 
 import path from 'path';
+
 const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
 const db = require('./' + config.database + '.js');
 
 
 // Doesn't matter what this is as there is only 1 itemsList
 const itemsListId = 'itemsList'; 
+
+function assertAuth(context) {
+  if (!context.user) {
+    throw new Error('Authentication required');
+  }
+}
 
 // Used to create getItemById
 var {nodeInterface, nodeField} = nodeDefinitions(
@@ -113,7 +120,8 @@ const AddItemMutation = mutationWithClientMutationId({
       }
     },
   },
-  mutateAndGetPayload: (item) => {
+  mutateAndGetPayload: (item, context) => {
+    assertAuth(context);
     return db.addItem(item);
   },
 });
@@ -131,7 +139,8 @@ const DeleteItemMutation = mutationWithClientMutationId({
       }
     },
   },
-  mutateAndGetPayload: ({itemToDeleteId}) => {
+  mutateAndGetPayload: ({itemToDeleteId}, context) => {
+    assertAuth(context);
     let localId = fromGlobalId(itemToDeleteId).id;
     db.deleteItem(localId);
     return { id: itemsListId };
@@ -154,7 +163,8 @@ const UpdateItemMutation = mutationWithClientMutationId({
       }
     },
   },
-  mutateAndGetPayload: (item) => {
+  mutateAndGetPayload: (item, context) => {
+    assertAuth(context);
     let localId = fromGlobalId(item.id).id;
     item.id = localId;
     return db.updateItem(item).then(function () {
@@ -179,7 +189,8 @@ export const Schema = new GraphQLSchema({
       item: {
         args: { id: { type: GraphQLString } },
         type: ItemType,
-        resolve: function (root, args) {
+        resolve: function (root, args, context) {
+          assertAuth(context);
           var {type, id} = fromGlobalId(args.id);
           return db.getItem(id);
         }
@@ -189,7 +200,8 @@ export const Schema = new GraphQLSchema({
           title: { type: GraphQLString }
         },
         type: ItemsListType,
-        resolve: function (root, args) {
+        resolve: function (root, args, context) {
+          assertAuth(context);
           return { id: itemsListId }
         }
       }

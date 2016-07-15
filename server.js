@@ -37,12 +37,11 @@ function startExpressAppServer(callback) {
     res.cookie('tagpadlogin', 'true', { maxAge: 900000, httpOnly: false });
     res.send('Success');
   });
+
   app.use('/graphql', graphQLHTTP(function (req, res) {
-    if (!req.session.user) {
-      throw new Error('Authentication Required'); 
-    }
     return {
       graphiql: true,
+      context: req.session,
       pretty: true,
       schema: Schema
     }

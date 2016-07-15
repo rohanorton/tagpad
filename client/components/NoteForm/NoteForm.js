@@ -4,6 +4,7 @@ import AddItemMutation from './../../mutations/AddItemMutation.js';
 import UpdateItemMutation from './../../mutations/UpdateItemMutation.js';
 import DeleteItemMutation from './../../mutations/DeleteItemMutation.js';
 import notification from './../../helpers/notification.js';
+import {isAuthError} from './../../helpers/error.js';
 import itemHelpers from './../../helpers/items.js';
 import navigation from './../../helpers/navigation.js';
 
@@ -39,6 +40,10 @@ let Form = React.createClass({
         },
         onFailure: function (transaction) {
           let error = transaction.getError();
+          if (isAuthError(error)) {
+            navigation.startNavigating('login');
+            return;
+          }
           let message = 'Delete item failed';
           if (error) {
             message = _.get(error, 'source.errors[0].message');
@@ -70,6 +75,10 @@ let Form = React.createClass({
         },
         onFailure: function (transaction) {
           let error = transaction.getError();
+          if (isAuthError(error)) {
+            navigation.startNavigating('login');
+            return;
+          }
           let message = 'Add item failed';
           if (error) {
             message = _.get(error, 'source.errors[0].message');
@@ -93,6 +102,11 @@ let Form = React.createClass({
         },
         onFailure: function (transaction) {
           let error = transaction.getError();
+          if (isAuthError(error)) {
+            navigation.startNavigating('login');
+            return;
+          }
+
           let message = 'Update item failed';
           if (error) {
             message = _.get(error, 'source.errors[0].message');

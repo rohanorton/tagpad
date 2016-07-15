@@ -3,6 +3,7 @@ import Relay from 'react-relay';
 import React from 'react';
 import queryString from 'query-string';
 import model from '../../helpers/model';
+import {isAuthError} from '../../helpers/error';
 import navigation from '../../helpers/navigation';
 
 require('./browse.css');
@@ -135,6 +136,10 @@ function Browse(props) {
           );
         }}
         renderFailure={function(error, retry) {
+          if (isAuthError(error)) {
+            navigation.startNavigating('login'); 
+            return;
+          }
           return (
             <div>
               <p>{error.message}</p>

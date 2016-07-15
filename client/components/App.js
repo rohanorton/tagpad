@@ -16,18 +16,11 @@ function NotFound() {
   );
 }
 
-function loginSubmit(e) {
-  e.preventDefault();
-  alert('loginSubmit, value = ' + JSON.stringify(e.target.value));
-}
-
-
-
 function App (props) {
   // props {location:Array, query:Object}
   const page = props.location[0];
   if (page === "login") {
-    return <Login onSubmit={loginSubmit}/>;
+    return <Login/>;
   } else if (page === "browse") {
     return (
       <div className="ui center aligned">
