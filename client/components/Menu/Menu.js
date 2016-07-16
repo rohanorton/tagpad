@@ -9,9 +9,9 @@ function logout (e) {
     method: 'POST',
     credentials: 'same-origin'
   }).then(function(res) {
-    return res.text();
-  }).then(function(text) {
-    if (text === 'Success') {
+    return res.json();
+  }).then(function(json) {
+    if (json.status === 'success') {
       navigation.startNavigating('login');
     }
   });

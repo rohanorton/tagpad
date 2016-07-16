@@ -16,11 +16,14 @@ module.exports = React.createClass({
       credentials: 'same-origin',
       body: credentialsJSON
     }).then(function(res) {
-      return res.text();
-    }).then(function(text) {
-      console.log('Login: ' + text);
-      if (text === 'Success') {
+      return res.json();
+    }).then(function(json) {
+      if (json.status === 'success') {
         navigation.startNavigating('browse');
+      } else {
+        if (json.message) {
+          alert(json.message);
+        }
       }
     });
   },

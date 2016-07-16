@@ -11,6 +11,9 @@ import session from 'express-session';
 import url from 'url';
 import bodyParser from 'body-parser';
 import password from './data/password.js';
+import jSend from 'proto-jsend';
+ 
+ 
 
 let APP_PORT = 3000;
 let WEBPACK_PORT = 8080; 
@@ -40,22 +43,24 @@ function startExpressAppServer(callback) {
     saveUninitialized: true
   }));
 
+  app.use(jSend);
+
   app.post('/login', function (req, res) {
     // get a user by email.
     db.getUserByEmail(req.body.email).then(function (user) {
       if (!user) {
-        return res.send('Could not find user with email: ' + req.body.email);
+        return res.jSend.fail({code: 404, message: 'Could not find user with email: ' + req.body.email});
       }
       password.matchesHash(req.body.password, user.password, function (err, match) {
         if (err) {
-          return res.send('Error: ' + JSON.stringify(err));
+          return res.jSend.error(err);
         } 
         if (match) {
           req.session.user = user;
           res.cookie('tagpadlogin', 'true', { maxAge: 900000, httpOnly: false });
-          res.send('Success');
+          return res.jSend();
         } else {
-          res.send('Password did not match');
+          return res.jSend.fail({message: 'Incorrect password'})
         }
       });
     });
@@ -64,7 +69,7 @@ function startExpressAppServer(callback) {
   app.post('/logout', function (req, res) {
     delete req.session.user;
     res.cookie('tagpadlogin', 'false', { maxAge: 900000, httpOnly: false });
-    res.send('Success');
+    res.jSend();
   });
 
   app.use('/graphql', graphQLHTTP(function (req, res) {
