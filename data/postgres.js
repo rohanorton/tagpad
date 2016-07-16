@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
 import Faker from 'faker';
 import _ from 'lodash';
+import passwordHelper from './password.js';
 
 function getConnection (config) {
   return new Sequelize(config.name, config.user, config.password, {
@@ -23,10 +24,18 @@ function sync (callback) {
   });
 }
 
-function createFakeData() {
-  _.times(1, () => {
-    return exports.conn.models.user.create({
-      email: Faker.internet.email()
+function createFakeData(callback) {
+  let email = Faker.internet.email();
+  let password = Faker.internet.password();
+  console.log('Creating User');
+  console.log(email, password);
+  passwordHelper.hash(password, function (err, hash) {
+    if (err) {
+      return callback(err);
+    }
+    exports.conn.models.user.create({
+      email: email,
+      password: hash
     }).then(user => {
       _.times(3, (i) => {
         return user.createItem({
@@ -35,7 +44,7 @@ function createFakeData() {
           tags: Faker.lorem.words()
         });
       });
-    });
+    }).catch(callback).then(callback);
   });
 }
 
@@ -54,7 +63,11 @@ exports.define = function (config, callback) {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true
-    }
+    },
+    password: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
   }, {
     freezeTableName: true // Model tableName will be the same as the model name
   });
@@ -88,8 +101,7 @@ exports.define = function (config, callback) {
     if (err) {
       return callback(err);
     }
-    createFakeData();
-    callback();
+    createFakeData(callback);
   });
 };
 

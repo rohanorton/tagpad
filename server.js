@@ -104,7 +104,6 @@ function startServer(callback) {
       console.log(error);
       return;
     }
-    console.log(stdout);
     startExpressAppServer(function () {
       if (process.env.NODE_ENV !== 'production') {
         startWebpackAppServer(callback);    
