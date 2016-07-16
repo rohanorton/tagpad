@@ -122,6 +122,10 @@ exports.getItem = function (id) {
   return exports.conn.models.item.findById(id);
 };
 
+exports.getUserByEmail = function (email) {
+  return exports.conn.models.user.findOne({where: {email}});
+};
+
 exports.addItem = function (item) {
   return exports.conn.models.item.create(item);
 };

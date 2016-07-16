@@ -9,7 +9,8 @@ import {exec} from 'child_process';
 import proxy from 'express-http-proxy';
 import session from 'express-session';
 import url from 'url';
-
+import bodyParser from 'body-parser';
+import password from './data/password.js';
 
 let APP_PORT = 3000;
 let WEBPACK_PORT = 8080; 
@@ -26,6 +27,13 @@ function startExpressAppServer(callback) {
   clean('./data/schema');
   const {Schema} = require('./data/schema');
 
+  //app.use(bodyParser.json());
+  app.use(bodyParser());
+  // parse application/x-www-form-urlencoded
+  app.use(bodyParser.urlencoded({ extended: false }))
+  // parse application/json
+  app.use(bodyParser.json())
+
   app.use(session({
     secret: 'keyboard cat',
     resave: false,
@@ -33,9 +41,24 @@ function startExpressAppServer(callback) {
   }));
 
   app.post('/login', function (req, res) {
-    req.session.user = {name: 'the user'};
-    res.cookie('tagpadlogin', 'true', { maxAge: 900000, httpOnly: false });
-    res.send('Success');
+    // get a user by email.
+    db.getUserByEmail(req.body.email).then(function (user) {
+      if (!user) {
+        return res.send('Could not find user with email: ' + req.body.email);
+      }
+      password.matchesHash(req.body.password, user.password, function (err, match) {
+        if (err) {
+          return res.send('Error: ' + JSON.stringify(err));
+        } 
+        if (match) {
+          req.session.user = user;
+          res.cookie('tagpadlogin', 'true', { maxAge: 900000, httpOnly: false });
+          res.send('Success');
+        } else {
+          res.send('Password did not match');
+        }
+      });
+    });
   });
 
   app.post('/logout', function (req, res) {

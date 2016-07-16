@@ -16,7 +16,7 @@ exports.hash = function (plainTextPassword, callback) {
   });
 };
 
-exports.matchesHash = function (plainTextPassword, hash) {
+exports.matchesHash = function (plainTextPassword, hash, callback) {
   bcrypt.compare(plainTextPassword, hash, function(err, res) {
     callback(err, res);
   });

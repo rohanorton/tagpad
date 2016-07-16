@@ -6,10 +6,15 @@ require('./style.css')
 module.exports = React.createClass({
   handleSubmit: function (e) {
     e.preventDefault();
+    let credentialsJSON = JSON.stringify(this.state);
     fetch('login', {
       method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       credentials: 'same-origin',
-      body: new FormData(document.getElementById('login-form'))
+      body: credentialsJSON
     }).then(function(res) {
       return res.text();
     }).then(function(text) {
@@ -20,10 +25,12 @@ module.exports = React.createClass({
     });
   },
   updatePassword: function (e) {
+    console.log('update password');
     var newState = Object.assign({}, this.state, {password: e.target.value});
     this.setState(newState);
   },
   updateEmail: function (e) {
+    console.log('update email');
     var newState = Object.assign({}, this.state, {email: e.target.value});
     this.setState(newState);
   },
@@ -44,13 +51,23 @@ module.exports = React.createClass({
               <div className="field">
                 <div className="ui left icon input">
                   <i className="user icon"></i>
-                  <input type="text" name="email" placeholder="E-mail address" />
+                  <input 
+                    type="text" 
+                    name="email" 
+                    placeholder="E-mail address" 
+                    onChange={this.updateEmail}
+                  />
                 </div>
               </div>
               <div className="field">
                 <div className="ui left icon input">
                   <i className="lock icon"></i>
-                  <input type="password" name="password" placeholder="Password" />
+                  <input 
+                    type="password" 
+                    onChange={this.updatePassword} 
+                    name="password" 
+                    placeholder="Password" 
+                  />
                 </div>
               </div>
               <button 
