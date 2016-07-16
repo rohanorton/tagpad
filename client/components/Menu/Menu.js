@@ -3,7 +3,6 @@ import navigation from '../../helpers/navigation'
 
 require('./menu.css');
 
-
 function logout (e) {
   e.preventDefault();
   fetch('logout', {
@@ -19,7 +18,6 @@ function logout (e) {
 }
 
 module.exports = function (props) {
-
   return (
     <div className="ui fixed inverted menu">
       <div className="ui container">
@@ -29,14 +27,12 @@ module.exports = function (props) {
         </a>
         <a href="#/browse" className={"item " + (props.page === 'browse' ? 'active' : '')}>browse</a>
         <a href="#/add" className={"item " + (props.page === 'add' ? 'active' : '')}>add</a>
-
         <a href="#/logout" onClick={logout} className="item right">logout</a>
       </div>
-      
-      
     </div>
   );
 };
+
 module.exports.propTypes = {
   page: React.PropTypes.string.isRequired
 };
