@@ -38,6 +38,12 @@ function startExpressAppServer(callback) {
     res.send('Success');
   });
 
+  app.post('/logout', function (req, res) {
+    delete req.session.user;
+    res.cookie('tagpadlogin', 'false', { maxAge: 900000, httpOnly: false });
+    res.send('Success');
+  });
+
   app.use('/graphql', graphQLHTTP(function (req, res) {
     return {
       graphiql: true,
