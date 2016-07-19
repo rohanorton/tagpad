@@ -86,8 +86,8 @@ function startExpressAppServer(callback) {
  
   // when in production server these, in dev they are served by webpack dev server. 
   if (process.env.NODE_ENV === 'production') {
-    app.use('/', express.static(__dirname + '/build/static'));
-    app.use('/', express.static(__dirname + '/build/client'));
+    app.use('/', express.static(__dirname + '/static'));
+    app.use('/', express.static(__dirname + '/client'));
   } else {
     app.use('/', proxy('http://localhost:' + WEBPACK_PORT + '/'));
   }
