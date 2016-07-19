@@ -1,10 +1,19 @@
 
+
+
 .login-form {
-  padding-top: 8em !important;
+  padding-top: 6em !important;
 }
+
 .login-form .column {
   max-width: 450px;
 }
+
+
+#login-form {
+  padding-top: 4em !important;
+}
+
 .signup-container {
   margin-top:40px;
 }

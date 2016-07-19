@@ -49,7 +49,10 @@ function startExpressAppServer(callback) {
     // get a user by email.
     db.getUserByEmail(req.body.email).then(function (user) {
       if (!user) {
-        return res.jSend.fail({code: 404, message: 'Could not find user with email: ' + req.body.email});
+        return res.jSend.fail({
+          code: 404,
+          message: 'Could not find user with email: ' + req.body.email
+        });
       }
       password.matchesHash(req.body.password, user.password, function (err, match) {
         if (err) {
