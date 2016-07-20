@@ -16,18 +16,19 @@ module.exports = React.createClass({
     } 
   },
   showServerError: function (message) {
-    var credentials = this.state;
-    console.log('show server error');
-    credentials.errors = {};
+    var state = {email: this.state.email, password: this.state.password};
+    state.errors = {};
     if (message.indexOf('email') !== -1) {
-      credentials.errors.email = [ message ];
+      state.errors.email = [ message ];
     } else if (message.indexOf('password') !== -1) {
-      credentials.errors.password = [ message ];
+      state.errors.password = [ message ];
     }
-    this.setState(credentials);
+    state.loading = false;
+    this.setState(state);
   },
   login: function () {
     let showServerError = this.showServerError;
+    this.setState({loading: true, errors: {}});
     fetch('login', {
       method: 'POST',
       headers: {
@@ -51,7 +52,7 @@ module.exports = React.createClass({
   },
   handleSubmit: function (e) {
     e.preventDefault();
-    var credentials = this.state;
+    var credentials = {email: this.state.email, password: this.state.password};
     this.validate(credentials);
     if (Object.keys(credentials.errors).length !== 0) {
       // show the errors;
@@ -70,7 +71,6 @@ module.exports = React.createClass({
   },
   getFieldErrorClass: function (fieldName) {
     var areErrors = !!this.getErrorMessage(fieldName);
-    console.log('get error class for ', fieldName, areErrors, this.state);
     return (areErrors ? 'error': '');
   },
   getErrorMessage: function (fieldName) {
@@ -78,7 +78,6 @@ module.exports = React.createClass({
   },
   getErrorLabel: function (fieldName){
     var msg = this.getErrorMessage(fieldName);
-    console.log('get error label for', fieldName, msg);
     if (msg) {
       return (
         <div className="ui  pointing red basic label">
@@ -108,6 +107,8 @@ module.exports = React.createClass({
                 <div className="ui left icon input">
                   <i className="user icon"></i>
                   <input 
+
+                    disabled={!!(this.state && this.state.loading)} 
                     type="text" 
                     name="email" 
                     placeholder="E-mail address" 
@@ -121,6 +122,7 @@ module.exports = React.createClass({
                 <div className="ui left icon input">
                   <i className="lock icon"></i>
                   <input 
+                    disabled={!!(this.state && this.state.loading)} 
                     type="password" 
                     onChange={this.updatePassword} 
                     name="password" 
@@ -132,7 +134,7 @@ module.exports = React.createClass({
               </div>
               <button 
                 type="submit" 
-                className="ui fluid large orange submit button">
+                className={"ui fluid large orange submit " + (this.state && this.state.loading ? 'loading' : '') + " button"}>
                 Login
               </button>
             </div>
