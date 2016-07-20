@@ -14,12 +14,15 @@ import password from './data/password.js';
 import jSend from 'proto-jsend';
  
  
+const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
+const db = require('./data/' + config.database + '.js');
 
 let APP_PORT = 3000;
 let WEBPACK_PORT = 8080; 
 
 let devServer;
 let appServer;
+
 
 if (process.env.NODE_ENV === 'production') {
   APP_PORT = 80;
@@ -146,22 +149,39 @@ function startServer(callback) {
     });
   });
 }
-const watcher = chokidar.watch('./data/{database,schema}.js');
-watcher.on('change', path => {
-  console.log(`\`${path}\` changed. Restarting.`);
-  startServer(() =>
-    console.log('Restart your browser to use the updated schema.')
-  );
-});
 
-const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
-const db = require('./data/' + config.database + '.js');
-
-db.define(config[config.database], function (err) {
-  if (err) {
-    throw err;
-  }
-  startServer(function () {
-    console.log('server started');
+if (process.env.NODE_ENV !== 'production') {
+  const watcher = chokidar.watch('./data/{database,schema}.js');
+  watcher.on('change', path => {
+    console.log(`\`${path}\` changed. Restarting.`);
+    startServer(() =>
+      console.log('Restart your browser to use the updated schema.')
+    );
   });
-});
+}
+
+function setupDatabase() {
+  db.connect(config[config.database]);
+  if (process.env.NODE_ENV === 'production') {
+      // do not sync
+      startServer(function () {
+        console.log('server started');
+      });
+  } else {
+    // make sync really explicity we don't want this happening by accident
+    if (process.env.sync_tagpad_db === 'true') {
+      console.log('syncing db');
+      db.sync(function (err) {
+        if (err) {
+          throw err;
+        }
+        startServer(function () {
+          console.log('server started');
+        });
+      });
+    }
+  }
+}
+
+setupDatabase();
+

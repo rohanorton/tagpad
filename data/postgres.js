@@ -49,7 +49,7 @@ function createFakeData(callback) {
 }
 
 
-exports.define = function (config, callback) {
+exports.connect = function (config) {
   exports.conn = getConnection(config);
   let User = exports.conn.define('user', {
     email: {
@@ -96,7 +96,10 @@ exports.define = function (config, callback) {
   
   User.hasMany(Item);
   Item.belongsTo(User);
-  
+
+}
+
+exports.sync = function (callback) {
   sync(function (err) {
     if (err) {
       return callback(err);
