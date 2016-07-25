@@ -9,9 +9,12 @@ import {exec} from 'child_process';
 import proxy from 'express-http-proxy';
 import session from 'express-session';
 import url from 'url';
+import fs from 'fs';
+import https from 'https';
 import bodyParser from 'body-parser';
 import password from './data/password.js';
 import jSend from 'proto-jsend';
+let redisStore = require('connect-redis')(session);
  
  
 const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
@@ -26,10 +29,14 @@ let appServer;
 
 if (process.env.NODE_ENV === 'production') {
   APP_PORT = 80;
+  if (config.ssl) {
+    APP_PORT = 443;
+  }
 }
 
+
 function startExpressAppServer(callback) {
-  var app = express()
+  var app = express(options)
   clean('./data/schema');
   const {Schema} = require('./data/schema');
 
@@ -42,6 +49,7 @@ function startExpressAppServer(callback) {
 
   app.use(session({
     secret: 'keyboard cat',
+    store: new redisStore({ host: 'localhost', port: 6379}),
     resave: false,
     saveUninitialized: true
   }));
@@ -73,9 +81,14 @@ function startExpressAppServer(callback) {
   });
 
   app.post('/logout', function (req, res) {
-    delete req.session.user;
-    res.cookie('tagpadlogin', 'false', { maxAge: 900000, httpOnly: false });
-    res.jSend();
+    req.session.destroy(function(err){
+      if (err) {
+        res.jSend.error(err);
+      } else {
+          res.cookie('tagpadlogin', 'false', { maxAge: 900000, httpOnly: false });
+          res.jSend();
+      }
+    });
   });
 
   app.use('/graphql', graphQLHTTP(function (req, res) {
@@ -95,12 +108,27 @@ function startExpressAppServer(callback) {
     app.use('/', proxy('http://localhost:' + WEBPACK_PORT + '/'));
   }
 
-  appServer = app.listen(APP_PORT, () => {
-    console.log(`App is now running on http://localhost:${APP_PORT}`);
-    if (callback) {
-      callback();
-    }
-  });
+  let options = config.ssl ? {
+      key: fs.readFileSync(config.ssl.key),
+      cert: fs.readFileSync(config.ssl.cert),
+			ca: fs.readFileSync(config.ssl.ca)
+  } : null;
+
+	if (config.ssl) {
+    appServer = https.createServer(options, app).listen(APP_PORT, function () {
+      console.log(`App is now running on http://localhost:${APP_PORT}`);
+      if (callback) {
+        callback();
+      }
+    });
+	} else {
+    appServer = app.listen(APP_PORT, () => {
+      console.log(`App is now running on http://localhost:${APP_PORT}`);
+      if (callback) {
+        callback();
+      }
+    });
+   }
 }
 
 // for development.
@@ -160,28 +188,32 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-function setupDatabase() {
+function setupDatabase(callback) {
   db.connect(config[config.database]);
   if (process.env.NODE_ENV === 'production') {
       // do not sync
-      startServer(function () {
-        console.log('server started');
-      });
+			callback();
   } else {
     // make sync really explicity we don't want this happening by accident
     if (process.env.sync_tagpad_db === 'true') {
       console.log('syncing db');
       db.sync(function (err) {
         if (err) {
-          throw err;
+					return callback(err);
         }
-        startServer(function () {
-          console.log('server started');
-        });
       });
-    }
+    } else {
+			callback();
+		}
   }
 }
 
-setupDatabase();
+setupDatabase(function (err) {
+	if (err) {
+		throw err;
+	}
+	startServer(function () {
+		console.log('server started');
+	});
+});
 

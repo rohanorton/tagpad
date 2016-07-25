@@ -40,3 +40,6 @@ node_modules
 app/client/build
 
 build
+
+# redis data
+dump.rdb
