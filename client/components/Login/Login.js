@@ -16,7 +16,7 @@ module.exports = React.createClass({
     } 
   },
   showServerError: function (message) {
-    var state = {email: this.state.email, password: this.state.password};
+    var state = this.state ? {email: this.state.email, password: this.state.password} : {};
     state.errors = {};
     if (message.indexOf('email') !== -1) {
       state.errors.email = [ message ];
@@ -52,7 +52,7 @@ module.exports = React.createClass({
   },
   handleSubmit: function (e) {
     e.preventDefault();
-    var credentials = {email: this.state.email, password: this.state.password};
+    var credentials = this.state ? {email: this.state.email, password: this.state.password}: {};
     this.validate(credentials);
     if (Object.keys(credentials.errors).length !== 0) {
       // show the errors;
