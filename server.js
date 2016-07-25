@@ -11,6 +11,7 @@ import session from 'express-session';
 import url from 'url';
 import fs from 'fs';
 import https from 'https';
+import http from 'http';
 import bodyParser from 'body-parser';
 import password from './data/password.js';
 import jSend from 'proto-jsend';
@@ -122,11 +123,12 @@ function startExpressAppServer(callback) {
       }
     });
     // redirect from http to https
-    redirectServer = express.createServer();
+    let redirectApp = express();
     // set up a route to redirect http to https
-    redirectServer.get('*',function(req, res){  
+    redirectApp.get('*',function(req, res){  
         res.redirect('https://tagpadapp.com' + req.url)
     });
+    redirectServer = http.createServer(redirectApp);
     // have it listen on 8080
     redirectServer.listen(80);
 	} else {
