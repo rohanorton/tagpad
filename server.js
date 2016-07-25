@@ -25,7 +25,7 @@ let WEBPACK_PORT = 8080;
 
 let devServer;
 let appServer;
-
+let redirectServer;
 
 if (process.env.NODE_ENV === 'production') {
   APP_PORT = 80;
@@ -116,11 +116,19 @@ function startExpressAppServer(callback) {
 
 	if (config.ssl) {
     appServer = https.createServer(options, app).listen(APP_PORT, function () {
-      console.log(`App is now running on http://localhost:${APP_PORT}`);
+      console.log(`App is now running on https://localhost:${APP_PORT}`);
       if (callback) {
         callback();
       }
     });
+    // redirect from http to https
+    redirectServer = express.createServer();
+    // set up a route to redirect http to https
+    redirectServer.get('*',function(req, res){  
+        res.redirect('https://tagpadapp.com' + req.url)
+    });
+    // have it listen on 8080
+    redirectServer.listen(80);
 	} else {
     appServer = app.listen(APP_PORT, () => {
       console.log(`App is now running on http://localhost:${APP_PORT}`);
@@ -159,6 +167,9 @@ function startServer(callback) {
   }
   if (devServer) {
     devServer.close();
+  }
+  if (redirectServer) {
+    redirectServer.close();
   }
   // Compile the schema
   exec('npm run update-schema', (error, stdout) => {
