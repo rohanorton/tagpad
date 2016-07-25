@@ -56,7 +56,7 @@ module.exports = React.createClass({
     this.validate(credentials);
     if (Object.keys(credentials.errors).length !== 0) {
       // show the errors;
-      this.setState({credentials});
+      this.setState(credentials);
     } else {
       this.login();
     }

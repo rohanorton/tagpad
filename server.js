@@ -71,6 +71,9 @@ function startExpressAppServer(callback) {
           return res.jSend.error(err);
         } 
         if (match) {
+					if (!req.session) {
+						throw new Error('req.session is undefined, perhaps redis server is not running?');
+					}
           req.session.user = user;
           res.cookie('tagpadlogin', 'true', { maxAge: 900000, httpOnly: false });
           return res.jSend();
@@ -115,7 +118,7 @@ function startExpressAppServer(callback) {
 			ca: fs.readFileSync(config.ssl.ca)
   } : null;
 
-	if (config.ssl) {
+	if (process.env.NODE_ENV === 'production' && config.ssl) {
     appServer = https.createServer(options, app).listen(APP_PORT, function () {
       console.log(`App is now running on https://localhost:${APP_PORT}`);
       if (callback) {
