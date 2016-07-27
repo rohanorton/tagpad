@@ -6,7 +6,7 @@ const saltRounds = 10;
 exports.assertIsStrongEnough = function (plainTextPassword) {
   var result = zxcvbn(plainTextPassword);
   if (result.score < 3) {
-    throw new Error(result.warning);
+    throw new Error(result.feedback.warning);
   }
 };
 

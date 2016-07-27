@@ -211,12 +211,10 @@ function setupDatabase(callback) {
 			callback();
   } else {
     // make sync really explicity we don't want this happening by accident
-    if (process.env.sync_tagpad_db === 'true') {
+    if (process.env.sync_db === 'true') {
       console.log('syncing db');
       db.sync(function (err) {
-        if (err) {
-					return callback(err);
-        }
+				return callback(err);
       });
     } else {
 			callback();

@@ -55,6 +55,7 @@ exports.connect = function (config) {
     email: {
       type: Sequelize.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         isEmail: true
       }
@@ -127,6 +128,10 @@ exports.getItem = function (id) {
 
 exports.getUserByEmail = function (email) {
   return exports.conn.models.user.findOne({where: {email}});
+};
+
+exports.addUser = function ({email, password}) {
+  return exports.conn.models.user.create({email, password});
 };
 
 exports.addItem = function (item) {
