@@ -3,7 +3,7 @@ import {hash, assertIsStrongEnough} from '../data/password';
 const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
 const db = require('../data/' + config.database + '.js');
 
-var argv = require('optimist')
+var argv = require('yargs')
     .usage('Usage: $0 --email [string] --password [string]')
     .demand(['email','password'])
     .argv;
