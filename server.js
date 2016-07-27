@@ -129,7 +129,7 @@ function startExpressAppServer(callback) {
     let redirectApp = express();
     // set up a route to redirect http to https
     redirectApp.get('*',function(req, res){  
-      res.redirect('https://' + request.headers.host + req.url)
+      res.redirect('https://' + req.headers.host + req.url)
     });
     redirectServer = http.createServer(redirectApp);
     // have it listen on 8080
