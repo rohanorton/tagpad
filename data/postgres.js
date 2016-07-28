@@ -110,6 +110,7 @@ exports.sync = function (callback) {
 };
 
 exports.getItems = function (args) {
+  console.log('real postgres getItems method');
   let query = {where: {}};
   if (args.title) {
     query.where.title = {$like: '%' + args.title + '%'};

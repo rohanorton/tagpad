@@ -6,7 +6,7 @@
   "main": "",
   "repository": "https://github.com/Abe404/tagpad",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --compilers js:babel-core/register",
     "start": "babel-node ./server.js",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "build": "source ./scripts/build.sh",
@@ -59,6 +59,7 @@
     "babel-cli": "^6.10.1",
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
+    "mockery": "^1.7.0",
     "zxcvbn": "^4.3.0"
   }
 }
