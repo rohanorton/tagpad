@@ -74,7 +74,7 @@ function startExpressAppServer(callback) {
 					if (!req.session) {
 						throw new Error('req.session is undefined, perhaps redis server is not running?');
 					}
-          req.session.user = user;
+          req.session.user = {email: user.email, id: user.id};
           res.cookie('tagpadlogin', 'true', { maxAge: 900000, httpOnly: false });
           return res.jSend();
         } else {
