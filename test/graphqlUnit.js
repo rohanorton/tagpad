@@ -116,3 +116,32 @@ describe('add item', function() {
     graphql(Schema, query, null, session, { itemInput });
   });
 });
+
+
+describe.only('delete item', function () {
+  it('delete on other users item should cause auth error', function (done) {
+    let input_0 = {"itemToDeleteId":toGlobalId('Item', '34'),"clientMutationId":"1"};
+    let query = `
+      mutation DeleteItemMutation($input_0:DeleteItemInput!) {
+        deleteItem(input:$input_0) {
+          clientMutationId
+        }
+      }
+    `;
+    setDb({
+      // delete item will get the item first to do the auth check.
+      getItem: function (id) {
+        // return an item with a userId which does not match the user
+        return new Promise(function(resolve, reject) {
+          resolve({ title: 'example', userId: 5, id: id });
+        });
+      }
+    });
+    let session = { user: { id: 9 }};
+    graphql(Schema, query, null, session, { input_0 }).then(function (result) {
+      let errorString = String(result.errors[0]);
+      assert(errorString.indexOf('Authentication') > -1, 'error should be auth, error = ' + errorString);
+      doen();
+    }).catch(done);
+  });
+});
