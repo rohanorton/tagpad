@@ -179,12 +179,17 @@ const UpdateItemMutation = mutationWithClientMutationId({
       }
     },
   },
-  mutateAndGetPayload: (item, context) => {
+  mutateAndGetPayload: (newItem, context) => {
     assertAuth(context);
-    let localId = fromGlobalId(item.id).id;
-    item.id = localId;
-    return db.updateItem(item).then(function () {
-      return db.getItem(localId);
+    let localId = fromGlobalId(newItem.id).id;
+    return db.getItem(localId).then(function (item) {
+      if (item.userId !== context.user.id) {
+        throw new Error('Authentication');
+      }
+      newItem.id = localId;
+      return db.updateItem(newItem).then(function () {
+        return db.getItem(localId);
+      });
     });
   },
 });
