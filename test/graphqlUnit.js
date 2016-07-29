@@ -10,30 +10,30 @@ import {graphql} from 'graphql';
 describe('ItemsList', function() {
   it('should get items from db for user in session', function(done) {
     setDb({ 
-			getItems: function (filter) { 
-				if (filter.userId === 4) {
+      getItems: function (filter) { 
+        if (filter.userId === 4) {
           done();
         } else {
           done(new Error('user id should match the one in the session, filter.userId = ' + filter.userId));
         }
-			}
+      }
     });
-		let session = { user: { id: 4 }};
-		let query = (`
-			{itemsList {
-				id
-				items {
-					edges {
-						node {
-							id
-							title
-						}
-					}
-				}
-			}}
-		`);
-		graphql(Schema, query, null, session);
-	});
+    let session = { user: { id: 4 }};
+    let query = (`
+      {itemsList {
+        id
+        items {
+          edges {
+            node {
+              id
+              title
+            }
+          }
+        }
+      }}
+    `);
+    graphql(Schema, query, null, session);
+  });
 });
 
 describe('get item', function() {
@@ -49,14 +49,14 @@ describe('get item', function() {
       }}
     `;
     setDb({
-			getItem: function (id) { 
+      getItem: function (id) { 
         assert.equal(id, 14);
         return new Promise(function(resolve, reject) {
           resolve({ title: 'example', userId: 4, id: '14' });
         });
-			}
+      }
     });
-		let session = { user: { id: 4 }};
+    let session = { user: { id: 4 }};
     graphql(Schema, query, null, session).then(function (result) {
       let {type, id} = fromGlobalId(result.data.item.id);
       assert.equal(id, 14, 'the id should match');
@@ -75,14 +75,14 @@ describe('get item', function() {
       }}
     `;
      setDb({
-			getItem: function (id, userId) { 
+      getItem: function (id, userId) { 
         // return an item with a userId which matches the user
         return new Promise(function(resolve, reject) {
           resolve({ title: 'example', userId: 5, id: id });
         });
-			}
+      }
     });
-		let session = { user: { id: 4 }};
+    let session = { user: { id: 4 }};
     graphql(Schema, query, null, session).then(function (result) {
       assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
       assert(!result.data.item, 'item should not be returned as it belongs to a different user');
@@ -104,14 +104,14 @@ describe('add item', function() {
       }}
     `;
      setDb({
-			getItem: function (id, userId) { 
+      getItem: function (id, userId) { 
         // return an item with a userId which matches the user
         return new Promise(function(resolve, reject) {
           resolve({ title: 'example', userId: 5, id: id });
         });
-			}
+      }
     });
-		let session = { user: { id: 7 }};
+    let session = { user: { id: 7 }};
     graphql(Schema, query, null, session).then(function (result) {
       assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
       assert(!result.data.item, 'item should not be returned as it belongs to a different user');
