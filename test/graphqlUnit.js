@@ -18,7 +18,7 @@ describe('ItemsList', function() {
         }
 			}
     });
-	  let session = { user: { id: 4 }};
+		let session = { user: { id: 4 }};
 		let query = (`
 			{itemsList {
 				id
@@ -56,7 +56,7 @@ describe('get item', function() {
         });
 			}
     });
-	  let session = { user: { id: 4 }};
+		let session = { user: { id: 4 }};
     graphql(Schema, query, null, session).then(function (result) {
       let {type, id} = fromGlobalId(result.data.item.id);
       assert.equal(id, 14, 'the id should match');
@@ -82,7 +82,7 @@ describe('get item', function() {
         });
 			}
     });
-	  let session = { user: { id: 4 }};
+		let session = { user: { id: 4 }};
     graphql(Schema, query, null, session).then(function (result) {
       assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
       assert(!result.data.item, 'item should not be returned as it belongs to a different user');
@@ -111,7 +111,7 @@ describe('add item', function() {
         });
 			}
     });
-	  let session = { user: { id: 7 }};
+		let session = { user: { id: 7 }};
     graphql(Schema, query, null, session).then(function (result) {
       assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
       assert(!result.data.item, 'item should not be returned as it belongs to a different user');
