@@ -146,9 +146,20 @@ const DeleteItemMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({itemToDeleteId}, context) => {
     assertAuth(context);
+
     let localId = fromGlobalId(itemToDeleteId).id;
-    db.deleteItem(localId);
-    return { id: itemsListId };
+
+    return db.getItem(localId).then(function (item) {
+
+      if (item.userId !== context.user.id) {
+        throw new Error('Authentication');
+      }
+
+      db.deleteItem(localId);
+
+      return { id: itemsListId };
+    });
+
   }
 });
 

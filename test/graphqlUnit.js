@@ -118,9 +118,9 @@ describe('add item', function() {
 });
 
 
-describe.only('delete item', function () {
+describe('delete item', function () {
   it('delete on other users item should cause auth error', function (done) {
-    let input_0 = {"itemToDeleteId":toGlobalId('Item', '34'),"clientMutationId":"1"};
+    let input_0 = {"itemToDeleteId":toGlobalId('Item', '34'), "clientMutationId":"1"};
     let query = `
       mutation DeleteItemMutation($input_0:DeleteItemInput!) {
         deleteItem(input:$input_0) {
@@ -141,7 +141,7 @@ describe.only('delete item', function () {
     graphql(Schema, query, null, session, { input_0 }).then(function (result) {
       let errorString = String(result.errors[0]);
       assert(errorString.indexOf('Authentication') > -1, 'error should be auth, error = ' + errorString);
-      doen();
+      done();
     }).catch(done);
   });
 });
