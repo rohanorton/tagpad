@@ -17,7 +17,6 @@ function getConnection (config) {
 
 function sync (callback) {
   exports.conn.sync({force: true}).then(function() {
-    console.log('callback called, exports.conn.models = ', exports.conn.models);
     callback();
   }).catch(function(error) {
     callback(error);
@@ -27,7 +26,6 @@ function sync (callback) {
 function createFakeData(callback) {
   let email = Faker.internet.email();
   let password = Faker.internet.password();
-  console.log('Creating User');
   console.log(email, password);
   passwordHelper.hash(password, function (err, hash) {
     if (err) {
@@ -110,12 +108,12 @@ exports.sync = function (callback) {
 };
 
 exports.getItems = function (args) {
-  console.log('real postgres getItems method');
   let query = {where: {}};
   if (args.title) {
     query.where.title = {$like: '%' + args.title + '%'};
   }
   query.limit = 20;
+
   return exports.conn.models.item.findAll(query).then(function (items) {
     return items.map(function ({title, content, id, tags}) {
       return {title, content, id: String(id), tags: tags || ""};
@@ -144,7 +142,6 @@ exports.deleteItem = function (id) {
 };
 
 exports.updateItem = function (item) {
-  console.error('update item, id = ', item.id);
   return exports.conn.models.item.update(item, {where: {id: item.id}} );
 };
 

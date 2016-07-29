@@ -21,8 +21,12 @@ import {
 import path from 'path';
 
 const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
-const db = require('./' + config.database + '.js');
+let db = require('./' + config.database + '.js');
 
+// used for testing.
+exports.setDb = function (newDb) {
+  db = newDb;
+};
 
 // Doesn't matter what this is as there is only 1 itemsList
 const itemsListId = 'itemsList'; 
@@ -35,7 +39,7 @@ function assertAuth(context) {
 
 // Used to create getItemById
 var {nodeInterface, nodeField} = nodeDefinitions(
-  (globalId) => {
+  (globalId, context) => {
     var {type, id} = fromGlobalId(globalId);
     if (type === 'Item') {
       return db.getItem(id);
@@ -87,9 +91,8 @@ const ItemsListType = new GraphQLObjectType({
         },
        ...connectionArgs, 
       },
-      resolve: function (obj, {title, ...args}) {
-        console.log('inside items list resolve method');
-        return db.getItems({title}).then(function (items) {
+      resolve: function (obj, {title, ...args}, context) {
+        return db.getItems({title, userId: context.user.id}).then(function (items) {
           return connectionFromArray(items, args);
         });
       }
@@ -193,7 +196,12 @@ export const Schema = new GraphQLSchema({
         resolve: function (root, args, context) {
           assertAuth(context);
           var {type, id} = fromGlobalId(args.id);
-          return db.getItem(id);
+          return db.getItem(id).then(function (item) {
+            if (item.userId !== context.user.id) {
+              throw new Error('Authentication');
+            }
+            return item;
+          });
         }
       },
       itemsList: {

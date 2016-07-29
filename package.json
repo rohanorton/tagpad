@@ -58,7 +58,7 @@
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "chai": "^3.5.0",
-    "mocha": "^2.5.3",
+    "mocha": "git://github.com/mochajs/mocha.git#8a754344db3d4d85780572d38ada272b1faa6ee6",
     "mockery": "^1.7.0",
     "zxcvbn": "^4.3.0"
   }
