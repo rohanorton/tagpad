@@ -94,28 +94,25 @@ describe('get item', function() {
 
 describe('add item', function() {
   it('added item should have the userId of the session user', function(done) {
-    let itemGlobalId = toGlobalId('Item', '19');
+    let itemInput = {"title":"example","content":"content","tags":"","clientMutationId":"0"};
     let query = `
-      {item(id:"${itemGlobalId}") {
-          id,
-          title,
-          content,
-          tags
-      }}
+      mutation AddItemMutation ($itemInput: AddItemInput!) {
+        addItem(input: $itemInput) {
+          clientMutationId
+        }
+      }
     `;
      setDb({
-      getItem: function (id, userId) { 
-        // return an item with a userId which matches the user
-        return new Promise(function(resolve, reject) {
-          resolve({ title: 'example', userId: 5, id: id });
-        });
+      addItem: function (item) {
+        if (item.userId === 7) {
+          done();
+          return {}; // prevent graphql from falling over.
+        } else {
+          done(new Error('user id should match the one in the session, item.userId = ' + item.userId));
+        }
       }
     });
     let session = { user: { id: 7 }};
-    graphql(Schema, query, null, session).then(function (result) {
-      assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
-      assert(!result.data.item, 'item should not be returned as it belongs to a different user');
-      done();
-    }).catch(done);
+    graphql(Schema, query, null, session, { itemInput });
   });
 });

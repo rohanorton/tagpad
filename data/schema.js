@@ -126,6 +126,7 @@ const AddItemMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: (item, context) => {
     assertAuth(context);
+    item.userId = context.user.id;
     return db.addItem(item);
   },
 });
