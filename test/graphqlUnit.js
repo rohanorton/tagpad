@@ -1,6 +1,5 @@
 import path from 'path';
 import assert from 'assert';
-import mockery from 'mockery';
 import {toGlobalId, fromGlobalId} from 'graphql-relay';
 import {hash, assertIsStrongEnough} from '../data/password';
 const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
@@ -33,6 +32,28 @@ describe('ItemsList', function() {
       }}
     `);
     graphql(Schema, query, null, session);
+  });
+
+  it('should throw error if no user in session', function (done) {
+    let query = (`
+      {itemsList {
+        id
+        items {
+          edges {
+            node {
+              id
+              title
+            }
+          }
+        }
+      }}
+    `);
+    let session = {};
+    graphql(Schema, query, null, session).then(function (result) {
+      assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
+      assert(!result.data.item, 'item should not be returned as it belongs to a different user');
+      done();
+    }).catch(done);
   });
 });
 
@@ -89,6 +110,26 @@ describe('get item', function() {
       done();
     }).catch(done);
   });
+
+  it('should throw error if no user in session', function (done) {
+    let itemGlobalId = toGlobalId('Item', '19');
+    let query = `
+      {item(id:"${itemGlobalId}") {
+          id,
+          title,
+          content,
+          tags
+      }}
+    `;
+    let session = {};
+    graphql(Schema, query, null, session).then(function (result) {
+      assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
+      assert(!result.data.item, 'item should not be returned as it belongs to a different user');
+      done();
+    }).catch(done);
+  });
+
+
 });
 
 
@@ -115,6 +156,24 @@ describe('add item', function() {
     let session = { user: { id: 7 }};
     graphql(Schema, query, null, session, { itemInput });
   });
+
+  it('should throw error if no user in session', function (done) {
+    let itemInput = {"title":"example","content":"content","tags":"","clientMutationId":"0"};
+    let query = `
+      mutation AddItemMutation ($itemInput: AddItemInput!) {
+        addItem(input: $itemInput) {
+          clientMutationId
+        }
+      }
+    `;
+    let session = {};
+    graphql(Schema, query, null, session, { itemInput}).then(function (result) {
+      assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
+      done();
+    }).catch(done);
+  });
+
+
 });
 
 
@@ -144,6 +203,23 @@ describe('delete item', function () {
       done();
     }).catch(done);
   });
+
+  it('should throw error if no user in session', function (done) {
+    let input_0 = {"itemToDeleteId":toGlobalId('Item', '34'), "clientMutationId":"1"};
+    let query = `
+      mutation DeleteItemMutation($input_0:DeleteItemInput!) {
+        deleteItem(input:$input_0) {
+          clientMutationId
+        }
+      }
+    `;
+    let session = {};
+    graphql(Schema, query, null, session, {input_0}).then(function (result) {
+      assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
+      done();
+    }).catch(done);
+  });
+
 });
 
 
@@ -176,6 +252,28 @@ describe('update item', function () {
     graphql(Schema, query, null, session, { input_0 }).then(function (result) {
       let errorString = String(result.errors[0]);
       assert(errorString.indexOf('Authentication') > -1, 'error should be auth, error = ' + errorString);
+      done();
+    }).catch(done);
+  });
+
+  it('should throw error if no user in session', function (done) {
+   let input_0 = {
+      id: toGlobalId('Item', '34'),
+      title: "example",
+      content: "content2",
+      tags: "",
+      clientMutationId: "0"
+    };
+    let query = `
+      mutation UpdateItemMutation($input_0:UpdateItemInput!) {
+        updateItem(input:$input_0) {
+          clientMutationId
+        }
+      }
+    `;
+    let session = {};
+    graphql(Schema, query, null, session, {input_0}).then(function (result) {
+      assert(String(result.errors[0]).indexOf('Authentication') > -1, 'error should be auth');
       done();
     }).catch(done);
   });
