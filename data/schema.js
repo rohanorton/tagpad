@@ -40,8 +40,10 @@ function assertAuth(context) {
 // Used to create getItemById
 var {nodeInterface, nodeField} = nodeDefinitions(
   (globalId, context) => {
+    throw new Error('gotta find out when this is called');
     var {type, id} = fromGlobalId(globalId);
     if (type === 'Item') {
+      throw new Error('gotta find out when this is called');
       return db.getItem(id);
     } else {
       return null;
@@ -49,6 +51,8 @@ var {nodeInterface, nodeField} = nodeDefinitions(
   },
   (obj) => {
     let type = 'Item';
+
+      throw new Error('gotta find out when this is called');
     if (type === 'Item') {
       return ItemType;
     } else {
