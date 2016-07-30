@@ -41,13 +41,9 @@ function startExpressAppServer(callback) {
   clean('./data/schema');
   const {Schema} = require('./data/schema');
 
-  //app.use(bodyParser.json());
   app.use(bodyParser());
-  // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))
-  // parse application/json
   app.use(bodyParser.json())
-
   app.use(session({
     secret: 'keyboard cat',
     store: new redisStore({ host: 'localhost', port: 6379}),
