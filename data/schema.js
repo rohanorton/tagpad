@@ -13,7 +13,6 @@ import {
   connectionFromArray,
   cursorForObjectInConnection,
   globalIdField,
-  nodeDefinitions,
   fromGlobalId,
   mutationWithClientMutationId,
 } from 'graphql-relay';
@@ -37,30 +36,6 @@ function assertAuth(context) {
   }
 }
 
-// Used to create getItemById
-var {nodeInterface, nodeField} = nodeDefinitions(
-  (globalId, context) => {
-    throw new Error('gotta find out when this is called');
-    var {type, id} = fromGlobalId(globalId);
-    if (type === 'Item') {
-      throw new Error('gotta find out when this is called');
-      return db.getItem(id);
-    } else {
-      return null;
-    }
-  },
-  (obj) => {
-    let type = 'Item';
-
-      throw new Error('gotta find out when this is called');
-    if (type === 'Item') {
-      return ItemType;
-    } else {
-      return null;
-    }
-  }
-);
-
 const ItemType = new GraphQLObjectType({
   name: 'Item',
   fields: () => ({
@@ -68,8 +43,7 @@ const ItemType = new GraphQLObjectType({
     content: {type: GraphQLString},
     tags: {type: GraphQLString},
     id: globalIdField('Item'),
-  }),
-  interfaces: [nodeInterface]
+  })
 });
 
 const {
@@ -210,7 +184,6 @@ export const Schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
-      node: nodeField,
       item: {
         args: { id: { type: GraphQLString } },
         type: ItemType,

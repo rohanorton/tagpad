@@ -26,7 +26,7 @@ type DeleteItemPayload {
   clientMutationId: String!
 }
 
-type Item implements Node {
+type Item {
   title: String
   content: String
   tags: String
@@ -54,10 +54,6 @@ type Mutation {
   deleteItem(input: DeleteItemInput!): DeleteItemPayload
 }
 
-interface Node {
-  id: ID!
-}
-
 type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
@@ -66,7 +62,6 @@ type PageInfo {
 }
 
 type Query {
-  node(id: ID!): Node
   item(id: String): Item
   itemsList(title: String): ItemsList
 }
