@@ -112,7 +112,12 @@ exports.getItems = function (args) {
   if (args.title) {
     query.where.title = {$like: '%' + args.title + '%'};
   }
+
   query.limit = 20;
+
+  if (args.userId) {
+    query.where.userId = args.userId;
+  }
 
   return exports.conn.models.item.findAll(query).then(function (items) {
     return items.map(function ({title, content, id, tags}) {
