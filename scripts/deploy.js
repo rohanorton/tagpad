@@ -2,13 +2,16 @@
 let SSH = require('simple-ssh');
 let _ = require('lodash');
 
+let appName = require('../package.json').name;
+let deployConfig = require(process.env.HOME + '/' + appName + '_config.js').deploy;
+
 let ssh = new SSH({
-    host: process.env.TAGPAD_HOST,
-    user: process.env.TAGPAD_USER,
-    pass: process.env.TAGPAD_PASS
+    host: deployConfig.host,
+    user: deployConfig.user,
+    pass: deployConfig.pass
 });
 
-let remoteAppDir = '/home/tagpad/tagpad';
+let remoteAppDir = deployConfig.remoteAppDir;
 
 let commands = [
   'git clean -f -d',
