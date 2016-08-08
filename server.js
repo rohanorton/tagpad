@@ -17,8 +17,9 @@ import password from './data/password.js';
 import jSend from 'proto-jsend';
 let redisStore = require('connect-redis')(session);
  
- 
-const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
+
+let appName = require('./package.json').name;
+let config = require(process.env.HOME + '/' + appName + '_config.js');
 const db = require('./data/' + config.database + '.js');
 
 let APP_PORT = 3000;
