@@ -17,9 +17,7 @@ import {
   mutationWithClientMutationId,
 } from 'graphql-relay';
 
-import path from 'path';
-
-const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
+import config from '../loadConfig';
 let db = require('./' + config.database + '.js');
 
 // used for testing.

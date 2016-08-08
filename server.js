@@ -15,11 +15,8 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import password from './data/password.js';
 import jSend from 'proto-jsend';
+import config from './loadConfig';
 let redisStore = require('connect-redis')(session);
- 
-
-let appName = require('./package.json').name;
-let config = require(process.env.HOME + '/' + appName + '_config.js');
 const db = require('./data/' + config.database + '.js');
 
 let APP_PORT = 3000;

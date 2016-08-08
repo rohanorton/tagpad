@@ -2,7 +2,7 @@ import path from 'path';
 import assert from 'assert';
 import {toGlobalId, fromGlobalId} from 'graphql-relay';
 import {hash, assertIsStrongEnough} from '../data/password';
-const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
+import config from '../loadConfig';
 const {Schema, setDb} = require('../data/schema');
 import {graphql} from 'graphql';
 

@@ -2,8 +2,7 @@
 let SSH = require('simple-ssh');
 let _ = require('lodash');
 
-let appName = require('../package.json').name;
-let deployConfig = require(process.env.HOME + '/' + appName + '_config.js').deploy;
+let config = require('../loadConfig.js');
 
 let ssh = new SSH({
     host: deployConfig.host,
