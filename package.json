@@ -42,6 +42,7 @@
     "passport-local": "^1.0.0",
     "pg": "^4.5.5",
     "pg-hstore": "^2.3.2",
+    "prompt": "^1.0.0",
     "proto-jsend": "0.0.3",
     "query-string": "^4.2.0",
     "react": "15.1.0",
