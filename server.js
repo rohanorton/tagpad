@@ -198,30 +198,9 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-function setupDatabase(callback) {
-  db.connect(config[config.database]);
-  if (process.env.NODE_ENV === 'production') {
-      // do not sync
-			callback();
-  } else {
-    // make sync really explicity we don't want this happening by accident
-    if (process.env.sync_db === 'true') {
-      console.log('syncing db');
-      db.sync(function (err) {
-				return callback(err);
-      });
-    } else {
-			callback();
-		}
-  }
-}
+db.connect(config[config.database]);
 
-setupDatabase(function (err) {
-	if (err) {
-		throw err;
-	}
-	startServer(function () {
-		console.log('server started');
-	});
+startServer(function () {
+  console.log('server started');
 });
 
