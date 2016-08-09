@@ -1,6 +1,6 @@
 var path = require('path');
 import {hash, assertIsStrongEnough} from '../data/password';
-const config = require(path.join(process.env.HOME, 'tagpad_config.js'));
+import config from '../loadConfig';
 const db = require('../data/' + config.database + '.js');
 
 var argv = require('yargs')
